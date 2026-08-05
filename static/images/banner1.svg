@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#021526;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#03346E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6EACDA;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="800" fill="url(#bgGrad1)" />
+  <rect width="1920" height="800" fill="url(#grid)" />
+  <!-- Abstract HVAC & Construction Vectors -->
+  <g fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2">
+    <circle cx="1400" cy="400" r="300" />
+    <circle cx="1400" cy="400" r="200" stroke-dasharray="10 15" />
+    <path d="M 1000 700 L 1200 300 L 1600 300 L 1800 700 Z" />
+    <path d="M 1200 500 L 1600 500" stroke-width="4"/>
+  </g>
+</svg>

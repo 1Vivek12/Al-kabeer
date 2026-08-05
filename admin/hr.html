@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Management | Al Kabeer Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin_print.css">
+    <style>
+        /* QATAR COMPLIANT PDF TEMPLATE STYLES */
+        .pdf-template {
+            font-family: 'Segoe UI', Arial, 'Cairo', 'Times New Roman', sans-serif;
+            color: #1e293b;
+            padding: 0;
+            box-sizing: border-box;
+            background: #ffffff;
+            position: relative;
+        }
+
+        .pdf-page {
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 210mm;
+            min-height: 285mm;
+            padding: 8mm 12mm;
+            display: block;
+            background: #ffffff;
+        }
+        
+        .pdf-header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .pdf-logo-col img {
+            width: 130px;
+            height: auto;
+        }
+        
+        .pdf-center-col {
+            text-align: center;
+            flex-grow: 1;
+            padding: 0 10px;
+        }
+        
+        .pdf-center-col h1 {
+            font-size: 20px;
+            color: #1e3a8a;
+            margin: 0 0 2px 0;
+            font-weight: 800;
+        }
+        
+        .pdf-center-col h2 {
+            font-size: 14px;
+            color: #1e3a8a;
+            margin: 0 0 4px 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .cr-info {
+            font-size: 11px;
+            font-weight: 700;
+            color: #d97706;
+        }
+        
+        .pdf-right-col {
+            width: 230px;
+            font-size: 10px;
+        }
+        
+        .pdf-ref-date {
+            margin-bottom: 4px;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .pdf-contact-box {
+            border: 1px solid #94a3b8;
+            border-radius: 4px;
+            overflow: hidden;
+            font-size: 9.5px;
+            background: #fafafa;
+        }
+        
+        .pdf-contact-box div {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 2px 6px;
+        }
+        
+        .pdf-contact-box div:last-child {
+            border-bottom: none;
+        }
+        
+        .pdf-contact-box .red-title {
+            color: #dc2626;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 9px;
+        }
+        
+        .pdf-doc-title {
+            text-align: center;
+            color: #1e3a8a;
+            font-size: 15px;
+            font-weight: 800;
+            margin: 6px 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #eff6ff;
+            padding: 5px;
+            border: 1px solid #bfdbfe;
+            border-radius: 4px;
+        }
+        
+        .pdf-doc-title span {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-top: 2px;
+            direction: rtl;
+        }
+        
+        .emp-summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .emp-summary-table td {
+            padding: 5px 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 11px;
+        }
+        
+        .emp-summary-table .lbl-en {
+            font-weight: bold;
+            color: #1e3a8a;
+            width: 22%;
+        }
+        
+        .emp-summary-table .val-col {
+            font-weight: bold;
+            color: #0f172a;
+            width: 48%;
+        }
+        
+        .emp-summary-table .lbl-ar {
+            font-weight: bold;
+            color: #1e3a8a;
+            width: 30%;
+            text-align: right;
+            direction: rtl;
+        }
+        
+        .terms-section-title {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 11.5px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .terms-section-title span {
+            font-size: 11px;
+            font-weight: 600;
+            direction: rtl;
+        }
+        
+        .terms-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .terms-item {
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 4px;
+        }
+        
+        .terms-row-en {
+            display: flex;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .terms-row-en .t-num {
+            font-weight: bold;
+            color: #1e3a8a;
+            min-width: 20px;
+        }
+        
+        .terms-row-en .t-lbl {
+            font-weight: bold;
+            color: #1e3a8a;
+            min-width: 165px;
+        }
+        
+        .terms-row-en .t-val {
+            flex: 1;
+            color: #334155;
+        }
+        
+        .terms-row-ar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10.5px;
+            color: #475569;
+            direction: rtl;
+            margin-top: 1px;
+            padding-left: 20px;
+        }
+        
+        .terms-row-ar .t-lbl-ar {
+            font-weight: bold;
+            color: #1e3a8a;
+            min-width: 140px;
+        }
+        
+        .terms-row-ar .t-val-ar {
+            flex: 1;
+            text-align: right;
+            color: #475569;
+        }
+        
+        .pdf-header-mini {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9.5px;
+            color: #475569;
+            font-weight: bold;
+        }
+        
+        .header-line {
+            border: 0;
+            border-top: 1.5px solid #1e3a8a;
+            margin: 4px 0 10px 0;
+        }
+        
+        .law-note {
+            background: #eff6ff;
+            border-left: 4px solid #1e3a8a;
+            padding: 6px 10px;
+            font-size: 10.5px;
+            margin: 8px 0;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        
+        .law-note .ar-text {
+            direction: rtl;
+            text-align: right;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        
+        .pdf-important-box {
+            border: 1px solid #fca5a5;
+            background: #fff5f5;
+            border-radius: 4px;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+        }
+        
+        .imp-head {
+            font-weight: bold;
+            color: #dc2626;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .imp-head span {
+            direction: rtl;
+        }
+        
+        .imp-list {
+            margin: 4px 0 0 16px;
+            padding: 0;
+            font-size: 10px;
+        }
+        
+        .imp-list li {
+            margin-bottom: 4px;
+        }
+        
+        .imp-list .en-line {
+            font-weight: 600;
+            color: #7f1d1d;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .imp-list .ar-line {
+            font-weight: 500;
+            color: #991b1b;
+            direction: rtl;
+            text-align: right;
+            margin-top: 1px;
+        }
+        
+        .pdf-acceptance {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+            font-size: 10.5px;
+        }
+        
+        .pdf-acceptance .acc-text-en {
+            margin: 0 0 2px 0;
+            color: #0f172a;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .pdf-acceptance .acc-text-ar {
+            margin: 0;
+            color: #0f172a;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .pdf-signatures-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 4px;
+        }
+        
+        .sig-col {
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 8px 12px;
+            background: #fafafa;
+        }
+        
+        .sig-title {
+            font-weight: bold;
+            font-size: 11px;
+            color: #1e3a8a;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 3px;
+            margin-bottom: 6px;
+        }
+        
+        .sig-line-box {
+            font-size: 10px;
+            color: #475569;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        
+        .company-name-sig {
+            font-weight: 800;
+            font-size: 11px;
+            color: #1e3a8a;
+        }
+        
+        .company-name-ar {
+            font-size: 10px;
+            font-weight: bold;
+            color: #1e3a8a;
+            direction: rtl;
+        }
+        
+        .app-badge {
+            display: inline-block;
+            background: #d97706;
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin: 4px 0 2px 0;
+        }
+        
+        .dept {
+            font-size: 10px;
+            color: #475569;
+            font-weight: 600;
+        }
+        
+        .stamp-box {
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stamp-box img {
+            height: 40px;
+            opacity: 0.85;
+        }
+        
+        .stamp-box .stamp-text {
+            font-size: 8.5px;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            width: 55%;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: multiply;
+        }
+        
+        .content-over-watermark {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .page-break {
+            page-break-before: always;
+            break-before: page;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper no-print">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Admin" style="max-width:180px; filter:none;">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li><a href="hr.html" class="active"><i class="bi bi-people-fill"></i> HR Management</a></li>
+                <li><a href="#"><i class="bi bi-briefcase-fill"></i> Services</a></li>
+                <li><a href="#"><i class="bi bi-images"></i> Gallery</a></li>
+                <li><a href="#"><i class="bi bi-chat-left-text-fill"></i> Enquiries</a></li>
+                <li><a href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h1 class="topbar-title">HR Document Generator</h1>
+                <div class="user-profile">
+                    <span style="font-weight: 500; font-size: 14px;">HR Admin</span>
+                    <img src="https://ui-avatars.com/api/?name=HR+Admin&background=0175b2&color=fff" alt="Profile">
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="hr-layout">
+                    
+                    <!-- Left Panel: Form -->
+                    <div class="hr-form-panel">
+                        <div class="doc-type-tabs">
+                            <button class="doc-tab active" data-doc="offer">Offer Letter</button>
+                            <button class="doc-tab" data-doc="appointment">Appt. Letter</button>
+                            <button class="doc-tab" data-doc="idcard">ID Card</button>
+                        </div>
+
+                        <form id="hrForm">
+                            <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--secondary); font-size: 16px;">Employee Details</h4>
+                            
+                            <div class="form-group">
+                                <label>Date of Issue</label>
+                                <input type="date" id="docDate" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ref No.</label>
+                                <input type="text" id="refNo" class="form-control" value="QTR/AK:A001">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="empName" class="form-control" required placeholder="e.g. AASHIK RAUT" style="text-transform: uppercase;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Passport No. *</label>
+                                <input type="text" id="empIdNo" class="form-control" required placeholder="e.g. PA5231328" style="text-transform: uppercase;">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Trade / Designation *</label>
+                                <input type="text" id="empTitle" class="form-control" required placeholder="e.g. CIVIL FOREMAN" style="text-transform: uppercase;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Nationality *</label>
+                                <input type="text" id="empNat" class="form-control" required placeholder="e.g. NEPAL" style="text-transform: uppercase;">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Salary & Benefits String</label>
+                                <input type="text" id="salaryString" class="form-control" value="[BASIC 3400 + OT / MONTH] QAR + FREE FOOD">
+                            </div>
+
+                            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                            
+                            <div id="photoSection" style="display: none;">
+                                <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--secondary); font-size: 16px;">ID Card Photo</h4>
+                                <div class="form-group">
+                                    <label>Upload Employee Photo (JPG/PNG)</label>
+                                    <input type="file" id="empPhoto" class="form-control" accept="image/*">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Date of Joining (For ID Card)</label>
+                                <input type="date" id="empDoj" class="form-control">
+                            </div>
+
+                            <div class="form-group" style="margin-top: 30px;">
+                                <button type="button" id="btnGenerate" class="btn-primary" style="width: 100%; font-size: 16px; padding: 12px;">
+                                    <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generate Document
+                                </button>
+                                <p style="font-size: 12px; color: #64748b; text-align: center; margin-top: 8px;">Click to Print or Save as PDF</p>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Right Panel: Preview -->
+                    <div class="hr-preview-panel">
+                        <div class="preview-toolbar">
+                            <span style="font-weight: 600; color: #475569;">Document Preview</span>
+                            <button id="btnPrint" class="btn-primary"><i class="bi bi-printer-fill me-2"></i> Print / Save PDF</button>
+                        </div>
+                        
+                        <div class="preview-content-scroll">
+                            
+                            <!-- OFFER LETTER TEMPLATE -->
+                            <div id="offerTemplate" class="document-paper pdf-template">
+                                
+                                <!-- PAGE 1 -->
+                                <div class="pdf-page page-1">
+                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
+                                    <div class="content-over-watermark">
+                                        <!-- Header -->
+                                        <div class="pdf-header-wrapper">
+                                            <div class="pdf-logo-col">
+                                                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Logo">
+                                            </div>
+                                            <div class="pdf-center-col">
+                                                <h1>شركة الكبير للتجارة والمقاولات ذ.م.م</h1>
+                                                <h2>AL KABEER TRADING & CONTRACTING W.L.L.</h2>
+                                                <div class="cr-info">C.R. No: 184920 | Establishment ID: 74/92014</div>
+                                            </div>
+                                            <div class="pdf-right-col">
+                                                <div class="pdf-ref-date">
+                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">05/08/2026</span></div>
+                                                    <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                </div>
+                                                <div class="pdf-contact-box">
+                                                    <div>Tel: +974 4490 2699 | Fax: +974 4434 1512</div>
+                                                    <div style="color: #004b87;">info@alkabeerqatar.com | www.alkabeerqatar.com</div>
+                                                    <div class="red-title">HEAD OFFICE - DOHA QATAR</div>
+                                                    <div>Office 110, World Wide Commercial Bldg, D Ring Rd</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Title -->
+                                        <div class="pdf-doc-title">
+                                            EMPLOYMENT OFFER LETTER & PRELIMINARY CONTRACT
+                                            <span>عرض عمل وعقد ابتدائي - وفقاً لقانون العمل القطري رقم (14) لسنة 2004</span>
+                                        </div>
+
+                                        <!-- Employee Summary Table -->
+                                        <table class="emp-summary-table">
+                                            <tr>
+                                                <td class="lbl-en">Candidate Name:</td>
+                                                <td class="val-col outName">AASHIK RAUT</td>
+                                                <td class="lbl-ar">اسم المرشح:</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="lbl-en">Passport No:</td>
+                                                <td class="val-col outIdNo">PA5231328</td>
+                                                <td class="lbl-ar">رقم الجواز:</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="lbl-en">Designation / Trade:</td>
+                                                <td class="val-col outTitle">CIVIL FOREMAN</td>
+                                                <td class="lbl-ar">المسمى الوظيفي:</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="lbl-en">Nationality:</td>
+                                                <td class="val-col outNat">NEPAL</td>
+                                                <td class="lbl-ar">الجنسية:</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="lbl-en">Monthly Salary & Benefits:</td>
+                                                <td class="val-col outSalary">[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION</td>
+                                                <td class="lbl-ar">الراتب الشهري والمزايا:</td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Terms Header -->
+                                        <div class="terms-section-title">
+                                            TERMS & CONDITIONS OF EMPLOYMENT (QATAR LABOR LAW COMPLIANT)
+                                            <span>الشروط والأحكام الخاصة بالتوظيف (وفقاً لقانون العمل القطري)</span>
+                                        </div>
+
+                                        <!-- Terms List Part 1 (Points 1 to 6) -->
+                                        <div class="terms-container">
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">1.</span>
+                                                    <span class="t-lbl">Contract Duration:</span>
+                                                    <span class="t-val">2 Years Renewable upon mutual agreement of both parties.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">مدة العقد:</span>
+                                                    <span class="t-val-ar">سنتان (2) قابلة للتجديد بموافقة الطرفين.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">2.</span>
+                                                    <span class="t-lbl">Probation Period:</span>
+                                                    <span class="t-val">Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">فترة التجربة:</span>
+                                                    <span class="t-val-ar">6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">3.</span>
+                                                    <span class="t-lbl">Working Hours & Rest:</span>
+                                                    <span class="t-val">8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">ساعات العمل والراحة:</span>
+                                                    <span class="t-val-ar">8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">4.</span>
+                                                    <span class="t-lbl">Overtime Allowance:</span>
+                                                    <span class="t-val">Calculated at 125% for regular overtime & 150% for rest days/holidays as per Art. 74.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">بدل العمل الإضافي:</span>
+                                                    <span class="t-val-ar">يحتسب بنسبة 125% للأيام العادية و150% لأيام العطلات والإجازات وفقاً للمادة (74).</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">5.</span>
+                                                    <span class="t-lbl">Accommodation & Food:</span>
+                                                    <span class="t-val">Free bachelor accommodation & food / allowance provided by Company as per MoL regulations.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">السكن والتغذية:</span>
+                                                    <span class="t-val-ar">توفير سكن عمالي ملائم وتغذية/بدل طعام موفر من الشركة وفق تعليمات وزارة العمل.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">6.</span>
+                                                    <span class="t-lbl">Transportation:</span>
+                                                    <span class="t-val">Free transportation provided between accommodation and work sites.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">المواصلات:</span>
+                                                    <span class="t-val-ar">توفير وسائل المواصلات المجانية بين مقر السكن ومواقع العمل.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- END PAGE 1 -->
+
+                                <div class="page-break"></div>
+
+                                <!-- PAGE 2 -->
+                                <div class="pdf-page page-2">
+                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
+                                    <div class="content-over-watermark">
+                                        <div class="pdf-header-mini">
+                                            <span class="left">AL KABEER TRADING & CONTRACTING W.L.L.</span>
+                                            <span class="center">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
+                                            <span class="right">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
+                                        </div>
+                                        <hr class="header-line">
+
+                                        <!-- Terms List Part 2 (Points 7 to 12) -->
+                                        <div class="terms-container">
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">7.</span>
+                                                    <span class="t-lbl">Medical & Health Insurance:</span>
+                                                    <span class="t-val">Health card / Private Health Insurance provided as per Qatar Law No. 22 of 2021.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">الرعاية الصحية والتأمين:</span>
+                                                    <span class="t-val-ar">توفير البطاقة الصحية والتأمين الصحي وفقاً للقانون القطري رقم (22) لسنة 2021.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">8.</span>
+                                                    <span class="t-lbl">Annual Leave:</span>
+                                                    <span class="t-val">3 Weeks paid annual leave per year after 1 year of continuous service as per Art. 79.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">الإجازة السنوية:</span>
+                                                    <span class="t-val-ar">إجازة سنوية مدفوعة الأجر لمدة 3 أسابيع بعد إكمال سنة من الخدمة وفقاً للمادة (79).</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">9.</span>
+                                                    <span class="t-lbl">Return Air Ticket:</span>
+                                                    <span class="t-val">Economy return air ticket to home country upon completion of contract period.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">تذكرة الطيران:</span>
+                                                    <span class="t-val-ar">تذكرة طيران سفر وعودة اقتصادية لموطن العامل عند إكمال مدة العقد.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">10.</span>
+                                                    <span class="t-lbl">Residency & QID Fees:</span>
+                                                    <span class="t-val">All costs for QID (Residence Permit) & Visa borne entirely by Company as per Qatar Law.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">الإقامة وتأشيرة العمل:</span>
+                                                    <span class="t-val-ar">تتحمل الشركة كافة مصاريف استخراج وتجديد الإقامة (QID) وتأشيرة العمل.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">11.</span>
+                                                    <span class="t-lbl">End of Service Gratuity:</span>
+                                                    <span class="t-val">Minimum 21 days basic salary per year of service after completing 1 year as per Art. 54.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">مكافأة نهاية الخدمة:</span>
+                                                    <span class="t-val-ar">مكافأة نهاية الخدمة بواقع 21 يوماً عن كل سنة خدمة بعد إكمال سنة كاملة وفقاً للمادة (54).</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">12.</span>
+                                                    <span class="t-lbl">Governing Jurisdiction:</span>
+                                                    <span class="t-val">Subject to Qatar Labor Law No. 14 of 2004 and Qatar Ministry of Labour regulations.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">القانون الواجب التطبيق:</span>
+                                                    <span class="t-val-ar">يخضع هذا العقد لأحكام قانون العمل القطري رقم (14) لسنة 2004 وتعديلاته.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="law-note">
+                                            <div class="en-text" dir="ltr">All other conditions not specified herein shall be governed by Qatar Labor Law No. 14 of 2004.</div>
+                                            <div class="ar-text" dir="rtl">تخضع جميع الشروط والأحكام الأخرى غير المذكورة هنا لقانون العمل القطري رقم (14) لسنة 2004.</div>
+                                        </div>
+
+                                        <!-- Important Note Box -->
+                                        <div class="pdf-important-box">
+                                            <div class="imp-head">
+                                                <span>Important Instructions for Employee</span>
+                                                <span dir="rtl">تعليمات وإرشادات هامة للموظف</span>
+                                            </div>
+                                            <ol class="imp-list">
+                                                <li>
+                                                    <div class="en-line" dir="ltr">Offer valid for 30 days from date of issue.</div>
+                                                    <div class="ar-line" dir="rtl">يسري هذا العرض لمدة 30 يوماً من تاريخ صدوره.</div>
+                                                </li>
+                                                <li>
+                                                    <div class="en-line" dir="ltr">Employee signature or thumb impression must match passport signature.</div>
+                                                    <div class="ar-line" dir="rtl">يجب أن يطابق توقيع الموظف أو البصمة التوقيع الموجود بجواز السفر.</div>
+                                                </li>
+                                                <li>
+                                                    <div class="en-line" dir="ltr">Employee must strictly adhere to Qatar Ministry of Interior & Ministry of Labour safety & conduct regulations.</div>
+                                                    <div class="ar-line" dir="rtl">يلتزم الموظف باتباع تعليمات السلامة والسلوك الصادرة عن الجهات المختصة بقطر.</div>
+                                                </li>
+                                            </ol>
+                                        </div>
+
+                                        <!-- Acceptance Statement -->
+                                        <div class="pdf-acceptance">
+                                            <div class="acc-text-en" dir="ltr"><b>Declaration & Acceptance:</b> I hereby confirm that I have read, understood, and accepted all terms and conditions of this Employment Offer Letter without reservation.</div>
+                                            <div class="acc-text-ar" dir="rtl"><b>إقرار واعتراف بالقبول:</b> أقر أنا المسمى أعلاه بأنني قد قرأت وفهمت ووافقت على كافة الشروط والأحكام الواردة في عرض العمل هذا دون أي تحفظ.</div>
+                                        </div>
+
+                                        <!-- Signatures Row -->
+                                        <div class="pdf-signatures-grid">
+                                            <div class="sig-col employee-sig">
+                                                <div class="sig-title">Candidate Signature / توقيع المرشح</div>
+                                                <div class="sig-line-box">
+                                                    <div>Date / التاريخ: .........................</div>
+                                                    <div>Signature / التوقيع: .........................</div>
+                                                </div>
+                                            </div>
+                                            <div class="sig-col employer-sig">
+                                                <div class="company-name-sig">AL KABEER TRADING & CONTRACTING W.L.L.</div>
+                                                <div class="company-name-ar" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</div>
+                                                <div class="app-badge">APPROVED BY / اعتمد بواسطة</div>
+                                                <div class="dept">Human Resources Department</div>
+                                                <div class="stamp-box">
+                                                    <img src="../static/images/alkabeer_logo.png" alt="Company Seal">
+                                                    <div class="stamp-text">Official Stamp & Signature</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- END PAGE 2 -->
+                            </div>
+
+                            <!-- APPOINTMENT LETTER TEMPLATE (Hidden by default) -->
+                            <div id="apptTemplate" class="document-paper pdf-template" style="display: none;">
+                                <div class="pdf-page page-1">
+                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
+                                    <div class="content-over-watermark">
+                                        <div class="pdf-header-wrapper">
+                                            <div class="pdf-logo-col">
+                                                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Logo">
+                                            </div>
+                                            <div class="pdf-center-col">
+                                                <h1>شركة الكبير للتجارة والمقاولات ذ.م.م</h1>
+                                                <h2>AL KABEER TRADING & CONTRACTING W.L.L.</h2>
+                                                <div class="cr-info">C.R. No: 184920 | Establishment ID: 74/92014</div>
+                                            </div>
+                                            <div class="pdf-right-col">
+                                                <div class="pdf-ref-date">
+                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">05/08/2026</span></div>
+                                                    <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                </div>
+                                                <div class="pdf-contact-box">
+                                                    <div>Tel: +974 4490 2699 | Fax: +974 4434 1512</div>
+                                                    <div style="color: #004b87;">info@alkabeerqatar.com | www.alkabeerqatar.com</div>
+                                                    <div class="red-title">HEAD OFFICE - DOHA QATAR</div>
+                                                    <div>Office 110, World Wide Commercial Bldg, D Ring Rd</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pdf-doc-title">
+                                            OFFICIAL APPOINTMENT LETTER
+                                            <span>خطاب التعيين الرسمي - دولة قطر</span>
+                                        </div>
+
+                                        <div class="document-body" style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1e293b; margin-top: 15px;">
+                                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 4px; margin-bottom: 15px;">
+                                                <div style="display: flex; justify-content: space-between;">
+                                                    <div><strong>To / إلى:</strong> <span class="outName" style="text-transform: uppercase; font-weight: bold; color: #1e3a8a;">[NAME]</span></div>
+                                                    <div><strong>Nationality / الجنسية:</strong> <span class="outNat">[NATIONALITY]</span></div>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                                                    <div><strong>Passport No / رقم الجواز:</strong> <span class="outIdNo">[PASSPORT]</span></div>
+                                                    <div><strong>Designation / المسمى:</strong> <span class="outTitle">[DESIGNATION]</span></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <p>Dear <span class="outName" style="font-weight: bold;">[NAME]</span>,</p>
+                                            
+                                            <p>Following your successful interview and acceptance of our offer, we are pleased to officially appoint you as <strong><span class="outTitle">[DESIGNATION]</span></strong> at <strong>Al Kabeer Trading & Contracting W.L.L.</strong> in the State of Qatar.</p>
+                                            
+                                            <p><strong>Terms of Engagement:</strong> During your employment, you will be subject to the rules and regulations of the company and the Labor Laws of the State of Qatar (Law No. 14 of 2004). You will be on a probationary period of six (6) months, during which your performance will be evaluated as per Qatar Labor Law Article 39.</p>
+                                            
+                                            <p><strong>Remuneration & Benefits:</strong> Your total monthly salary and employment benefits will remain exactly as stated in your accepted Offer Letter: <br><span style="display: inline-block; background: #eff6ff; padding: 6px 12px; border-radius: 4px; border: 1px solid #bfdbfe; font-weight: bold; color: #1e3a8a; margin-top: 5px;"><span class="outSalary">[SALARY STRING]</span></span>.</p>
+
+                                            <p><strong>Compliance & Confidentiality:</strong> You are required to maintain strict confidentiality regarding all company matters, trade secrets, and client information, and adhere strictly to Qatar Ministry of Interior and Ministry of Labour safety guidelines.</p>
+                                            
+                                            <p>We look forward to a successful and productive association with you.</p>
+
+                                            <div class="pdf-signatures-grid" style="margin-top: 35px;">
+                                                <div class="sig-col employee-sig">
+                                                    <div class="sig-title">Employee Acknowledgment / استلام الموظف</div>
+                                                    <div class="sig-line-box">
+                                                        <div>I accept the terms of this appointment letter.</div>
+                                                        <div>Signature / التوقيع: .........................</div>
+                                                        <div>Date / التاريخ: .........................</div>
+                                                    </div>
+                                                </div>
+                                                <div class="sig-col employer-sig">
+                                                    <div class="company-name-sig">AL KABEER TRADING & CONTRACTING W.L.L.</div>
+                                                    <div class="company-name-ar" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</div>
+                                                    <div class="app-badge">ISSUED BY HR DEPARTMENT</div>
+                                                    <div class="stamp-box" style="margin-top: 10px;">
+                                                        <img src="../static/images/alkabeer_logo.png" alt="Company Seal">
+                                                        <div class="stamp-text">Official Stamp & Signature</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ID CARD TEMPLATE (Hidden by default) -->
+                            <div id="idCardTemplate" style="display: none; align-items: center; justify-content: center; height: 100%; width: 100%;">
+                                <div class="id-card-canvas">
+                                    <div class="id-header">
+                                        <h2 style="margin:0; font-size: 16px; font-weight: 800;">AL KABEER</h2>
+                                        <h5>TRADING & CONTRACTING W.L.L.</h5>
+                                    </div>
+                                    
+                                    <div class="id-photo-container">
+                                        <img id="outPhoto" src="https://via.placeholder.com/90x110?text=Photo" alt="Employee">
+                                    </div>
+                                    
+                                    <div class="id-details">
+                                        <h2 class="outName">[NAME]</h2>
+                                        <h4 class="outTitle">[DESIGNATION]</h4>
+                                        
+                                        <div class="id-info-grid">
+                                            <div class="label">PASS NO:</div>
+                                            <div class="outIdNo">-------</div>
+                                            
+                                            <div class="label">DOJ:</div>
+                                            <div class="outDoj">--/--/----</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="id-footer">
+                                        Office 110, D Ring Rd, Doha | +974 44902699<br>
+                                        www.alkabeerqatar.com
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Print area that will be isolated during printing -->
+    <div id="printArea" class="no-print"></div>
+
+    <script src="js/hr.js"></script>
+</body>
+</html>

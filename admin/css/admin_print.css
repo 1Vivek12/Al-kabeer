@@ -1,0 +1,332 @@
+/* ===== Print Styles for Qatar HR Admin ===== */
+/* This stylesheet ONLY applies during printing (Ctrl+P / Save as PDF) */
+
+@media print {
+
+    /* ── Page Setup ── */
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    /* ── Force Colors & Backgrounds ── */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* ── Hide Everything Except #printArea ── */
+    body > *:not(#printArea) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .admin-wrapper,
+    .sidebar,
+    .topbar,
+    .hr-form-panel,
+    .hr-preview-panel,
+    .preview-toolbar,
+    .preview-content-scroll,
+    .no-print {
+        display: none !important;
+    }
+
+    /* ── Print Area ── */
+    #printArea {
+        display: block !important;
+        visibility: visible !important;
+        position: static !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+    }
+
+    /* ── Document Paper Container ── */
+    .document-paper,
+    .pdf-template {
+        display: block !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: #ffffff !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    /* ── Individual PDF Pages ── */
+    .pdf-page {
+        display: block !important;
+        position: relative !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        box-sizing: border-box !important;
+        padding: 8mm 12mm !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        background: #ffffff !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Last page should not force a blank page after it */
+    .pdf-page:last-child,
+    .pdf-page.page-2 {
+        page-break-after: auto !important;
+        break-after: auto !important;
+    }
+
+    /* ── Watermark (Per-Page) ── */
+    .pdf-page .watermark {
+        display: block !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 55% !important;
+        height: auto !important;
+        opacity: 0.05 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        mix-blend-mode: multiply !important;
+    }
+
+    /* ── Content Layer Above Watermark ── */
+    .pdf-page .content-over-watermark {
+        position: relative !important;
+        z-index: 1 !important;
+        width: 100% !important;
+    }
+
+    /* ── Page Break Divider (between Page 1 and Page 2) ── */
+    .page-break {
+        display: block !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        page-break-before: always !important;
+        break-before: page !important;
+        visibility: hidden !important;
+    }
+
+    /* ── Header ── */
+    .pdf-header-wrapper {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        border-bottom: 2px solid #1e3a8a !important;
+        padding-bottom: 8px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .pdf-logo-col img {
+        width: 130px !important;
+        height: auto !important;
+    }
+
+    .pdf-center-col {
+        text-align: center !important;
+        flex-grow: 1 !important;
+    }
+
+    .pdf-center-col h1 {
+        font-size: 20px !important;
+        color: #1e3a8a !important;
+    }
+
+    .pdf-center-col h2 {
+        font-size: 14px !important;
+        color: #1e3a8a !important;
+    }
+
+    .cr-info {
+        color: #d97706 !important;
+    }
+
+    /* ── Document Title ── */
+    .pdf-doc-title {
+        background: #eff6ff !important;
+        border: 1px solid #bfdbfe !important;
+        color: #1e3a8a !important;
+    }
+
+    /* ── Terms Section Title (Navy Bar) ── */
+    .terms-section-title {
+        background: #1e3a8a !important;
+        color: #ffffff !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* ── Terms Rows ── */
+    .terms-row-en {
+        display: flex !important;
+    }
+
+    .terms-row-en .t-num,
+    .terms-row-en .t-lbl {
+        color: #1e3a8a !important;
+    }
+
+    .terms-row-ar {
+        display: flex !important;
+        direction: rtl !important;
+    }
+
+    .terms-row-ar .t-lbl-ar {
+        color: #1e3a8a !important;
+    }
+
+    .terms-item {
+        border-bottom: 1px dashed #cbd5e1 !important;
+    }
+
+    /* ── Summary Table ── */
+    .emp-summary-table {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    .emp-summary-table td {
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    .emp-summary-table .lbl-en,
+    .emp-summary-table .lbl-ar {
+        color: #1e3a8a !important;
+    }
+
+    /* ── Law Note ── */
+    .law-note {
+        background: #eff6ff !important;
+        border-left: 4px solid #1e3a8a !important;
+        color: #1e3a8a !important;
+    }
+
+    /* ── Important Box ── */
+    .pdf-important-box {
+        background: #fff5f5 !important;
+        border: 1px solid #fca5a5 !important;
+    }
+
+    .imp-head {
+        color: #dc2626 !important;
+    }
+
+    .imp-list .en-line {
+        color: #7f1d1d !important;
+        direction: ltr !important;
+        text-align: left !important;
+    }
+
+    .imp-list .ar-line {
+        color: #991b1b !important;
+        direction: rtl !important;
+        text-align: right !important;
+    }
+
+    /* ── Acceptance ── */
+    .pdf-acceptance {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    .pdf-acceptance .acc-text-en {
+        direction: ltr !important;
+        text-align: left !important;
+    }
+
+    .pdf-acceptance .acc-text-ar {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+
+    /* ── Signatures ── */
+    .pdf-signatures-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .sig-col {
+        border: 1px solid #cbd5e1 !important;
+        background: #fafafa !important;
+    }
+
+    .sig-title {
+        color: #1e3a8a !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    .company-name-sig {
+        color: #1e3a8a !important;
+    }
+
+    .company-name-ar {
+        color: #1e3a8a !important;
+        direction: rtl !important;
+    }
+
+    .app-badge {
+        background: #d97706 !important;
+        color: #fff !important;
+    }
+
+    .stamp-box img {
+        height: 40px !important;
+        opacity: 0.85 !important;
+    }
+
+    /* ── Ref/Date Box ── */
+    .pdf-ref-date {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    .pdf-contact-box {
+        border: 1px solid #94a3b8 !important;
+        background: #fafafa !important;
+    }
+
+    .pdf-contact-box .red-title {
+        color: #dc2626 !important;
+    }
+
+    /* ── Mini Header (Page 2) ── */
+    .pdf-header-mini {
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+
+    .header-line {
+        border-top: 1.5px solid #1e3a8a !important;
+    }
+
+    /* ── ID Card ── */
+    .id-card-canvas {
+        width: 85mm !important;
+        height: 54mm !important;
+        margin: auto !important;
+    }
+}

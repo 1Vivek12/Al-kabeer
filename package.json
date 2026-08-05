@@ -1,0 +1,22 @@
+{
+  "name": "alkabeer-qatar",
+  "version": "1.0.0",
+  "description": "Al Kabeer Trading & Contracting W.L.L. Website - Qatar",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 8080 -c-1",
+    "start": "npx http-server -p 8080 -c-1"
+  },
+  "keywords": [
+    "qatar",
+    "hvac",
+    "mep",
+    "contracting",
+    "alkabeer"
+  ],
+  "author": "Al Kabeer Trading & Contracting",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^25.5.0"
+  }
+}

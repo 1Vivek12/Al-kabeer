@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Al Kabeer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper no-print">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Admin">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li><a href="hr.html"><i class="bi bi-people-fill"></i> HR Management</a></li>
+                <li><a href="#"><i class="bi bi-briefcase-fill"></i> Services</a></li>
+                <li><a href="#"><i class="bi bi-images"></i> Gallery</a></li>
+                <li><a href="#"><i class="bi bi-chat-left-text-fill"></i> Enquiries</a></li>
+                <li><a href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                &copy; 2026 Al Kabeer Trading & Contracting
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <h1 class="topbar-title">Dashboard Overview</h1>
+                <div class="user-profile">
+                    <span style="font-weight: 500; font-size: 14px;">Admin User</span>
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=0175b2&color=fff" alt="Profile">
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="dashboard-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                        <div class="stat-details">
+                            <h3>142</h3>
+                            <p>Total Employees</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-chat-left-dots-fill"></i></div>
+                        <div class="stat-details">
+                            <h3>28</h3>
+                            <p>New Enquiries</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-briefcase-fill"></i></div>
+                        <div class="stat-details">
+                            <h3>12</h3>
+                            <p>Job Applications</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-tools"></i></div>
+                        <div class="stat-details">
+                            <h3>45</h3>
+                            <p>Active Projects</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #fff; padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); text-align: center; margin-top: 20px;">
+                    <i class="bi bi-rocket-takeoff-fill" style="font-size: 48px; color: var(--primary); margin-bottom: 15px; display: inline-block;"></i>
+                    <h2 style="color: var(--sidebar-bg); margin-bottom: 10px;">Welcome to Al Kabeer Admin Panel</h2>
+                    <p style="color: #64748b; max-width: 600px; margin: 0 auto 20px;">Use the sidebar navigation to manage website content, view enquiries, and generate HR documents like Offer Letters and ID Cards.</p>
+                    <a href="hr.html" class="btn-primary" style="text-decoration: none; display: inline-block;">Go to HR Management <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" width="220" height="70">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0175b2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#004c86;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0099e6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0175b2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon Graphics -->
+  <g transform="translate(10, 15)">
+    <!-- Hexagon / Diamond Structure Emblem -->
+    <path d="M 45 5 L 85 28 L 85 72 L 45 95 L 5 72 L 5 28 Z" fill="none" stroke="url(#grad1)" stroke-width="6" />
+    <path d="M 45 18 L 70 33 L 70 67 L 45 82 L 20 67 L 20 33 Z" fill="url(#grad2)" />
+    <!-- Architectural AK Emblem inside -->
+    <path d="M 33 65 L 45 35 L 57 65 M 37 55 L 53 55" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none" />
+    <circle cx="45" cy="27" r="4" fill="#ffffff" />
+  </g>
+
+  <!-- Typography -->
+  <text x="110" y="52" font-family="'Rubik', sans-serif" font-weight="900" font-size="34" fill="#004c86" letter-spacing="1">AL KABEER</text>
+  <text x="110" y="78" font-family="'Rubik', sans-serif" font-weight="700" font-size="16" fill="#0175b2" letter-spacing="1.5">TRADING &amp; CONTRACTING</text>
+  <text x="110" y="96" font-family="'Rubik', sans-serif" font-weight="600" font-size="11" fill="#666666" letter-spacing="2">W.L.L. - QATAR</text>
+</svg>
