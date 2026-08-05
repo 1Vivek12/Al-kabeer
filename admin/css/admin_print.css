@@ -1,12 +1,29 @@
 /* ===== Print Styles for Qatar HR Admin ===== */
 /* This stylesheet ONLY applies during printing (Ctrl+P / Save as PDF) */
 
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
 @media print {
 
     /* ── Page Setup ── */
     @page {
         size: A4 portrait;
         margin: 0;
+    }
+
+    /* ── Force Fonts & Arabic Glyph Shaping ── */
+    [dir="rtl"], .ar-line, .ar-text, .acc-text-ar, .company-name-ar, .lbl-ar, .t-lbl-ar, .t-val-ar, [lang="ar"] {
+        font-family: 'Cairo', 'Tajawal', 'Amiri', sans-serif !important;
+        direction: rtl !important;
+        unicode-bidi: isolate !important;
+        text-align: right !important;
+    }
+
+    [dir="ltr"], .en-line, .en-text, .acc-text-en, .company-name-sig, .lbl-en, .t-lbl, .t-val, [lang="en"] {
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+        direction: ltr !important;
+        unicode-bidi: isolate !important;
+        text-align: left !important;
     }
 
     /* ── Force Colors & Backgrounds ── */
