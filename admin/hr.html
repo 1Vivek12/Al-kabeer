@@ -12,6 +12,24 @@
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/admin_print.css">
     <style>
+        /* Corner Logos */
+        .corner-logos {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .corner-logo {
+            position: absolute;
+            width: 45px;
+            opacity: 0.15;
+            mix-blend-mode: multiply;
+        }
+        .c-tl { top: 12px; left: 12px; }
+        .c-tr { top: 12px; right: 12px; }
+        .c-bl { bottom: 12px; left: 12px; }
+        .c-br { bottom: 12px; right: 12px; }
+
         /* QATAR COMPLIANT PDF TEMPLATE STYLES */
         .pdf-template {
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
@@ -54,7 +72,7 @@
             align-items: flex-start;
             border-bottom: 2px solid #1e3a8a;
             padding-bottom: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         
         .pdf-logo-col img {
@@ -69,14 +87,14 @@
         }
         
         .pdf-center-col h1 {
-            font-size: 20px;
+            font-size: 25px;
             color: #1e3a8a;
             margin: 0 0 2px 0;
             font-weight: 800;
         }
         
         .pdf-center-col h2 {
-            font-size: 14px;
+            font-size: 17.5px;
             color: #1e3a8a;
             margin: 0 0 4px 0;
             font-weight: 700;
@@ -84,20 +102,20 @@
         }
         
         .cr-info {
-            font-size: 11px;
+            font-size: 13.75px;
             font-weight: 700;
             color: #d97706;
         }
         
         .pdf-right-col {
             width: 230px;
-            font-size: 10px;
+            font-size: 12.5px;
         }
         
         .pdf-ref-date {
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             background: #f1f5f9;
-            padding: 4px 8px;
+            padding: 5.2px 8px;
             border-radius: 4px;
             border: 1px solid #cbd5e1;
             display: flex;
@@ -108,13 +126,13 @@
             border: 1px solid #94a3b8;
             border-radius: 4px;
             overflow: hidden;
-            font-size: 9.5px;
+            font-size: 11.875px;
             background: #fafafa;
         }
         
         .pdf-contact-box div {
             border-bottom: 1px solid #e2e8f0;
-            padding: 2px 6px;
+            padding: 2.6px 6px;
         }
         
         .pdf-contact-box div:last-child {
@@ -125,26 +143,26 @@
             color: #dc2626;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 9px;
+            font-size: 11.25px;
         }
         
         .pdf-doc-title {
             text-align: center;
             color: #1e3a8a;
-            font-size: 15px;
+            font-size: 18.75px;
             font-weight: 800;
             margin: 6px 0 8px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             background: #eff6ff;
-            padding: 5px;
+            padding: 6.5px;
             border: 1px solid #bfdbfe;
             border-radius: 4px;
         }
         
         .pdf-doc-title span {
             display: block;
-            font-size: 12px;
+            font-size: 15px;
             font-weight: 700;
             color: #1e3a8a;
             margin-top: 2px;
@@ -154,15 +172,15 @@
         .emp-summary-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             background: #f8fafc;
             border: 1px solid #cbd5e1;
         }
         
         .emp-summary-table td {
-            padding: 5px 8px;
+            padding: 6.5px 8px;
             border: 1px solid #cbd5e1;
-            font-size: 11px;
+            font-size: 13.75px;
         }
         
         .emp-summary-table .lbl-en {
@@ -188,18 +206,18 @@
         .terms-section-title {
             background: #1e3a8a;
             color: #ffffff;
-            padding: 5px 10px;
+            padding: 6.5px 10px;
             font-weight: bold;
-            font-size: 11.5px;
+            font-size: 14.375px;
             border-radius: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .terms-section-title span {
-            font-size: 11px;
+            font-size: 13.75px;
             font-weight: 600;
             direction: rtl;
         }
@@ -218,7 +236,7 @@
         .terms-row-en {
             display: flex;
             gap: 4px;
-            font-size: 11px;
+            font-size: 13.75px;
             font-weight: 600;
             color: #0f172a;
         }
@@ -243,7 +261,7 @@
         .terms-row-ar {
             display: flex;
             justify-content: space-between;
-            font-size: 10.5px;
+            font-size: 13.125px;
             color: #475569;
             direction: rtl;
             margin-top: 1px;
@@ -265,7 +283,7 @@
         .pdf-header-mini {
             display: flex;
             justify-content: space-between;
-            font-size: 9.5px;
+            font-size: 11.875px;
             color: #475569;
             font-weight: bold;
         }
@@ -279,8 +297,8 @@
         .law-note {
             background: #eff6ff;
             border-left: 4px solid #1e3a8a;
-            padding: 6px 10px;
-            font-size: 10.5px;
+            padding: 7.800000000000001px 10px;
+            font-size: 13.125px;
             margin: 8px 0;
             color: #1e3a8a;
             font-weight: 600;
@@ -297,14 +315,14 @@
             border: 1px solid #fca5a5;
             background: #fff5f5;
             border-radius: 4px;
-            padding: 6px 10px;
-            margin-bottom: 8px;
+            padding: 7.800000000000001px 10px;
+            margin-bottom: 12px;
         }
         
         .imp-head {
             font-weight: bold;
             color: #dc2626;
-            font-size: 11px;
+            font-size: 13.75px;
             display: flex;
             justify-content: space-between;
         }
@@ -316,11 +334,11 @@
         .imp-list {
             margin: 4px 0 0 16px;
             padding: 0;
-            font-size: 10px;
+            font-size: 12.5px;
         }
         
         .imp-list li {
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
         
         .imp-list .en-line {
@@ -342,9 +360,9 @@
             background: #f8fafc;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
-            padding: 6px 10px;
-            margin-bottom: 8px;
-            font-size: 10.5px;
+            padding: 7.800000000000001px 10px;
+            margin-bottom: 12px;
+            font-size: 13.125px;
         }
         
         .pdf-acceptance .acc-text-en {
@@ -371,21 +389,21 @@
         .sig-col {
             border: 1px solid #cbd5e1;
             border-radius: 4px;
-            padding: 8px 12px;
+            padding: 10.4px 12px;
             background: #fafafa;
         }
         
         .sig-title {
             font-weight: bold;
-            font-size: 11px;
+            font-size: 13.75px;
             color: #1e3a8a;
             border-bottom: 1px solid #e2e8f0;
             padding-bottom: 3px;
-            margin-bottom: 6px;
+            margin-bottom: 9px;
         }
         
         .sig-line-box {
-            font-size: 10px;
+            font-size: 12.5px;
             color: #475569;
             display: flex;
             flex-direction: column;
@@ -395,12 +413,12 @@
         
         .company-name-sig {
             font-weight: 800;
-            font-size: 11px;
+            font-size: 13.75px;
             color: #1e3a8a;
         }
         
         .company-name-ar {
-            font-size: 10px;
+            font-size: 12.5px;
             font-weight: bold;
             color: #1e3a8a;
             direction: rtl;
@@ -410,15 +428,15 @@
             display: inline-block;
             background: #d97706;
             color: #fff;
-            font-size: 9px;
+            font-size: 11.25px;
             font-weight: bold;
-            padding: 1px 6px;
+            padding: 1.3px 6px;
             border-radius: 3px;
             margin: 4px 0 2px 0;
         }
         
         .dept {
-            font-size: 10px;
+            font-size: 12.5px;
             color: #475569;
             font-weight: 600;
         }
@@ -436,7 +454,7 @@
         }
         
         .stamp-box .stamp-text {
-            font-size: 8.5px;
+            font-size: 10.625px;
             color: #64748b;
             font-style: italic;
         }
@@ -489,7 +507,7 @@
             <header class="topbar">
                 <h1 class="topbar-title">HR Document Generator</h1>
                 <div class="user-profile">
-                    <span style="font-weight: 500; font-size: 14px;">HR Admin</span>
+                    <span style="font-weight: 500; font-size: 17.5px;">HR Admin</span>
                     <img src="https://ui-avatars.com/api/?name=HR+Admin&background=0175b2&color=fff" alt="Profile">
                 </div>
             </header>
@@ -506,7 +524,7 @@
                         </div>
 
                         <form id="hrForm">
-                            <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--secondary); font-size: 16px;">Employee Details</h4>
+                            <h4 style="margin-top: 0; margin-bottom: 30px; color: var(--secondary); font-size: 20px;">Employee Details</h4>
                             
                             <div class="form-group">
                                 <label>Date of Issue</label>
@@ -546,7 +564,7 @@
                             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
                             
                             <div id="photoSection" style="display: none;">
-                                <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--secondary); font-size: 16px;">ID Card Photo</h4>
+                                <h4 style="margin-top: 0; margin-bottom: 30px; color: var(--secondary); font-size: 20px;">ID Card Photo</h4>
                                 <div class="form-group">
                                     <label>Upload Employee Photo (JPG/PNG)</label>
                                     <input type="file" id="empPhoto" class="form-control" accept="image/*">
@@ -559,10 +577,10 @@
                             </div>
 
                             <div class="form-group" style="margin-top: 30px;">
-                                <button type="button" id="btnGenerate" class="btn-primary" style="width: 100%; font-size: 16px; padding: 12px;">
+                                <button type="button" id="btnGenerate" class="btn-primary" style="width: 100%; font-size: 20px; padding: 15.600000000000001px;">
                                     <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generate Document
                                 </button>
-                                <p style="font-size: 12px; color: #64748b; text-align: center; margin-top: 8px;">Click to Print or Save as PDF</p>
+                                <p style="font-size: 15px; color: #64748b; text-align: center; margin-top: 8px;">Click to Print or Save as PDF</p>
                             </div>
 
                         </form>
@@ -582,6 +600,12 @@
                                 
                                 <!-- PAGE 1 -->
                                 <div class="pdf-page page-1">
+                                    <div class="corner-logos">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-tl">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-tr">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-bl">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-br">
+                                    </div>
                                     <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
                                     <div class="content-over-watermark">
                                         <!-- Header -->
@@ -649,7 +673,7 @@
                                             <span>الشروط والأحكام الخاصة بالتوظيف (وفقاً لقانون العمل القطري)</span>
                                         </div>
 
-                                        <!-- Terms List Part 1 (Points 1 to 7) -->
+                                        <!-- Terms List Part 1 (Points 1 to 9) -->
                                         <div class="terms-container">
                                             <div class="terms-item">
                                                 <div class="terms-row-en">
@@ -734,35 +758,7 @@
                                                     <span class="t-val-ar">توفير البطاقة الصحية والتأمين الصحي وفقاً للقانون القطري رقم (22) لسنة 2021.</span>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Company Commitment Box Page 1 Bottom -->
-                                        <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 4px; font-size: 10px;">
-                                            <div dir="ltr" style="font-weight: 600; color: #0369a1; margin-bottom: 2px;">
-                                                <b>Company Commitment:</b> Al Kabeer Trading & Contracting W.L.L. guarantees all rights & benefits under Qatar Labor Law No. 14 of 2004.
-                                            </div>
-                                            <div dir="rtl" style="font-weight: 500; color: #0284c7; text-align: right;">
-                                                <b>التزام الشركة:</b> تلتزم شركة الكبير للتجارة والمقاولات ذ.م.م بضمان وتوفير كافة الحقوق والمزايا وفقاً لقانون العمل القطري.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> <!-- END PAGE 1 -->
-
-                                <div class="page-break"></div>
-
-                                <!-- PAGE 2 -->
-                                <div class="pdf-page page-2">
-                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
-                                    <div class="content-over-watermark">
-                                        <div class="pdf-header-mini">
-                                            <span class="left" dir="ltr">AL KABEER TRADING & CONTRACTING W.L.L.</span>
-                                            <span class="center" dir="ltr">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
-                                            <span class="right" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
-                                        </div>
-                                        <hr class="header-line">
-
-                                        <!-- Terms List Part 2 (Points 8 to 13) -->
-                                        <div class="terms-container">
                                             <div class="terms-item">
                                                 <div class="terms-row-en">
                                                     <span class="t-num">8.</span>
@@ -786,7 +782,41 @@
                                                     <span class="t-val-ar">توفير تذكرة طيران سفر وعودة اقتصادية لموطن العامل عند إكمال مدة العقد.</span>
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <!-- Company Commitment Box Page 1 Bottom -->
+                                        <div style="margin-top: 12px; padding: 10.4px 12px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 4px; font-size: 12.5px;">
+                                            <div dir="ltr" style="font-weight: 600; color: #0369a1; margin-bottom: 3px;">
+                                                <b>Statutory Guarantee:</b> Al Kabeer Trading & Contracting W.L.L. guarantees all statutory rights and welfare standards under Qatar Labor Law No. 14 of 2004.
+                                            </div>
+                                            <div dir="rtl" style="font-weight: 500; color: #0284c7; text-align: right;">
+                                                <b>الضمان القانوني:</b> تلتزم شركة الكبير للتجارة والمقاولات ذ.م.م بضمان وحماية كافة الحقوق والمعايير العمالية وفقاً لقانون العمل القطري.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- END PAGE 1 -->
+
+                                <div class="page-break"></div>
+
+                                <!-- PAGE 2 -->
+                                <div class="pdf-page page-2">
+                                    <div class="corner-logos">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-tl">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-tr">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-bl">
+                                        <img src="../static/images/alkabeer_logo.png" class="corner-logo c-br">
+                                    </div>
+                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
+                                    <div class="content-over-watermark">
+                                        <div class="pdf-header-mini">
+                                            <span class="left" dir="ltr">AL KABEER TRADING & CONTRACTING W.L.L.</span>
+                                            <span class="center" dir="ltr">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
+                                            <span class="right" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
+                                        </div>
+                                        <hr class="header-line">
+
+                                        <!-- Terms List Part 2 (Points 10 to 15) -->
+                                        <div class="terms-container">
                                             <div class="terms-item">
                                                 <div class="terms-row-en">
                                                     <span class="t-num">10.</span>
@@ -826,8 +856,32 @@
                                             <div class="terms-item">
                                                 <div class="terms-row-en">
                                                     <span class="t-num">13.</span>
+                                                    <span class="t-lbl">Safety & Conduct Guidelines:</span>
+                                                    <span class="t-val">Employee must strictly adhere to Qatar MoI & MoL safety guidelines and site discipline rules.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">تعليمات السلامة والسلوك:</span>
+                                                    <span class="t-val-ar">يلتزم الموظف باتباع تعليمات السلامة المهنية والسلوك الصادرة عن الجهات المختصة بقطر.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">14.</span>
+                                                    <span class="t-lbl">Confidentiality & Non-Disclosure:</span>
+                                                    <span class="t-val">Employee shall maintain strict confidentiality regarding company projects, clients & operations.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">السرية وعدم الإفصاح:</span>
+                                                    <span class="t-val-ar">يلتزم الموظف بالحفاظ على سرية كافة بيانات وأعمال ومشاريع الشركة وعدم الإفصاح عنها.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">15.</span>
                                                     <span class="t-lbl">Governing Jurisdiction:</span>
-                                                    <span class="t-val">Subject to Qatar Labor Law No. 14 of 2004 and Ministry of Labour competent courts in Doha.</span>
+                                                    <span class="t-val">Subject to Qatar Labor Law No. 14 of 2004 and competent courts in Doha, State of Qatar.</span>
                                                 </div>
                                                 <div class="terms-row-ar">
                                                     <span class="t-lbl-ar">القانون الواجب التطبيق:</span>
@@ -926,8 +980,8 @@
                                             <span>خطاب التعيين الرسمي - دولة قطر</span>
                                         </div>
 
-                                        <div class="document-body" style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1e293b; margin-top: 15px;">
-                                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 4px; margin-bottom: 15px;">
+                                        <div class="document-body" style="font-size: 15px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1e293b; margin-top: 15px;">
+                                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 13px 14px; border-radius: 4px; margin-bottom: 22.5px;">
                                                 <div style="display: flex; justify-content: space-between;">
                                                     <div><strong>To / إلى:</strong> <span class="outName" style="text-transform: uppercase; font-weight: bold; color: #1e3a8a;">[NAME]</span></div>
                                                     <div><strong>Nationality / الجنسية:</strong> <span class="outNat">[NATIONALITY]</span></div>
@@ -944,7 +998,7 @@
                                             
                                             <p><strong>Terms of Engagement:</strong> During your employment, you will be subject to the rules and regulations of the company and the Labor Laws of the State of Qatar (Law No. 14 of 2004). You will be on a probationary period of six (6) months, during which your performance will be evaluated as per Qatar Labor Law Article 39.</p>
                                             
-                                            <p><strong>Remuneration & Benefits:</strong> Your total monthly salary and employment benefits will remain exactly as stated in your accepted Offer Letter: <br><span style="display: inline-block; background: #eff6ff; padding: 6px 12px; border-radius: 4px; border: 1px solid #bfdbfe; font-weight: bold; color: #1e3a8a; margin-top: 5px;"><span class="outSalary">[SALARY STRING]</span></span>.</p>
+                                            <p><strong>Remuneration & Benefits:</strong> Your total monthly salary and employment benefits will remain exactly as stated in your accepted Offer Letter: <br><span style="display: inline-block; background: #eff6ff; padding: 7.800000000000001px 12px; border-radius: 4px; border: 1px solid #bfdbfe; font-weight: bold; color: #1e3a8a; margin-top: 5px;"><span class="outSalary">[SALARY STRING]</span></span>.</p>
 
                                             <p><strong>Compliance & Confidentiality:</strong> You are required to maintain strict confidentiality regarding all company matters, trade secrets, and client information, and adhere strictly to Qatar Ministry of Interior and Ministry of Labour safety guidelines.</p>
                                             
@@ -978,7 +1032,7 @@
                             <div id="idCardTemplate" style="display: none; align-items: center; justify-content: center; height: 100%; width: 100%;">
                                 <div class="id-card-canvas">
                                     <div class="id-header">
-                                        <h2 style="margin:0; font-size: 16px; font-weight: 800;">AL KABEER</h2>
+                                        <h2 style="margin:0; font-size: 20px; font-weight: 800;">AL KABEER</h2>
                                         <h5>TRADING & CONTRACTING W.L.L.</h5>
                                     </div>
                                     
