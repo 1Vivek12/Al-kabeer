@@ -691,6 +691,7 @@
                             <button class="doc-tab" data-doc="appointment">Appt. Letter</button>
                             <button class="doc-tab" data-doc="salary_cert">Salary Cert.</button>
                             <button class="doc-tab" data-doc="idcard">ID Card</button>
+                            <button class="doc-tab" data-doc="history" style="background: #eff6ff; color: #1e3a8a; font-weight: 700;"><i class="bi bi-clock-history"></i> History</button>
                         </div>
 
                         <form id="hrForm">
@@ -1339,6 +1340,43 @@
                                         Office 110, D Ring Rd, Doha, Qatar | Tel: +974 4490 2699<br>
                                         <strong>www.alkabeerqatar.com</strong>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- DOCUMENT HISTORY TEMPLATE (Hidden by default) -->
+                            <div id="historyTemplate" class="pdf-template" style="display: none; width: 100%; max-width: 1050px; background: #ffffff; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); border: 1px solid #cbd5e1; margin: 0 auto;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #1e3a8a; padding-bottom: 15px; flex-wrap: wrap; gap: 15px;">
+                                    <div>
+                                        <h3 style="margin: 0; color: #1e3a8a; font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                                            <i class="bi bi-clock-history"></i> Generated Document History & Registry
+                                        </h3>
+                                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #16a34a; font-weight: 700;">
+                                            <i class="bi bi-cloud-check-fill"></i> Live Synchronized with Supabase Cloud Database
+                                        </p>
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <input type="text" id="historySearchInput" placeholder="🔍 Search Name, Passport or Ref..." style="padding: 10px 16px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 14px; width: 300px; font-weight: 600;">
+                                    </div>
+                                </div>
+
+                                <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+                                        <thead>
+                                            <tr style="background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #ffffff;">
+                                                <th style="padding: 12px 14px; font-weight: 700;">Ref No.</th>
+                                                <th style="padding: 12px 14px; font-weight: 700;">Employee Name</th>
+                                                <th style="padding: 12px 14px; font-weight: 700;">Passport No.</th>
+                                                <th style="padding: 12px 14px; font-weight: 700;">Designation</th>
+                                                <th style="padding: 12px 14px; font-weight: 700;">Doc Type</th>
+                                                <th style="padding: 12px 14px; font-weight: 700;">Issue Date</th>
+                                                <th style="padding: 12px 14px; font-weight: 700;">Status</th>
+                                                <th style="padding: 12px 14px; font-weight: 700; text-align: center;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="historyTableBody">
+                                            <!-- Dynamically rendered rows -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 

@@ -56,13 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'offer': document.getElementById('offerTemplate'),
         'appointment': document.getElementById('apptTemplate'),
         'salary_cert': document.getElementById('salaryCertTemplate'),
-        'idcard': document.getElementById('idCardTemplate')
+        'idcard': document.getElementById('idCardTemplate'),
+        'history': document.getElementById('historyTemplate')
     };
     const docTypeNames = {
         'offer': 'Employment Offer Letter & Preliminary Contract',
         'appointment': 'Official Appointment Letter',
         'salary_cert': 'Salary & Employment Certificate',
-        'idcard': 'Employee ID Badge Card'
+        'idcard': 'Employee ID Badge Card',
+        'history': 'Document Registry History'
     };
     const photoSection = document.getElementById('photoSection');
 
@@ -210,6 +212,152 @@ document.addEventListener('DOMContentLoaded', () => {
         return record;
     }
 
+    // Render Document History Table from Supabase Cloud DB and LocalStorage
+    async function renderHistoryTable() {
+        const historyTableBody = document.getElementById('historyTableBody');
+        if (!historyTableBody) return;
+
+        historyTableBody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 35px; color: #1e3a8a; font-weight: 700;">
+                    <i class="bi bi-hourglass-split" style="font-size: 28px; display: block; margin-bottom: 8px;"></i>
+                    Fetching live registry from Supabase Cloud Database...
+                </td>
+            </tr>
+        `;
+
+        let recordsList = [];
+
+        // 1. Fetch records from Supabase
+        if (supabaseClient) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('hr_documents')
+                    .select('*')
+                    .order('generatedAt', { ascending: false });
+
+                if (!error && data && data.length > 0) {
+                    recordsList = data;
+                    console.log("🟢 History fetched from Supabase Cloud DB:", data);
+                }
+            } catch (err) {
+                console.warn("Supabase history fetch error, falling back to local registry:", err);
+            }
+        }
+
+        // 2. Fallback / Merge from LocalStorage
+        try {
+            const localDocs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+            const localList = Object.values(localDocs);
+            
+            const map = new Map();
+            localList.forEach(item => map.set(item.refNo, item));
+            recordsList.forEach(item => map.set(item.refNo, item));
+            recordsList = Array.from(map.values());
+        } catch (e) {
+            console.error("LocalStorage read error", e);
+        }
+
+        if (recordsList.length === 0) {
+            historyTableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">
+                        <i class="bi bi-folder-x" style="font-size: 32px; display: block; margin-bottom: 10px; color: #94a3b8;"></i>
+                        No generated document records found in registry.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        window.cachedHistoryRecords = recordsList;
+        displayFilteredHistory(recordsList);
+    }
+
+    function displayFilteredHistory(records) {
+        const historyTableBody = document.getElementById('historyTableBody');
+        if (!historyTableBody) return;
+
+        if (records.length === 0) {
+            historyTableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 30px; color: #64748b;">
+                        No matching documents found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        historyTableBody.innerHTML = records.map(rec => {
+            const verifyUrl = `${window.location.origin}/verify.html?ref=${encodeURIComponent(rec.refNo)}`;
+            const isOffer = rec.docType === 'offer' || rec.docType === 'Employment Offer Letter & Preliminary Contract';
+            const typeLabel = rec.docTypeName || (isOffer ? 'Offer Letter' : 'HR Document');
+
+            return `
+                <tr style="border-bottom: 1px solid #e2e8f0; background: #ffffff; transition: background 0.15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#ffffff'">
+                    <td style="padding: 12px 14px; font-weight: 800; color: #1e3a8a;">${rec.refNo}</td>
+                    <td style="padding: 12px 14px; font-weight: 700; color: #0f172a; text-transform: uppercase;">${rec.empName}</td>
+                    <td style="padding: 12px 14px; font-weight: 600; color: #334155; text-transform: uppercase;">${rec.empIdNo}</td>
+                    <td style="padding: 12px 14px; font-weight: 600; color: #334155; text-transform: uppercase;">${rec.empTitle}</td>
+                    <td style="padding: 12px 14px;"><span style="background: #eff6ff; color: #1d4ed8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid #bfdbfe;">${typeLabel}</span></td>
+                    <td style="padding: 12px 14px; color: #475569; font-weight: 600;">${rec.docDate}</td>
+                    <td style="padding: 12px 14px;"><span style="background: #f0fdf4; color: #15803d; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 800; border: 1px solid #bbf7d0;">🟢 VERIFIED</span></td>
+                    <td style="padding: 12px 14px; text-align: center;">
+                        <div style="display: flex; gap: 6px; justify-content: center;">
+                            <a href="${verifyUrl}" target="_blank" style="background: #1e3a8a; color: #fff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class="bi bi-shield-check"></i> Verify
+                            </a>
+                            <button onclick="window.loadRecordToForm('${rec.refNo}')" style="background: #0175b2; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class="bi bi-pencil-square"></i> Load & Print
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Search filter listener for history table
+    const historySearchInput = document.getElementById('historySearchInput');
+    if (historySearchInput) {
+        historySearchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            const list = window.cachedHistoryRecords || [];
+            if (!query) {
+                displayFilteredHistory(list);
+                return;
+            }
+            const filtered = list.filter(r => 
+                (r.refNo && r.refNo.toLowerCase().includes(query)) ||
+                (r.empName && r.empName.toLowerCase().includes(query)) ||
+                (r.empIdNo && r.empIdNo.toLowerCase().includes(query)) ||
+                (r.empTitle && r.empTitle.toLowerCase().includes(query))
+            );
+            displayFilteredHistory(filtered);
+        });
+    }
+
+    // Global helper to load a saved history record back into the form fields
+    window.loadRecordToForm = function(refNo) {
+        const records = window.cachedHistoryRecords || [];
+        const record = records.find(r => r.refNo === refNo);
+        if (!record) return;
+
+        if (document.getElementById('empName')) document.getElementById('empName').value = record.empName || '';
+        if (document.getElementById('empIdNo')) document.getElementById('empIdNo').value = record.empIdNo || '';
+        if (document.getElementById('empTitle')) document.getElementById('empTitle').value = record.empTitle || '';
+        if (document.getElementById('empNat')) document.getElementById('empNat').value = record.empNat || '';
+        if (document.getElementById('salaryString')) document.getElementById('salaryString').value = record.salaryString || '';
+        if (document.getElementById('refNo')) document.getElementById('refNo').value = record.refNo || '';
+
+        // Switch tab to the document's type
+        const targetType = record.docType && record.docType !== 'history' ? record.docType : 'offer';
+        const targetTab = document.querySelector(`.doc-tab[data-doc="${targetType}"]`);
+        if (targetTab) targetTab.click();
+        else updateAllFields();
+    };
+
     // Tab Switch Listener
     tabs.forEach(tab => {
         tab.addEventListener('click', (e) => {
@@ -229,6 +377,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (docType === 'idcard') {
                     targetTmpl.style.display = 'flex';
                     if (photoSection) photoSection.style.display = 'block';
+                } else if (docType === 'history') {
+                    targetTmpl.style.display = 'block';
+                    if (photoSection) photoSection.style.display = 'none';
+                    renderHistoryTable();
                 } else {
                     targetTmpl.style.display = 'block';
                     if (photoSection) photoSection.style.display = 'none';
