@@ -40,43 +40,60 @@
         width: 210mm !important;
         height: auto !important;
         overflow: visible !important;
+        visibility: visible !important;
     }
 
-    /* ── Hide Everything Except #printArea ── */
-    body > *:not(#printArea) {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-
-    .admin-wrapper,
+    /* ── Hide Admin Navigation & Form UI During Print ── */
     .sidebar,
     .topbar,
     .hr-form-panel,
-    .hr-preview-panel,
     .preview-toolbar,
-    .preview-content-scroll,
     .no-print {
         display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
     }
 
-    /* ── Print Area ── */
-    #printArea {
+    /* ── Unconstrain Layout Containers for Direct Document Printing ── */
+    .admin-wrapper,
+    .admin-main,
+    .main-content,
+    .content-area,
+    .hr-layout,
+    .hr-preview-panel,
+    .preview-content-scroll {
         display: block !important;
         visibility: visible !important;
-        position: static !important;
-        width: 210mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
         overflow: visible !important;
+        width: 210mm !important;
+        height: auto !important;
+        position: static !important;
     }
 
-    /* ── Document Paper Container ── */
-    .document-paper,
-    .pdf-template {
+    /* ── Hide inactive document templates during print ── */
+    .pdf-template[style*="display: none"],
+    .pdf-template[style*="display:none"],
+    div[style*="display: none"],
+    div[style*="display:none"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* ── Active Document Paper Container ── */
+    .document-paper:not([style*="display: none"]):not([style*="display:none"]),
+    .pdf-template:not([style*="display: none"]):not([style*="display:none"]) {
         display: block !important;
+        visibility: visible !important;
         width: 210mm !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -85,6 +102,16 @@
         background: #ffffff !important;
         box-sizing: border-box !important;
         overflow: visible !important;
+        zoom: 1 !important;
+        transform: none !important;
+    }
+
+    #idCardTemplate:not([style*="display: none"]):not([style*="display:none"]) {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        min-height: 297mm !important;
+        width: 210mm !important;
     }
 
     /* ── Individual PDF Pages ── */

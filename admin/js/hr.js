@@ -267,48 +267,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Clean, Non-Destructive Print & Save Engine
+    // Clean, Non-Destructive Direct Print Engine
     const btnPrint = document.getElementById('btnPrint');
     const btnGenerate = document.getElementById('btnGenerate');
-    const printArea = document.getElementById('printArea');
 
     function triggerPrint() {
         updateAllFields();
-        const savedRecord = saveDocumentRecord();
+        saveDocumentRecord();
 
-        let activeTemplate = templates[currentDocType];
-        if (!activeTemplate) return;
-
-        // Clear previous content in printArea
-        printArea.innerHTML = '';
-
-        // Clone current template into printArea without removing original DOM from preview
-        const clone = activeTemplate.cloneNode(true);
-        clone.style.display = (currentDocType === 'idcard') ? 'flex' : 'block';
-        printArea.appendChild(clone);
-
-        if (currentDocType === 'idcard') {
-            printArea.style.display = 'flex';
-            printArea.style.justifyContent = 'center';
-            printArea.style.alignItems = 'center';
-            printArea.style.minHeight = '100vh';
-        } else {
-            printArea.style.display = 'block';
-            printArea.style.minHeight = 'auto';
-        }
-
-        printArea.classList.remove('no-print');
-
-        // Short delay for browser reflow before opening print dialog
-        requestAnimationFrame(() => {
+        // Trigger browser print dialog directly
+        setTimeout(() => {
             window.print();
-
-            setTimeout(() => {
-                printArea.innerHTML = '';
-                printArea.classList.add('no-print');
-                printArea.style.display = 'none';
-            }, 300);
-        });
+        }, 150);
     }
 
     if (btnPrint) btnPrint.addEventListener('click', triggerPrint);
