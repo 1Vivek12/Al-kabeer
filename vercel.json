@@ -1,14 +1,10 @@
 {
-  "version": 2,
   "cleanUrls": true,
-  "routes": [
-    {
-      "src": "/verify",
-      "dest": "/verify.html"
-    },
-    {
-      "src": "/admin/hr",
-      "dest": "/admin/hr.html"
-    }
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin/hr.html" },
+    { "source": "/admin/", "destination": "/admin/hr.html" },
+    { "source": "/admin/hr", "destination": "/admin/hr.html" },
+    { "source": "/verify", "destination": "/verify.html" },
+    { "source": "/verify/", "destination": "/verify/index.html" }
   ]
 }

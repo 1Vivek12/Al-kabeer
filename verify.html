@@ -477,27 +477,6 @@
                     }
                 }
 
-                // 3. Fallback default sample for demo reference QTR/AK:A01969
-                if (!record && (searchRef === 'QTR/AK:A01969' || searchRef === 'QTR/AK:A001')) {
-                    record = {
-                        refNo: searchRef,
-                        empName: 'AASHIK RAUT',
-                        empIdNo: 'PA5231328',
-                        empTitle: 'CIVIL FOREMAN',
-                        empNat: 'NEPAL',
-                        salaryString: '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION',
-                        docDate: '13/08/2026',
-                        empDoj: '15/08/2026',
-                        docType: 'offer',
-                        docTypeName: 'Employment Offer Letter & Preliminary Contract',
-                        status: 'VERIFIED',
-                        company: 'Al Kabeer Trading & Contracting W.L.L.',
-                        crNo: '184920',
-                        establishmentId: '74/92014',
-                        generatedAt: new Date().toISOString()
-                    };
-                }
-
                 if (record) {
                     renderVerifiedCard(record);
                 } else {
