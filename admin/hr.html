@@ -90,19 +90,26 @@
         }
         
         .pdf-right-col {
-            width: 230px;
+            width: 250px;
             font-size: 10px;
         }
         
         .pdf-ref-date {
             margin-bottom: 4px;
             background: #f1f5f9;
-            padding: 4px 8px;
+            padding: 5px 8px;
             border-radius: 4px;
             border: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .ref-date-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 9.5px;
         }
         
         .qr-code-box {
@@ -112,16 +119,24 @@
             justify-content: center;
             padding-left: 6px;
             border-left: 1px solid #cbd5e1;
-            margin-left: 4px;
+            margin-left: 6px;
+            flex-shrink: 0;
+        }
+
+        .qr-code-box img, .qr-code-box canvas {
+            width: 44px !important;
+            height: 44px !important;
+            display: block !important;
         }
 
         .qr-code-box .qr-label {
-            font-size: 5.5px;
+            font-size: 6px;
             font-weight: 800;
             color: #1e3a8a;
             text-align: center;
             line-height: 1.1;
             margin-top: 2px;
+            white-space: nowrap;
         }
         
         .pdf-contact-box {
