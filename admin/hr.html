@@ -417,6 +417,10 @@
             margin: 4px 0 2px 0;
         }
         
+        .stamp-box .stamp-text {
+            display: none !important;
+        }
+        
         .dept {
             font-size: 10px;
             color: #475569;
@@ -426,22 +430,21 @@
         .stamp-box {
             margin-top: 6px;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 8px;
+            position: relative;
         }
         
         .stamp-box img {
-            height: 85px;
-            width: auto;
-            opacity: 0.95;
+            height: 100px;
+            width: 100px;
+            opacity: 0.92;
             mix-blend-mode: multiply;
+            transform: rotate(-6deg) scale(1.05);
+            filter: drop-shadow(0px 1px 2px rgba(30, 58, 138, 0.2));
             object-fit: contain;
-        }
-        
-        .stamp-box .stamp-text {
-            font-size: 8.5px;
-            color: #64748b;
-            font-style: italic;
+            pointer-events: none;
+            user-select: none;
         }
         
         .watermark {
@@ -461,12 +464,158 @@
             z-index: 1;
         }
         
-        .page-break {
-            page-break-before: always;
-            break-before: page;
-            height: 0;
+        /* ID Card Badge Styling */
+        .id-card-badge {
+            width: 86mm;
+            min-height: 135mm;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid #cbd5e1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .id-card-header {
+            background: linear-gradient(135deg, #1e3a8a, #0175b2);
+            width: 100%;
+            padding: 12px 10px;
+            text-align: center;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        .id-header-logo {
+            width: 45px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .id-company-title h1 {
+            font-size: 14px;
+            font-weight: 800;
             margin: 0;
-            padding: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .id-company-title h2 {
+            font-size: 8.5px;
+            font-weight: 600;
+            margin: 1px 0 0 0;
+            opacity: 0.9;
+        }
+
+        .id-company-title p {
+            font-size: 7.5px;
+            margin: 2px 0 0 0;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .id-card-body {
+            padding: 14px 14px 8px 14px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+
+        .id-photo-box {
+            width: 95px;
+            height: 115px;
+            border-radius: 8px;
+            border: 3px solid #1e3a8a;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #f1f5f9;
+            margin-bottom: 10px;
+        }
+
+        .id-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .id-card-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1e3a8a;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 2px;
+        }
+
+        .id-card-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #d97706;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .id-details-table {
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 9.5px;
+            box-sizing: border-box;
+        }
+
+        .id-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2.5px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .id-row:last-child {
+            border-bottom: none;
+        }
+
+        .id-lbl {
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .id-val {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .id-barcode-graphic {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .id-card-footer {
+            background: #1e293b;
+            color: #cbd5e1;
+            width: 100%;
+            text-align: center;
+            padding: 6px 4px;
+            font-size: 8px;
+            line-height: 1.3;
+            box-sizing: border-box;
+        }
+
+        .id-card-footer strong {
+            color: #38bdf8;
         }
     </style>
 </head>
@@ -505,6 +654,7 @@
                         <div class="doc-type-tabs">
                             <button class="doc-tab active" data-doc="offer">Offer Letter</button>
                             <button class="doc-tab" data-doc="appointment">Appt. Letter</button>
+                            <button class="doc-tab" data-doc="salary_cert">Salary Cert.</button>
                             <button class="doc-tab" data-doc="idcard">ID Card</button>
                         </div>
 
@@ -513,59 +663,57 @@
                             
                             <div class="form-group">
                                 <label>Date of Issue</label>
-                                <input type="date" id="docDate" class="form-control">
+                                <input type="date" id="docDate" class="form-control" value="2026-08-13">
                             </div>
 
                             <div class="form-group">
                                 <label>Ref No.</label>
-                                <input type="text" id="refNo" class="form-control" value="QTR/AK:A001">
+                                <input type="text" id="refNo" class="form-control" value="QTR/AK:A01969">
                             </div>
 
                             <div class="form-group">
                                 <label>Full Name *</label>
-                                <input type="text" id="empName" class="form-control" required placeholder="e.g. AASHIK RAUT" style="text-transform: uppercase;">
+                                <input type="text" id="empName" class="form-control" required value="AASHIK RAUT" placeholder="e.g. AASHIK RAUT" style="text-transform: uppercase;">
                             </div>
                             
                             <div class="form-group">
                                 <label>Passport No. *</label>
-                                <input type="text" id="empIdNo" class="form-control" required placeholder="e.g. PA5231328" style="text-transform: uppercase;">
+                                <input type="text" id="empIdNo" class="form-control" required value="PA5231328" placeholder="e.g. PA5231328" style="text-transform: uppercase;">
                             </div>
 
                             <div class="form-group">
                                 <label>Trade / Designation *</label>
-                                <input type="text" id="empTitle" class="form-control" required placeholder="e.g. CIVIL FOREMAN" style="text-transform: uppercase;">
+                                <input type="text" id="empTitle" class="form-control" required value="CIVIL FOREMAN" placeholder="e.g. CIVIL FOREMAN" style="text-transform: uppercase;">
                             </div>
                             
                             <div class="form-group">
                                 <label>Nationality *</label>
-                                <input type="text" id="empNat" class="form-control" required placeholder="e.g. NEPAL" style="text-transform: uppercase;">
+                                <input type="text" id="empNat" class="form-control" required value="NEPAL" placeholder="e.g. NEPAL" style="text-transform: uppercase;">
                             </div>
 
                             <div class="form-group">
                                 <label>Salary & Benefits String</label>
-                                <input type="text" id="salaryString" class="form-control" value="[BASIC 3400 + OT / MONTH] QAR + FREE FOOD">
+                                <input type="text" id="salaryString" class="form-control" value="[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION">
                             </div>
 
-                            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
-                            
+                            <div class="form-group">
+                                <label>Date of Joining (For ID Card / Cert)</label>
+                                <input type="date" id="empDoj" class="form-control" value="2026-08-15">
+                            </div>
+
                             <div id="photoSection" style="display: none;">
-                                <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--secondary); font-size: 16px;">ID Card Photo</h4>
+                                <h4 style="margin-top: 15px; margin-bottom: 15px; color: var(--secondary); font-size: 15px;">ID Card Photo</h4>
                                 <div class="form-group">
                                     <label>Upload Employee Photo (JPG/PNG)</label>
                                     <input type="file" id="empPhoto" class="form-control" accept="image/*">
                                 </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <label>Date of Joining (For ID Card)</label>
-                                <input type="date" id="empDoj" class="form-control">
-                            </div>
 
-                            <div class="form-group" style="margin-top: 30px;">
+                            <div class="form-group" style="margin-top: 25px;">
                                 <button type="button" id="btnGenerate" class="btn-primary" style="width: 100%; font-size: 16px; padding: 12px;">
-                                    <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generate Document
+                                    <i class="bi bi-file-earmark-pdf-fill me-2"></i> Print / Save as PDF
                                 </button>
-                                <p style="font-size: 12px; color: #64748b; text-align: center; margin-top: 8px;">Click to Print or Save as PDF</p>
+                                <p style="font-size: 12px; color: #64748b; text-align: center; margin-top: 8px;">Generates High Resolution Printable PDF</p>
                             </div>
 
                         </form>
@@ -760,25 +908,6 @@
                                                     <span class="t-val-ar">توفير تذكرة طيران سفر وعودة اقتصادية لموطن العامل عند إكمال مدة العقد.</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div> <!-- END PAGE 1 -->
-
-                                <div class="page-break"></div>
-
-                                <!-- PAGE 2 -->
-                                <div class="pdf-page page-2">
-                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
-                                    <div class="content-over-watermark">
-                                        <div class="pdf-header-mini">
-                                            <span class="left" dir="ltr">AL KABEER TRADING & CONTRACTING W.L.L.</span>
-                                            <span class="center" dir="ltr">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
-                                            <span class="right" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
-                                        </div>
-                                        <hr class="header-line">
-
-                                        <!-- Terms List Part 2 (Points 10 to 15) -->
-                                        <div class="terms-container">
 
                                             <div class="terms-item">
                                                 <div class="terms-row-en">
@@ -815,18 +944,86 @@
                                                     <span class="t-val-ar">يجوز لأي من الطرفين إنهاء العقد وفقاً لأحكام المادة (49) من قانون العمل مع إخطار كتابي.</span>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- END PAGE 1 -->
+
+                                <div class="page-break"></div>
+
+                                <!-- PAGE 2 -->
+                                <div class="pdf-page page-2">
+                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
+                                    <div class="content-over-watermark">
+                                        <div class="pdf-header-mini">
+                                            <span class="left" dir="ltr">AL KABEER TRADING & CONTRACTING W.L.L.</span>
+                                            <span class="center" dir="ltr">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
+                                            <span class="right" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
+                                        </div>
+                                        <hr class="header-line">
+
+                                        <!-- Terms List Part 2 (Points 13 to 17) -->
+                                        <div class="terms-container">
 
                                             <div class="terms-item">
                                                 <div class="terms-row-en">
                                                     <span class="t-num">13.</span>
                                                     <span class="t-lbl">Governing Jurisdiction:</span>
-                                                    <span class="t-val">Subject to Qatar Labor Law No. 14 of 2004 and Ministry of Labour competent courts in Doha.</span>
+                                                    <span class="t-val">Subject to Qatar Labor Law No. 14 of 2004 and competent Labour Courts in Doha, State of Qatar.</span>
                                                 </div>
                                                 <div class="terms-row-ar">
                                                     <span class="t-lbl-ar">القانون الواجب التطبيق:</span>
                                                     <span class="t-val-ar">يخضع هذا العقد لأحكام قانون العمل القطري رقم (14) لسنة 2004 والاختصاص لمحاكم الدوحة.</span>
                                                 </div>
                                             </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">14.</span>
+                                                    <span class="t-lbl">Confidentiality & Non-Disclosure:</span>
+                                                    <span class="t-val">Employee shall maintain strict confidentiality of all company technical and commercial information (Art. 43).</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">السرية وعدم إفشاء الأسرار:</span>
+                                                    <span class="t-val-ar">يلتزم العامل بالحفاظ على السرية التامة لكافة معلومات وأسرار العمل وفقاً للمادة (43).</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">15.</span>
+                                                    <span class="t-lbl">Occupational Safety & PPE:</span>
+                                                    <span class="t-val">Employee must strictly comply with site safety rules and wear mandated PPE at all times (Art. 99-102).</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">السلامة والصحة المهنية:</span>
+                                                    <span class="t-val-ar">يلتزم العامل باتباع تعليمات السلامة بالمواقع وارتداء معدات الوقاية وفقاً للمواد (99-102).</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">16.</span>
+                                                    <span class="t-lbl">Disciplinary Regulations:</span>
+                                                    <span class="t-val">Subject to Ministry of Labour approved company disciplinary code under Qatar Labor Law Article 58.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">الجزاءات والسلوك المهني:</span>
+                                                    <span class="t-val-ar">يخضع العامل للائحة الجزاءات والجزاءات التأديبية المعتمدة وفقاً للمادة (58) من قانون العمل.</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="terms-item">
+                                                <div class="terms-row-en">
+                                                    <span class="t-num">17.</span>
+                                                    <span class="t-lbl">Passport Possession:</span>
+                                                    <span class="t-val">Employee retains full personal possession of passport as per Qatar Law No. 21 of 2015 regulations.</span>
+                                                </div>
+                                                <div class="terms-row-ar">
+                                                    <span class="t-lbl-ar">حيازة جواز السفر:</span>
+                                                     <span class="t-val-ar">يحتفظ العامل بحيازة جواز سفره الخاص وفقاً لأحكام القانون القطري رقم (21) لسنة 2015.</span>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <div class="law-note">
@@ -846,12 +1043,16 @@
                                                     <div class="ar-line" dir="rtl">يسري هذا العرض لمدة 30 يوماً من تاريخ صدوره.</div>
                                                 </li>
                                                 <li>
-                                                    <div class="en-line" dir="ltr">Employee signature or thumb impression must match passport signature.</div>
-                                                    <div class="ar-line" dir="rtl">يجب أن يطابق توقيع الموظف أو البصمة التوقيع الموجود بجواز السفر.</div>
+                                                    <div class="en-line" dir="ltr">Employee signature or thumb impression must match official passport signature.</div>
+                                                    <div class="ar-line" dir="rtl">يجب أن يطابق توقيع الموظف أو البصمة التوقيع الموجود بجواز السفر الرسمي.</div>
                                                 </li>
                                                 <li>
-                                                    <div class="en-line" dir="ltr">Employee must strictly adhere to Qatar Ministry of Interior & Ministry of Labour safety & conduct regulations.</div>
-                                                    <div class="ar-line" dir="rtl">يلتزم الموظف باتباع تعليمات السلامة والسلوك الصادرة عن الجهات المختصة بقطر.</div>
+                                                    <div class="en-line" dir="ltr">Employee must strictly adhere to Qatar Ministry of Interior & Ministry of Labour safety guidelines.</div>
+                                                    <div class="ar-line" dir="rtl">يلتزم الموظف باتباع تعليمات السلامة والسلوك الصادرة عن الجهات المختصة بدولة قطر.</div>
+                                                </li>
+                                                <li>
+                                                    <div class="en-line" dir="ltr">Medical fitness test & QID residency procedures must be completed upon arrival in Doha.</div>
+                                                    <div class="ar-line" dir="rtl">يجب إكمال الفحص الطبي وتأشيرة الإقامة القطري فور الوصول إلى مدينة الدوحة.</div>
                                                 </li>
                                             </ol>
                                         </div>
@@ -877,8 +1078,7 @@
                                                 <div class="app-badge">APPROVED BY / اعتمد بواسطة</div>
                                                 <div class="dept">Human Resources Department</div>
                                                 <div class="stamp-box">
-                                                    <img src="../images1/stamp.png" alt="Company Seal">
-                                                    <div class="stamp-text">Official Stamp & Signature</div>
+                                                    <img src="../static/images/stamp.png" alt="Company Seal">
                                                 </div>
                                             </div>
                                         </div>
@@ -902,7 +1102,7 @@
                                             </div>
                                             <div class="pdf-right-col">
                                                 <div class="pdf-ref-date">
-                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">05/08/2026</span></div>
+                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
                                                     <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
                                                 </div>
                                                 <div class="pdf-contact-box">
@@ -922,22 +1122,22 @@
                                         <div class="document-body" style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1e293b; margin-top: 15px;">
                                             <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 4px; margin-bottom: 15px;">
                                                 <div style="display: flex; justify-content: space-between;">
-                                                    <div><strong>To / إلى:</strong> <span class="outName" style="text-transform: uppercase; font-weight: bold; color: #1e3a8a;">[NAME]</span></div>
-                                                    <div><strong>Nationality / الجنسية:</strong> <span class="outNat">[NATIONALITY]</span></div>
+                                                    <div><strong>To / إلى:</strong> <span class="outName" style="text-transform: uppercase; font-weight: bold; color: #1e3a8a;">AASHIK RAUT</span></div>
+                                                    <div><strong>Nationality / الجنسية:</strong> <span class="outNat" style="font-weight: bold;">NEPAL</span></div>
                                                 </div>
-                                                <div style="display: flex; justify-content: space-between; margin-top: 4px;">
-                                                    <div><strong>Passport No / رقم الجواز:</strong> <span class="outIdNo">[PASSPORT]</span></div>
-                                                    <div><strong>Designation / المسمى:</strong> <span class="outTitle">[DESIGNATION]</span></div>
+                                                <div style="display: flex; justify-content: space-between; margin-top: 6px;">
+                                                    <div><strong>Passport No / رقم الجواز:</strong> <span class="outIdNo" style="font-weight: bold;">PA5231328</span></div>
+                                                    <div><strong>Designation / المسمى:</strong> <span class="outTitle" style="font-weight: bold;">CIVIL FOREMAN</span></div>
                                                 </div>
                                             </div>
                                             
-                                            <p>Dear <span class="outName" style="font-weight: bold;">[NAME]</span>,</p>
+                                            <p>Dear <span class="outName" style="font-weight: bold; color: #1e3a8a;">AASHIK RAUT</span>,</p>
                                             
-                                            <p>Following your successful interview and acceptance of our offer, we are pleased to officially appoint you as <strong><span class="outTitle">[DESIGNATION]</span></strong> at <strong>Al Kabeer Trading & Contracting W.L.L.</strong> in the State of Qatar.</p>
+                                            <p>Following your successful interview and acceptance of our offer, we are pleased to officially appoint you as <strong><span class="outTitle">CIVIL FOREMAN</span></strong> at <strong>Al Kabeer Trading & Contracting W.L.L.</strong> in the State of Qatar.</p>
                                             
                                             <p><strong>Terms of Engagement:</strong> During your employment, you will be subject to the rules and regulations of the company and the Labor Laws of the State of Qatar (Law No. 14 of 2004). You will be on a probationary period of six (6) months, during which your performance will be evaluated as per Qatar Labor Law Article 39.</p>
                                             
-                                            <p><strong>Remuneration & Benefits:</strong> Your total monthly salary and employment benefits will remain exactly as stated in your accepted Offer Letter: <br><span style="display: inline-block; background: #eff6ff; padding: 6px 12px; border-radius: 4px; border: 1px solid #bfdbfe; font-weight: bold; color: #1e3a8a; margin-top: 5px;"><span class="outSalary">[SALARY STRING]</span></span>.</p>
+                                            <p><strong>Remuneration & Benefits:</strong> Your total monthly salary and employment benefits will remain exactly as stated in your accepted Offer Letter: <br><span style="display: inline-block; background: #eff6ff; padding: 6px 12px; border-radius: 4px; border: 1px solid #bfdbfe; font-weight: bold; color: #1e3a8a; margin-top: 5px;"><span class="outSalary">[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION</span></span>.</p>
 
                                             <p><strong>Compliance & Confidentiality:</strong> You are required to maintain strict confidentiality regarding all company matters, trade secrets, and client information, and adhere strictly to Qatar Ministry of Interior and Ministry of Labour safety guidelines.</p>
                                             
@@ -948,8 +1148,8 @@
                                                     <div class="sig-title">Employee Acknowledgment / استلام الموظف</div>
                                                     <div class="sig-line-box">
                                                         <div>I accept the terms of this appointment letter.</div>
-                                                        <div>Signature / التوقيع: .........................</div>
-                                                        <div>Date / التاريخ: .........................</div>
+                                                        <div style="margin-top:12px;">Signature / التوقيع: .........................</div>
+                                                        <div style="margin-top:6px;">Date / التاريخ: .........................</div>
                                                     </div>
                                                 </div>
                                                 <div class="sig-col employer-sig">
@@ -957,7 +1157,87 @@
                                                     <div class="company-name-ar" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</div>
                                                     <div class="app-badge">ISSUED BY HR DEPARTMENT</div>
                                                     <div class="stamp-box" style="margin-top: 10px;">
-                                                        <img src="../images1/stamp.png" alt="Company Seal">
+                                                        <img src="../static/images/stamp.png" alt="Company Seal">
+                                                        <div class="stamp-text">Official Stamp & Signature</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SALARY CERTIFICATE TEMPLATE (Hidden by default) -->
+                            <div id="salaryCertTemplate" class="document-paper pdf-template" style="display: none;">
+                                <div class="pdf-page page-1">
+                                    <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
+                                    <div class="content-over-watermark">
+                                        <div class="pdf-header-wrapper">
+                                            <div class="pdf-logo-col">
+                                                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Logo">
+                                            </div>
+                                            <div class="pdf-center-col">
+                                                <h1>شركة الكبير للتجارة والمقاولات ذ.م.م</h1>
+                                                <h2>AL KABEER TRADING & CONTRACTING W.L.L.</h2>
+                                                <div class="cr-info">C.R. No: 184920 | Establishment ID: 74/92014</div>
+                                            </div>
+                                            <div class="pdf-right-col">
+                                                <div class="pdf-ref-date">
+                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
+                                                    <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                </div>
+                                                <div class="pdf-contact-box">
+                                                    <div>Tel: +974 4490 2699 | Fax: +974 4434 1512</div>
+                                                    <div style="color: #004b87;">info@alkabeerqatar.com | www.alkabeerqatar.com</div>
+                                                    <div class="red-title">HEAD OFFICE - DOHA QATAR</div>
+                                                    <div>Office 110, World Wide Commercial Bldg, D Ring Rd</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pdf-doc-title">
+                                            SALARY & EMPLOYMENT CERTIFICATE
+                                            <span>شهادة راتب واستمرار عمل</span>
+                                        </div>
+
+                                        <div class="document-body" style="font-size: 13px; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1e293b; margin-top: 25px;">
+                                            <div style="text-align: center; font-weight: bold; font-size: 15px; margin-bottom: 20px; color: #1e3a8a;">
+                                                TO WHOM IT MAY CONCERN / لمن يهمه الأمر
+                                            </div>
+
+                                            <p style="text-align: justify;">
+                                                This is to certify that Mr. <strong><span class="outName" style="color: #1e3a8a;">AASHIK RAUT</span></strong>, holding Passport No. <strong><span class="outIdNo">PA5231328</span></strong> and Nationality <strong><span class="outNat">NEPAL</span></strong>, is currently employed with <strong>Al Kabeer Trading & Contracting W.L.L.</strong> in the State of Qatar as <strong><span class="outTitle">CIVIL FOREMAN</span></strong> since <strong><span class="outDoj">15/08/2026</span></strong>.
+                                            </p>
+
+                                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 14px 18px; border-radius: 6px; margin: 20px 0;">
+                                                <div style="font-weight: bold; color: #1e3a8a; margin-bottom: 8px;">Monthly Salary & Remuneration Details:</div>
+                                                <div style="font-size: 14px; font-weight: bold; color: #0f172a; background: #eff6ff; padding: 8px 12px; border-radius: 4px; border: 1px solid #bfdbfe;">
+                                                    <span class="outSalary">[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION</span>
+                                                </div>
+                                            </div>
+
+                                            <p style="text-align: justify; direction: rtl; text-align: right; font-family: 'Cairo', 'Tajawal', sans-serif; color: #334155; margin-top: 15px;">
+                                                تشهد شركة الكبير للتجارة والمقاولات ذ.م.م بأن السيد/ <strong class="outName" style="color: #1e3a8a;">AASHIK RAUT</strong> يحمل جواز سفر رقم (<strong class="outIdNo">PA5231328</strong>) وجنسيته (<strong class="outNat">NEPAL</strong>) يعمل لدينا بمهنة (<strong class="outTitle">CIVIL FOREMAN</strong>) اعتباراً من تاريخ (<strong class="outDoj">15/08/2026</strong>)، ويتقاضى راتباً شهرياً ومزايا وقدرها: (<strong class="outSalary">[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION</strong>).
+                                            </p>
+
+                                            <p style="margin-top: 20px;">
+                                                This certificate is issued upon the request of the employee for official purposes without any liability or financial guarantee on the part of Al Kabeer Trading & Contracting W.L.L.
+                                            </p>
+
+                                            <div class="pdf-signatures-grid" style="margin-top: 45px;">
+                                                <div class="sig-col employee-sig" style="display: flex; flex-direction: column; justify-content: space-between;">
+                                                    <div class="sig-title">Human Resources Department</div>
+                                                    <div style="padding: 12px; font-size: 11px; color: #64748b;">
+                                                        Authorized HR Signatory<br>
+                                                        State of Qatar - Doha
+                                                    </div>
+                                                </div>
+                                                <div class="sig-col employer-sig">
+                                                    <div class="company-name-sig">AL KABEER TRADING & CONTRACTING W.L.L.</div>
+                                                    <div class="company-name-ar" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</div>
+                                                    <div class="app-badge">OFFICIAL DOCUMENT</div>
+                                                    <div class="stamp-box" style="margin-top: 10px;">
+                                                        <img src="../static/images/stamp.png" alt="Company Seal">
                                                         <div class="stamp-text">Official Stamp & Signature</div>
                                                     </div>
                                                 </div>
@@ -968,33 +1248,43 @@
                             </div>
 
                             <!-- ID CARD TEMPLATE (Hidden by default) -->
-                            <div id="idCardTemplate" style="display: none; align-items: center; justify-content: center; height: 100%; width: 100%;">
-                                <div class="id-card-canvas">
-                                    <div class="id-header">
-                                        <h2 style="margin:0; font-size: 16px; font-weight: 800;">AL KABEER</h2>
-                                        <h5>TRADING & CONTRACTING W.L.L.</h5>
-                                    </div>
-                                    
-                                    <div class="id-photo-container">
-                                        <img id="outPhoto" src="https://via.placeholder.com/90x110?text=Photo" alt="Employee">
-                                    </div>
-                                    
-                                    <div class="id-details">
-                                        <h2 class="outName">[NAME]</h2>
-                                        <h4 class="outTitle">[DESIGNATION]</h4>
-                                        
-                                        <div class="id-info-grid">
-                                            <div class="label">PASS NO:</div>
-                                            <div class="outIdNo">-------</div>
-                                            
-                                            <div class="label">DOJ:</div>
-                                            <div class="outDoj">--/--/----</div>
+                            <div id="idCardTemplate" style="display: none; align-items: center; justify-content: center; width: 100%; min-height: 500px; padding: 20px 0;">
+                                <div class="id-card-badge">
+                                    <div class="id-card-header">
+                                        <img src="../static/images/alkabeer_logo.png" alt="Logo" class="id-header-logo">
+                                        <div class="id-company-title">
+                                            <h1>AL KABEER</h1>
+                                            <h2>TRADING & CONTRACTING W.L.L.</h2>
+                                            <p>C.R. 184920 | DOHA - QATAR</p>
                                         </div>
                                     </div>
                                     
-                                    <div class="id-footer">
-                                        Office 110, D Ring Rd, Doha | +974 44902699<br>
-                                        www.alkabeerqatar.com
+                                    <div class="id-card-body">
+                                        <div class="id-photo-box">
+                                            <img id="outPhoto" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='120' viewBox='0 0 100 120' fill='%23cbd5e1'><rect width='100' height='120' fill='%23f1f5f9'/><circle cx='50' cy='45' r='22' fill='%2394a3b8'/><path d='M15,110 C15,80 35,70 50,70 C65,70 85,80 85,110 Z' fill='%2394a3b8'/></svg>" alt="Employee Photo">
+                                        </div>
+                                        
+                                        <div class="id-card-name outName">AASHIK RAUT</div>
+                                        <div class="id-card-title outTitle">CIVIL FOREMAN</div>
+                                        
+                                        <div class="id-details-table">
+                                            <div class="id-row"><span class="id-lbl">PASSPORT NO:</span> <span class="id-val outIdNo">PA5231328</span></div>
+                                            <div class="id-row"><span class="id-lbl">NATIONALITY:</span> <span class="id-val outNat">NEPAL</span></div>
+                                            <div class="id-row"><span class="id-lbl">JOINING DATE:</span> <span class="id-val outDoj">15/08/2026</span></div>
+                                            <div class="id-row"><span class="id-lbl">REF NO:</span> <span class="id-val outRefNo">QTR/AK:A01969</span></div>
+                                        </div>
+
+                                        <div class="id-barcode-graphic">
+                                            <svg width="180" height="26" viewBox="0 0 180 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="180" height="26" fill="white"/>
+                                                <path d="M5 2V24M9 2V24M11 2V24M17 2V24M23 2V24M25 2V24M31 2V24M37 2V24M41 2V24M45 2V24M51 2V24M57 2V24M61 2V24M67 2V24M73 2V24M77 2V24M83 2V24M89 2V24M93 2V24M99 2V24M103 2V24M109 2V24M113 2V24M119 2V24M125 2V24M129 2V24M135 2V24M139 2V24M145 2V24M151 2V24M155 2V24M161 2V24M167 2V24M171 2V24M175 2V24" stroke="#0f172a" stroke-width="2"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="id-card-footer">
+                                        Office 110, D Ring Rd, Doha, Qatar | Tel: +974 4490 2699<br>
+                                        <strong>www.alkabeerqatar.com</strong>
                                     </div>
                                 </div>
                             </div>

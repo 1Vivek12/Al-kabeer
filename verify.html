@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Verification Portal | Al Kabeer Trading & Contracting W.L.L.</title>
+    <!-- Google Fonts for Quality Arabic & English Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #0175b2;
+            --secondary: #d97706;
+            --bg-color: #f1f5f9;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Arabic Bidi Shaping */
+        [dir="rtl"], .ar-text, .ar-title, [lang="ar"] {
+            font-family: 'Cairo', 'Tajawal', sans-serif !important;
+            direction: rtl !important;
+        }
+
+        .header-bar {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: #ffffff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box img {
+            height: 52px;
+            width: auto;
+            background: #ffffff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .company-titles h1 {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .company-titles h2 {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 2px 0 0 0;
+            color: #93c5fd;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .header-info {
+            text-align: right;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .header-info .cr-badge {
+            display: inline-block;
+            background: rgba(217, 119, 6, 0.2);
+            color: #fef08a;
+            border: 1px solid #d97706;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .main-wrapper {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        /* Search Card */
+        .search-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .search-card h3 {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .search-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+            max-width: 700px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+            text-transform: uppercase;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(1, 117, 178, 0.15);
+        }
+
+        .btn-verify {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-verify:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(1, 117, 178, 0.3);
+        }
+
+        /* Result Section */
+        .result-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: none;
+        }
+
+        .result-header-verified {
+            background: #f0fdf4;
+            border-bottom: 2px solid #bbf7d0;
+            padding: 24px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .status-badge-verified {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-badge-verified i {
+            font-size: 36px;
+            color: var(--success);
+        }
+
+        .status-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #14532d;
+            margin: 0;
+        }
+
+        .status-sub {
+            font-size: 13px;
+            color: #166534;
+            font-weight: 600;
+            direction: rtl;
+        }
+
+        .status-tag {
+            background: #16a34a;
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-header-notfound {
+            background: #fef2f2;
+            border-bottom: 2px solid #fecaca;
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .result-header-notfound i {
+            font-size: 36px;
+            color: var(--danger);
+        }
+
+        .notfound-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #7f1d1d;
+        }
+
+        .result-body {
+            padding: 30px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 14px 18px;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        /* Stamp & Seal Box */
+        .verification-seal-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .seal-info {
+            flex-grow: 1;
+        }
+
+        .seal-info h4 {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .seal-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .official-stamp-img {
+            height: 110px;
+            width: auto;
+            mix-blend-mode: multiply;
+        }
+
+        /* Footer */
+        .footer-bar {
+            background: #0f172a;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            margin-top: auto;
+            border-top: 1px solid #1e293b;
+        }
+
+        .footer-bar strong {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-bar">
+        <div class="header-container">
+            <div class="logo-box">
+                <img src="static/images/alkabeer_logo.png" alt="Al Kabeer Logo" onerror="this.src='../static/images/alkabeer_logo.png'">
+                <div class="company-titles">
+                    <h1>AL KABEER TRADING & CONTRACTING W.L.L.</h1>
+                    <h2>شركة الكبير للتجارة والمقاولات ذ.م.م</h2>
+                </div>
+            </div>
+            <div class="header-info">
+                <div>Official Document & Certificate Verification Portal</div>
+                <div class="cr-badge">C.R. No: 184920 | Establishment ID: 74/92014</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Search Card -->
+        <div class="search-card">
+            <h3>Document Verification / التحقق من صحة المستند</h3>
+            <p>Enter the document reference number printed on your Al Kabeer Offer Letter, Appointment Letter, or Salary Certificate to verify its authenticity.</p>
+
+            <div class="search-form">
+                <input type="text" id="refInput" class="search-input" placeholder="e.g. QTR/AK:A01969" value="QTR/AK:A01969">
+                <button id="btnSearch" class="btn-verify">
+                    <i class="bi bi-shield-check"></i> Verify Document / تحقق
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Container -->
+        <div id="resultContainer" class="result-card">
+            <!-- Dynamic Content Injected via JS -->
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-bar">
+        Al Kabeer Trading & Contracting W.L.L. | Office 110, World Wide Commercial Bldg, D Ring Rd, Doha, Qatar<br>
+        Tel: +974 4490 2699 | Email: info@alkabeerqatar.com | Website: <strong>www.alkabeerqatar.com</strong>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const refInput = document.getElementById('refInput');
+            const btnSearch = document.getElementById('btnSearch');
+            const resultContainer = document.getElementById('resultContainer');
+
+            // Get query param ?ref=... if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryRef = urlParams.get('ref');
+            if (queryRef) {
+                refInput.value = queryRef;
+            }
+
+            function performVerification() {
+                const searchRef = refInput.value.trim().toUpperCase();
+                if (!searchRef) {
+                    alert("Please enter a document reference number.");
+                    return;
+                }
+
+                // Retrieve local records
+                let docs = {};
+                try {
+                    docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+                } catch (e) {
+                    console.error("Error reading localStorage", e);
+                }
+
+                // Search in localStorage or fallback default
+                let record = docs[searchRef];
+
+                if (!record && (searchRef === 'QTR/AK:A01969' || searchRef === 'QTR/AK:A001')) {
+                    record = {
+                        refNo: searchRef,
+                        empName: 'AASHIK RAUT',
+                        empIdNo: 'PA5231328',
+                        empTitle: 'CIVIL FOREMAN',
+                        empNat: 'NEPAL',
+                        salaryString: '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION',
+                        docDate: '13/08/2026',
+                        empDoj: '15/08/2026',
+                        docType: 'offer',
+                        docTypeName: 'Employment Offer Letter & Preliminary Contract',
+                        status: 'VERIFIED',
+                        company: 'Al Kabeer Trading & Contracting W.L.L.',
+                        crNo: '184920',
+                        establishmentId: '74/92014',
+                        generatedAt: new Date().toISOString()
+                    };
+                }
+
+                resultContainer.style.display = 'block';
+
+                if (record) {
+                    resultContainer.innerHTML = `
+                        <div class="result-header-verified">
+                            <div class="status-badge-verified">
+                                <i class="bi bi-patch-check-fill"></i>
+                                <div>
+                                    <h4 class="status-title">OFFICIAL DOCUMENT VERIFIED & VALID</h4>
+                                    <div class="status-sub">مستند رسمي معتمد وموثق صادرة عن شركة الكبير للتجارة والمقاولات ذ.م.م</div>
+                                </div>
+                            </div>
+                            <div class="status-tag"><i class="bi bi-shield-lock-fill me-1"></i> STATUS: ACTIVE & VALID</div>
+                        </div>
+
+                        <div class="result-body">
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">Document Reference No. <span>رقم المرجع</span></div>
+                                    <div class="detail-value" style="color: #1e3a8a;">${record.refNo}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Document Type <span>نوع المستند</span></div>
+                                    <div class="detail-value">${record.docTypeName}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Employee / Candidate Name <span>اسم الموظف / المرشح</span></div>
+                                    <div class="detail-value" style="text-transform: uppercase;">${record.empName}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Passport Number <span>رقم الجواز</span></div>
+                                    <div class="detail-value" style="text-transform: uppercase;">${record.empIdNo}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Trade / Designation <span>المسمى الوظيفي</span></div>
+                                    <div class="detail-value" style="text-transform: uppercase;">${record.empTitle}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Nationality <span>الجنسية</span></div>
+                                    <div class="detail-value" style="text-transform: uppercase;">${record.empNat}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Date of Issue <span>تاريخ الصدور</span></div>
+                                    <div class="detail-value">${record.docDate}</div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label">Date of Joining <span>تاريخ المباشرة</span></div>
+                                    <div class="detail-value">${record.empDoj}</div>
+                                </div>
+
+                                <div class="detail-item" style="grid-column: span 2;">
+                                    <div class="detail-label">Salary & Entitlements <span>الراتب والمزايا</span></div>
+                                    <div class="detail-value" style="color: #1e3a8a; background: #eff6ff; padding: 8px 12px; border-radius: 4px; border: 1px solid #bfdbfe;">${record.salaryString}</div>
+                                </div>
+                            </div>
+
+                            <div class="verification-seal-wrapper">
+                                <div class="seal-info">
+                                    <h4>Al Kabeer Human Resources Department</h4>
+                                    <p>State of Qatar - Doha | C.R. No: 184920 | Establishment ID: 74/92014</p>
+                                    <p style="font-size: 12px; color: #16a34a; margin-top: 4px; font-weight: 700;">
+                                        <i class="bi bi-database-check me-1"></i> Local Registry Synchronized | Ready for Supabase Cloud Database Integration
+                                    </p>
+                                </div>
+                                <img src="static/images/stamp.png" alt="Official Stamp" class="official-stamp-img">
+                            </div>
+
+                            <div style="margin-top: 25px; text-align: center;">
+                                <button onclick="window.print()" class="btn-verify" style="margin: 0 auto; background: linear-gradient(135deg, #0f172a, #1e3a8a);">
+                                    <i class="bi bi-printer-fill me-2"></i> Print Verification Certificate / طباعة شهادة التحقق
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultContainer.innerHTML = `
+                        <div class="result-header-notfound">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <div>
+                                <div class="notfound-title">DOCUMENT REFERENCE NOT FOUND / لم يتم العثور على المستند</div>
+                                <div style="font-size: 13px; color: #991b1b;">No official record was found matching reference number "${searchRef}".</div>
+                            </div>
+                        </div>
+                        <div class="result-body" style="text-align: center; color: #64748b;">
+                            <p>Please re-check the Reference Number printed on the document or contact Al Kabeer Human Resources Department in Doha, Qatar for assistance.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            btnSearch.addEventListener('click', performVerification);
+            refInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') performVerification();
+            });
+
+            if (refInput.value.trim()) {
+                performVerification();
+            }
+        });
+    </script>
+</body>
+</html>

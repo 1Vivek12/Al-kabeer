@@ -1,5 +1,12 @@
 node_modules/
 .DS_Store
 *.log
-screenshot.png
-test_output.pdf
+*.png
+*.pdf
+test_*.js
+verify_*.js
+render_*.js
+pdf_to_png.js
+process_*.js
+scratch_*.png
+scratch_*.pdf

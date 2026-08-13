@@ -1,94 +1,208 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Set today's date
-    const today = new Date().toLocaleDateString('en-GB');
-    const docDateInput = document.getElementById('docDate');
-    if(docDateInput) docDateInput.valueAsDate = new Date();
-    
-    document.querySelectorAll('.outDateOffer').forEach(el => el.textContent = today);
+    // Format date string YYYY-MM-DD -> DD/MM/YYYY without UTC timezone shift
+    function formatDateGB(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return dateStr;
+    }
 
-    // Elements
+    // Set default date of issue to today
+    const todayObj = new Date();
+    const yyyy = todayObj.getFullYear();
+    const mm = String(todayObj.getMonth() + 1).padStart(2, '0');
+    const dd = String(todayObj.getDate()).padStart(2, '0');
+    const todayISO = `${yyyy}-${mm}-${dd}`;
+    const todayFormatted = `${dd}/${mm}/${yyyy}`;
+
+    const docDateInput = document.getElementById('docDate');
+    if (docDateInput && !docDateInput.value) {
+        docDateInput.value = todayISO;
+    }
+
+    const empDojInput = document.getElementById('empDoj');
+    if (empDojInput && !empDojInput.value) {
+        empDojInput.value = todayISO;
+    }
+
+    // SVG Default Avatar for ID Card fallback
+    const defaultAvatarSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="120" viewBox="0 0 100 120" fill="%23cbd5e1"><rect width="100" height="120" fill="%23f1f5f9"/><circle cx="50" cy="45" r="22" fill="%2394a3b8"/><path d="M15,110 C15,80 35,70 50,70 C65,70 85,80 85,110 Z" fill="%2394a3b8"/></svg>`;
+
+    const outPhoto = document.getElementById('outPhoto');
+    if (outPhoto && (!outPhoto.src || outPhoto.src.includes('placeholder'))) {
+        outPhoto.src = defaultAvatarSvg;
+    }
+
+    // Tab Elements & Templates
     const tabs = document.querySelectorAll('.doc-tab');
     const templates = {
         'offer': document.getElementById('offerTemplate'),
         'appointment': document.getElementById('apptTemplate'),
+        'salary_cert': document.getElementById('salaryCertTemplate'),
         'idcard': document.getElementById('idCardTemplate')
+    };
+    const docTypeNames = {
+        'offer': 'Employment Offer Letter & Preliminary Contract',
+        'appointment': 'Official Appointment Letter',
+        'salary_cert': 'Salary & Employment Certificate',
+        'idcard': 'Employee ID Badge Card'
     };
     const photoSection = document.getElementById('photoSection');
 
     let currentDocType = 'offer';
 
-    // Tab Switching
+    // Inputs to Outputs mapping
+    const mappings = {
+        'empName': { selector: '.outName', fallback: 'AASHIK RAUT' },
+        'empTitle': { selector: '.outTitle', fallback: 'CIVIL FOREMAN' },
+        'empIdNo': { selector: '.outIdNo', fallback: 'PA5231328' },
+        'empNat': { selector: '.outNat', fallback: 'NEPAL' },
+        'salaryString': { selector: '.outSalary', fallback: '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION' },
+        'refNo': { selector: '.outRefNo', fallback: 'QTR/AK:A01969' }
+    };
+
+    // Synchronize all form input values to document templates
+    function updateAllFields() {
+        // Date of Issue
+        const docDateVal = docDateInput ? docDateInput.value : todayISO;
+        const formattedDocDate = formatDateGB(docDateVal) || todayFormatted;
+        document.querySelectorAll('.outDateOffer').forEach(el => el.textContent = formattedDocDate);
+
+        // Date of Joining
+        const dojVal = empDojInput ? empDojInput.value : '';
+        const formattedDoj = formatDateGB(dojVal) || formattedDocDate;
+        document.querySelectorAll('.outDoj').forEach(el => el.textContent = formattedDoj);
+
+        // Text & String mappings
+        Object.keys(mappings).forEach(inputId => {
+            const inputEl = document.getElementById(inputId);
+            const val = (inputEl && inputEl.value.trim()) ? inputEl.value.trim() : mappings[inputId].fallback;
+            document.querySelectorAll(mappings[inputId].selector).forEach(outEl => {
+                outEl.textContent = val;
+            });
+        });
+    }
+
+    // Save generated document record locally (and prepare Supabase sync)
+    function saveDocumentRecord() {
+        const refNo = (document.getElementById('refNo') && document.getElementById('refNo').value.trim()) 
+            ? document.getElementById('refNo').value.trim() 
+            : 'QTR/AK:A01969';
+
+        const empName = (document.getElementById('empName') && document.getElementById('empName').value.trim())
+            ? document.getElementById('empName').value.trim()
+            : 'AASHIK RAUT';
+
+        const empIdNo = (document.getElementById('empIdNo') && document.getElementById('empIdNo').value.trim())
+            ? document.getElementById('empIdNo').value.trim()
+            : 'PA5231328';
+
+        const empTitle = (document.getElementById('empTitle') && document.getElementById('empTitle').value.trim())
+            ? document.getElementById('empTitle').value.trim()
+            : 'CIVIL FOREMAN';
+
+        const empNat = (document.getElementById('empNat') && document.getElementById('empNat').value.trim())
+            ? document.getElementById('empNat').value.trim()
+            : 'NEPAL';
+
+        const salaryString = (document.getElementById('salaryString') && document.getElementById('salaryString').value.trim())
+            ? document.getElementById('salaryString').value.trim()
+            : '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION';
+
+        const docDateVal = docDateInput ? docDateInput.value : todayISO;
+        const formattedDocDate = formatDateGB(docDateVal) || todayFormatted;
+
+        const dojVal = empDojInput ? empDojInput.value : todayISO;
+        const formattedDoj = formatDateGB(dojVal) || formattedDocDate;
+
+        const record = {
+            refNo: refNo,
+            empName: empName,
+            empIdNo: empIdNo,
+            empTitle: empTitle,
+            empNat: empNat,
+            salaryString: salaryString,
+            docDate: formattedDocDate,
+            empDoj: formattedDoj,
+            docType: currentDocType,
+            docTypeName: docTypeNames[currentDocType] || 'HR Document',
+            status: 'VERIFIED',
+            company: 'Al Kabeer Trading & Contracting W.L.L.',
+            crNo: '184920',
+            establishmentId: '74/92014',
+            generatedAt: new Date().toISOString()
+        };
+
+        // 1. Save to LocalStorage
+        try {
+            let docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+            docs[refNo] = record;
+            localStorage.setItem('alkabeer_hr_documents', JSON.stringify(docs));
+            console.log("Saved document to LocalStorage:", record);
+        } catch (err) {
+            console.error("Error saving document to localStorage:", err);
+        }
+
+        // 2. Supabase Integration Ready (Calls window.supabaseClient if available)
+        if (window.supabaseClient) {
+            window.supabaseClient
+                .from('hr_documents')
+                .upsert([record], { onConflict: 'refNo' })
+                .then(({ data, error }) => {
+                    if (error) console.error("Supabase upsert error:", error);
+                    else console.log("Supabase synced successfully:", data);
+                }).catch(e => console.error("Supabase sync exception:", e));
+        }
+
+        return record;
+    }
+
+    // Tab Switch Listener
     tabs.forEach(tab => {
         tab.addEventListener('click', (e) => {
             e.preventDefault();
-            // Remove active class from all
             tabs.forEach(t => t.classList.remove('active'));
+            
             Object.values(templates).forEach(tmpl => {
-                tmpl.style.display = 'none';
-                tmpl.style.alignItems = '';
-                tmpl.style.justifyContent = '';
+                if (tmpl) tmpl.style.display = 'none';
             });
 
-            // Set current
             const docType = tab.getAttribute('data-doc');
             tab.classList.add('active');
             currentDocType = docType;
 
-            if (docType === 'idcard') {
-                templates[docType].style.display = 'flex';
-                photoSection.style.display = 'block';
-            } else {
-                templates[docType].style.display = 'block';
-                photoSection.style.display = 'none';
+            const targetTmpl = templates[docType];
+            if (targetTmpl) {
+                if (docType === 'idcard') {
+                    targetTmpl.style.display = 'flex';
+                    if (photoSection) photoSection.style.display = 'block';
+                } else {
+                    targetTmpl.style.display = 'block';
+                    if (photoSection) photoSection.style.display = 'none';
+                }
             }
+
+            // Sync fields when switching tabs
+            updateAllFields();
         });
     });
 
-    // Inputs to Outputs mapping
-    const mappings = {
-        'empName': '.outName',
-        'empTitle': '.outTitle',
-        'empIdNo': '.outIdNo',
-        'empNat': '.outNat',
-        'salaryString': '.outSalary',
-        'refNo': '.outRefNo',
-        'empDoj': '.outDoj'
-    };
-
-    // Listen to all inputs and update outputs
-    Object.keys(mappings).forEach(inputId => {
-        const inputEl = document.getElementById(inputId);
-        if (inputEl) {
-            inputEl.addEventListener('input', (e) => {
-                let val = e.target.value;
-                if (inputId === 'empDoj' && val) {
-                    val = new Date(val).toLocaleDateString('en-GB');
-                }
-                const outSelectors = document.querySelectorAll(mappings[inputId]);
-                outSelectors.forEach(outEl => {
-                    outEl.textContent = val || `[${inputId.toUpperCase()}]`;
-                });
-            });
+    // Listen to input changes on all form controls
+    const allInputIds = ['empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 'docDate', 'empDoj'];
+    allInputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', updateAllFields);
+            el.addEventListener('change', updateAllFields);
         }
     });
 
-    // Handle Document Date specifically
-    if(docDateInput) {
-        docDateInput.addEventListener('input', (e) => {
-            let val = e.target.value;
-            if(val) {
-                let formatted = new Date(val).toLocaleDateString('en-GB').replace(/\//g, '-');
-                document.querySelectorAll('.outDateOffer').forEach(el => el.textContent = formatted);
-            }
-        });
-    }
-
     // Handle Photo Upload
     const photoInput = document.getElementById('empPhoto');
-    const outPhoto = document.getElementById('outPhoto');
-    
-    if (photoInput) {
+    if (photoInput && outPhoto) {
         photoInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -97,86 +211,60 @@ document.addEventListener('DOMContentLoaded', () => {
                     outPhoto.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            } else {
+                outPhoto.src = defaultAvatarSvg;
             }
         });
     }
 
-    // Print Functionality
+    // Clean, Non-Destructive Print & Save Engine
     const btnPrint = document.getElementById('btnPrint');
     const btnGenerate = document.getElementById('btnGenerate');
     const printArea = document.getElementById('printArea');
 
     function triggerPrint() {
-        // Get the currently active template
+        updateAllFields();
+        const savedRecord = saveDocumentRecord();
+
         let activeTemplate = templates[currentDocType];
         if (!activeTemplate) return;
 
-        // Remember the parent and next sibling so we can put it back
-        const originalParent = activeTemplate.parentNode;
-        const originalNext = activeTemplate.nextSibling;
-
-        // Clear print area
+        // Clear previous content in printArea
         printArea.innerHTML = '';
 
-        // Move actual element (not clone) to printArea - preserves all styles
-        printArea.appendChild(activeTemplate);
-        activeTemplate.style.display = 'block';
+        // Clone current template into printArea without removing original DOM from preview
+        const clone = activeTemplate.cloneNode(true);
+        clone.style.display = (currentDocType === 'idcard') ? 'flex' : 'block';
+        printArea.appendChild(clone);
 
         if (currentDocType === 'idcard') {
             printArea.style.display = 'flex';
             printArea.style.justifyContent = 'center';
             printArea.style.alignItems = 'center';
-            printArea.style.height = '100vh';
+            printArea.style.minHeight = '100vh';
         } else {
             printArea.style.display = 'block';
-            printArea.style.height = 'auto';
+            printArea.style.minHeight = 'auto';
         }
 
-        // Show print area for printing
         printArea.classList.remove('no-print');
 
-        // Small delay to let browser reflow before printing
+        // Short delay for browser reflow before opening print dialog
         requestAnimationFrame(() => {
             window.print();
 
-            // After print dialog closes, put the element back
             setTimeout(() => {
-                // Move template back to its original location
-                if (originalNext) {
-                    originalParent.insertBefore(activeTemplate, originalNext);
-                } else {
-                    originalParent.appendChild(activeTemplate);
-                }
-
-                // Restore visibility for the current doc type
-                if (currentDocType === 'offer') {
-                    activeTemplate.style.display = 'block';
-                } else if (currentDocType === 'idcard') {
-                    activeTemplate.style.display = 'flex';
-                } else {
-                    activeTemplate.style.display = currentDocType === 'appointment' ? 'none' : 'block';
-                }
-
-                // Only the offer template should be visible by default
-                if (currentDocType !== 'offer') {
-                    // keep visible since user was on this tab
-                    if (currentDocType === 'idcard') {
-                        activeTemplate.style.display = 'flex';
-                    } else {
-                        activeTemplate.style.display = 'block';
-                    }
-                }
-
-                // Clear print area and hide it
                 printArea.innerHTML = '';
                 printArea.classList.add('no-print');
-                printArea.style.display = '';
-                printArea.style.height = '';
-            }, 500);
+                printArea.style.display = 'none';
+            }, 300);
         });
     }
 
-    if(btnPrint) btnPrint.addEventListener('click', triggerPrint);
-    if(btnGenerate) btnGenerate.addEventListener('click', triggerPrint);
+    if (btnPrint) btnPrint.addEventListener('click', triggerPrint);
+    if (btnGenerate) btnGenerate.addEventListener('click', triggerPrint);
 
+    // Initial Sync on load
+    updateAllFields();
+    saveDocumentRecord(); // Save initial default record so it can be verified right away!
 });
