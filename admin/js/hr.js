@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // Configurable Supabase Credentials (Set your credentials here to sync with Supabase)
-    const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
+    const SUPABASE_URL = "https://yueuvpvpzdizmrdgfwau.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_yGg4v1Uz35vj2xx5kJn8nw_BcXof5vs";
 
     let supabaseClient = null;
     if (window.supabase && SUPABASE_URL !== "YOUR_SUPABASE_URL_HERE") {

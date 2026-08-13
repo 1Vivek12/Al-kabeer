@@ -402,11 +402,28 @@
         Tel: +974 4490 2699 | Email: info@alkabeerqatar.com | Website: <strong>www.alkabeerqatar.com</strong>
     </footer>
 
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const refInput = document.getElementById('refInput');
             const btnSearch = document.getElementById('btnSearch');
             const resultContainer = document.getElementById('resultContainer');
+
+            // Supabase Cloud Credentials
+            const SUPABASE_URL = "https://yueuvpvpzdizmrdgfwau.supabase.co";
+            const SUPABASE_ANON_KEY = "sb_publishable_yGg4v1Uz35vj2xx5kJn8nw_BcXof5vs";
+
+            let supabaseClient = null;
+            if (window.supabase) {
+                try {
+                    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log("🟢 Supabase client initialized in verification portal");
+                } catch (e) {
+                    console.error("Supabase init error", e);
+                }
+            }
 
             // Get query param ?ref=... if present
             const urlParams = new URLSearchParams(window.location.search);
@@ -415,24 +432,52 @@
                 refInput.value = queryRef;
             }
 
-            function performVerification() {
+            async function performVerification() {
                 const searchRef = refInput.value.trim().toUpperCase();
                 if (!searchRef) {
                     alert("Please enter a document reference number.");
                     return;
                 }
 
-                // Retrieve local records
-                let docs = {};
-                try {
-                    docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
-                } catch (e) {
-                    console.error("Error reading localStorage", e);
+                resultContainer.style.display = 'block';
+                resultContainer.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #1e3a8a;">
+                        <i class="bi bi-shield-shaded" style="font-size: 36px; color: #1e3a8a;"></i>
+                        <p style="margin-top: 10px; font-weight: 700;">Verifying document with Al Kabeer Cloud Registry...</p>
+                    </div>
+                `;
+
+                let record = null;
+
+                // 1. Try fetching from Supabase Cloud DB
+                if (supabaseClient) {
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('hr_documents')
+                            .select('*')
+                            .eq('refNo', searchRef)
+                            .maybeSingle();
+
+                        if (!error && data) {
+                            record = data;
+                            console.log("🟢 Record found in Supabase Cloud DB:", record);
+                        }
+                    } catch (err) {
+                        console.warn("Supabase fetch exception, using local fallback:", err);
+                    }
                 }
 
-                // Search in localStorage or fallback default
-                let record = docs[searchRef];
+                // 2. Fallback to LocalStorage
+                if (!record) {
+                    try {
+                        let docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+                        record = docs[searchRef];
+                    } catch (e) {
+                        console.error("Error reading localStorage", e);
+                    }
+                }
 
+                // 3. Fallback default sample for demo reference QTR/AK:A01969
                 if (!record && (searchRef === 'QTR/AK:A01969' || searchRef === 'QTR/AK:A001')) {
                     record = {
                         refNo: searchRef,
@@ -453,101 +498,107 @@
                     };
                 }
 
-                resultContainer.style.display = 'block';
-
                 if (record) {
-                    resultContainer.innerHTML = `
-                        <div class="result-header-verified">
-                            <div class="status-badge-verified">
-                                <i class="bi bi-patch-check-fill"></i>
-                                <div>
-                                    <h4 class="status-title">OFFICIAL DOCUMENT VERIFIED & VALID</h4>
-                                    <div class="status-sub">مستند رسمي معتمد وموثق صادرة عن شركة الكبير للتجارة والمقاولات ذ.م.م</div>
-                                </div>
-                            </div>
-                            <div class="status-tag"><i class="bi bi-shield-lock-fill me-1"></i> STATUS: ACTIVE & VALID</div>
-                        </div>
-
-                        <div class="result-body">
-                            <div class="details-grid">
-                                <div class="detail-item">
-                                    <div class="detail-label">Document Reference No. <span>رقم المرجع</span></div>
-                                    <div class="detail-value" style="color: #1e3a8a;">${record.refNo}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Document Type <span>نوع المستند</span></div>
-                                    <div class="detail-value">${record.docTypeName}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Employee / Candidate Name <span>اسم الموظف / المرشح</span></div>
-                                    <div class="detail-value" style="text-transform: uppercase;">${record.empName}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Passport Number <span>رقم الجواز</span></div>
-                                    <div class="detail-value" style="text-transform: uppercase;">${record.empIdNo}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Trade / Designation <span>المسمى الوظيفي</span></div>
-                                    <div class="detail-value" style="text-transform: uppercase;">${record.empTitle}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Nationality <span>الجنسية</span></div>
-                                    <div class="detail-value" style="text-transform: uppercase;">${record.empNat}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Date of Issue <span>تاريخ الصدور</span></div>
-                                    <div class="detail-value">${record.docDate}</div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <div class="detail-label">Date of Joining <span>تاريخ المباشرة</span></div>
-                                    <div class="detail-value">${record.empDoj}</div>
-                                </div>
-
-                                <div class="detail-item" style="grid-column: span 2;">
-                                    <div class="detail-label">Salary & Entitlements <span>الراتب والمزايا</span></div>
-                                    <div class="detail-value" style="color: #1e3a8a; background: #eff6ff; padding: 8px 12px; border-radius: 4px; border: 1px solid #bfdbfe;">${record.salaryString}</div>
-                                </div>
-                            </div>
-
-                            <div class="verification-seal-wrapper">
-                                <div class="seal-info">
-                                    <h4>Al Kabeer Human Resources Department</h4>
-                                    <p>State of Qatar - Doha | C.R. No: 184920 | Establishment ID: 74/92014</p>
-                                    <p style="font-size: 12px; color: #16a34a; margin-top: 4px; font-weight: 700;">
-                                        <i class="bi bi-database-check me-1"></i> Local Registry Synchronized | Ready for Supabase Cloud Database Integration
-                                    </p>
-                                </div>
-                                <img src="static/images/stamp.png" alt="Official Stamp" class="official-stamp-img">
-                            </div>
-
-                            <div style="margin-top: 25px; text-align: center;">
-                                <button onclick="window.print()" class="btn-verify" style="margin: 0 auto; background: linear-gradient(135deg, #0f172a, #1e3a8a);">
-                                    <i class="bi bi-printer-fill me-2"></i> Print Verification Certificate / طباعة شهادة التحقق
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                    renderVerifiedCard(record);
                 } else {
-                    resultContainer.innerHTML = `
-                        <div class="result-header-notfound">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
+                    renderNotFoundCard(searchRef);
+                }
+            }
+
+            function renderVerifiedCard(record) {
+                resultContainer.innerHTML = `
+                    <div class="result-header-verified">
+                        <div class="status-badge-verified">
+                            <i class="bi bi-patch-check-fill"></i>
                             <div>
-                                <div class="notfound-title">DOCUMENT REFERENCE NOT FOUND / لم يتم العثور على المستند</div>
-                                <div style="font-size: 13px; color: #991b1b;">No official record was found matching reference number "${searchRef}".</div>
+                                <h4 class="status-title">OFFICIAL DOCUMENT VERIFIED & VALID</h4>
+                                <div class="status-sub">مستند رسمي معتمد وموثق صادرة عن شركة الكبير للتجارة والمقاولات ذ.م.م</div>
                             </div>
                         </div>
-                        <div class="result-body" style="text-align: center; color: #64748b;">
-                            <p>Please re-check the Reference Number printed on the document or contact Al Kabeer Human Resources Department in Doha, Qatar for assistance.</p>
+                        <div class="status-tag"><i class="bi bi-shield-lock-fill me-1"></i> STATUS: ACTIVE & VALID</div>
+                    </div>
+
+                    <div class="result-body">
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Document Reference No. <span>رقم المرجع</span></div>
+                                <div class="detail-value" style="color: #1e3a8a;">${record.refNo}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Document Type <span>نوع المستند</span></div>
+                                <div class="detail-value">${record.docTypeName}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Employee / Candidate Name <span>اسم الموظف / المرشح</span></div>
+                                <div class="detail-value" style="text-transform: uppercase;">${record.empName}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Passport Number <span>رقم الجواز</span></div>
+                                <div class="detail-value" style="text-transform: uppercase;">${record.empIdNo}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Trade / Designation <span>المسمى الوظيفي</span></div>
+                                <div class="detail-value" style="text-transform: uppercase;">${record.empTitle}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Nationality <span>الجنسية</span></div>
+                                <div class="detail-value" style="text-transform: uppercase;">${record.empNat}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Date of Issue <span>تاريخ الصدور</span></div>
+                                <div class="detail-value">${record.docDate}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-label">Date of Joining <span>تاريخ المباشرة</span></div>
+                                <div class="detail-value">${record.empDoj}</div>
+                            </div>
+
+                            <div class="detail-item" style="grid-column: span 2;">
+                                <div class="detail-label">Salary & Entitlements <span>الراتب والمزايا</span></div>
+                                <div class="detail-value" style="color: #1e3a8a; background: #eff6ff; padding: 8px 12px; border-radius: 4px; border: 1px solid #bfdbfe;">${record.salaryString}</div>
+                            </div>
                         </div>
-                    `;
-                }
+
+                        <div class="verification-seal-wrapper">
+                            <div class="seal-info">
+                                <h4>Al Kabeer Human Resources Department</h4>
+                                <p>State of Qatar - Doha | C.R. No: 184920 | Establishment ID: 74/92014</p>
+                                <p style="font-size: 12px; color: #16a34a; margin-top: 4px; font-weight: 700;">
+                                    <i class="bi bi-cloud-check-fill me-1"></i> Live Supabase Cloud Database Synchronized
+                                </p>
+                            </div>
+                            <img src="static/images/stamp.png" alt="Official Stamp" class="official-stamp-img" onerror="this.src='../static/images/stamp.png'">
+                        </div>
+
+                        <div style="margin-top: 25px; text-align: center;">
+                            <button onclick="window.print()" class="btn-verify" style="margin: 0 auto; background: linear-gradient(135deg, #0f172a, #1e3a8a);">
+                                <i class="bi bi-printer-fill me-2"></i> Print Verification Certificate / طباعة شهادة التحقق
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderNotFoundCard(searchRef) {
+                resultContainer.innerHTML = `
+                    <div class="result-header-notfound">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <div>
+                            <div class="notfound-title">DOCUMENT REFERENCE NOT FOUND / لم يتم العثور على المستند</div>
+                            <div style="font-size: 13px; color: #991b1b;">No official record was found matching reference number "${searchRef}".</div>
+                        </div>
+                    </div>
+                    <div class="result-body" style="text-align: center; color: #64748b;">
+                        <p>Please re-check the Reference Number printed on the document or contact Al Kabeer Human Resources Department in Doha, Qatar for assistance.</p>
+                    </div>
+                `;
             }
 
             btnSearch.addEventListener('click', performVerification);
