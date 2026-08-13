@@ -1,5 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Configurable Supabase Credentials (Set your credentials here to sync with Supabase)
+    const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
+
+    let supabaseClient = null;
+    if (window.supabase && SUPABASE_URL !== "YOUR_SUPABASE_URL_HERE") {
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("🟢 Supabase Client initialized successfully!");
+        } catch (e) {
+            console.error("Supabase Initialization Error:", e);
+        }
+    }
+
     // Format date string YYYY-MM-DD -> DD/MM/YYYY without UTC timezone shift
     function formatDateGB(dateStr) {
         if (!dateStr) return '';
@@ -84,9 +98,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 outEl.textContent = val;
             });
         });
+
+        // Update Dynamic Verification QR Codes
+        updateQRCodes();
     }
 
-    // Save generated document record locally (and prepare Supabase sync)
+    // Render dynamic Verification QR Codes
+    function updateQRCodes() {
+        const refEl = document.getElementById('refNo');
+        const refNo = (refEl && refEl.value.trim()) ? refEl.value.trim() : 'QTR/AK:A01969';
+        
+        // Target verification URL for scanning
+        const verifyUrl = `${window.location.origin}/verify.html?ref=${encodeURIComponent(refNo)}`;
+
+        const targets = [
+            'qrOfferP1',
+            'qrOfferP2',
+            'qrAppt',
+            'qrSalary'
+        ];
+
+        targets.forEach(id => {
+            const container = document.getElementById(id);
+            if (container) {
+                container.innerHTML = '';
+                if (window.QRCode) {
+                    new QRCode(container, {
+                        text: verifyUrl,
+                        width: 44,
+                        height: 44,
+                        colorDark: "#1e3a8a",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                }
+            }
+        });
+    }
+
+    // Save generated document record locally and sync with Supabase
     function saveDocumentRecord() {
         const refNo = (document.getElementById('refNo') && document.getElementById('refNo').value.trim()) 
             ? document.getElementById('refNo').value.trim() 
@@ -146,14 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error saving document to localStorage:", err);
         }
 
-        // 2. Supabase Integration Ready (Calls window.supabaseClient if available)
-        if (window.supabaseClient) {
-            window.supabaseClient
+        // 2. Supabase Integration Sync
+        if (supabaseClient) {
+            supabaseClient
                 .from('hr_documents')
                 .upsert([record], { onConflict: 'refNo' })
                 .then(({ data, error }) => {
                     if (error) console.error("Supabase upsert error:", error);
-                    else console.log("Supabase synced successfully:", data);
+                    else console.log("🟢 Supabase synced successfully:", data);
                 }).catch(e => console.error("Supabase sync exception:", e));
         }
 

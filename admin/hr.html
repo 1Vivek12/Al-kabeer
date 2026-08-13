@@ -102,6 +102,26 @@
             border: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+        
+        .qr-code-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-left: 6px;
+            border-left: 1px solid #cbd5e1;
+            margin-left: 4px;
+        }
+
+        .qr-code-box .qr-label {
+            font-size: 5.5px;
+            font-weight: 800;
+            color: #1e3a8a;
+            text-align: center;
+            line-height: 1.1;
+            margin-top: 2px;
         }
         
         .pdf-contact-box {
@@ -747,8 +767,14 @@
                                             </div>
                                             <div class="pdf-right-col">
                                                 <div class="pdf-ref-date">
-                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">05/08/2026</span></div>
-                                                    <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                    <div>
+                                                        <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
+                                                        <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                    </div>
+                                                    <div class="qr-code-box">
+                                                        <div id="qrOfferP1"></div>
+                                                        <div class="qr-label">SCAN TO VERIFY<br>امسح للتحقق</div>
+                                                    </div>
                                                 </div>
                                                 <div class="pdf-contact-box">
                                                     <div>Tel: +974 4490 2699 | Fax: +974 4434 1512</div>
@@ -1102,8 +1128,14 @@
                                             </div>
                                             <div class="pdf-right-col">
                                                 <div class="pdf-ref-date">
-                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
-                                                    <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                    <div>
+                                                        <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
+                                                        <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                    </div>
+                                                    <div class="qr-code-box">
+                                                        <div id="qrAppt"></div>
+                                                        <div class="qr-label">SCAN TO VERIFY<br>امسح للتحقق</div>
+                                                    </div>
                                                 </div>
                                                 <div class="pdf-contact-box">
                                                     <div>Tel: +974 4490 2699 | Fax: +974 4434 1512</div>
@@ -1183,8 +1215,14 @@
                                             </div>
                                             <div class="pdf-right-col">
                                                 <div class="pdf-ref-date">
-                                                    <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
-                                                    <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                    <div>
+                                                        <div><b>Date / التاريخ:</b> <span class="outDateOffer">13/08/2026</span></div>
+                                                        <div><b>Ref / المرجع:</b> <span class="outRefNo">QTR/AK:A01969</span></div>
+                                                    </div>
+                                                    <div class="qr-code-box">
+                                                        <div id="qrSalary"></div>
+                                                        <div class="qr-label">SCAN TO VERIFY<br>امسح للتحقق</div>
+                                                    </div>
                                                 </div>
                                                 <div class="pdf-contact-box">
                                                     <div>Tel: +974 4490 2699 | Fax: +974 4434 1512</div>
@@ -1299,6 +1337,8 @@
     <!-- Print area that will be isolated during printing -->
     <div id="printArea" class="no-print"></div>
 
+    <script src="js/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/hr.js"></script>
 </body>
 </html>
