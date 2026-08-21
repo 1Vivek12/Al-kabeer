@@ -83,15 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inputs to Outputs mapping
     const mappings = {
-        'empName': { selector: '.outName', fallback: 'AASHIK RAUT' },
-        'empTitle': { selector: '.outTitle', fallback: 'CIVIL FOREMAN' },
-        'empIdNo': { selector: '.outIdNo', fallback: 'PA5231328' },
-        'empNat': { selector: '.outNat', fallback: 'NEPAL' },
-        'salaryString': { selector: '.outSalary', fallback: '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION' },
+        'empName': { selector: '.outName', fallback: '[FULL NAME]' },
+        'empTitle': { selector: '.outTitle', fallback: '[DESIGNATION]' },
+        'empIdNo': { selector: '.outIdNo', fallback: '[PASSPORT NO]' },
+        'empNat': { selector: '.outNat', fallback: '[NATIONALITY]' },
+        'salaryString': { selector: '.outSalary', fallback: '[SALARY & BENEFITS]' },
         'refNo': { selector: '.outRefNo', fallback: 'QTR/AK:A01969' },
-        'empQid': { selector: '#outQid', fallback: '29852401928' },
-        'empDept': { selector: '#outDept', fallback: 'CIVIL DIVISION' },
-        'empBlood': { selector: '#outBlood', fallback: 'O+ POSITIVE' }
+        'empQid': { selector: '#outQid', fallback: '[QID NO]' },
+        'empDept': { selector: '#outDept', fallback: '[DEPARTMENT]' },
+        'empBlood': { selector: '#outBlood', fallback: '[BLOOD GROUP]' },
+        'termDurationEn': { selector: '.outTermDurationEn', fallback: '2 Years Renewable upon mutual agreement of both parties.' },
+        'termDurationAr': { selector: '.outTermDurationAr', fallback: 'سنتان (2) قابلة للتجديد بموافقة الطرفين.' },
+        'termProbationEn': { selector: '.outTermProbationEn', fallback: 'Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.' },
+        'termProbationAr': { selector: '.outTermProbationAr', fallback: '6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.' },
+        'termHoursEn': { selector: '.outTermHoursEn', fallback: '8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.' },
+        'termHoursAr': { selector: '.outTermHoursAr', fallback: '8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).' }
     };
 
     // Synchronize all form input values to document templates
@@ -185,10 +191,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const dojVal = empDojInput ? empDojInput.value : todayISO;
         const formattedDoj = formatDateGB(dojVal) || formattedDocDate;
 
-        const empQid = document.getElementById('empQid') ? document.getElementById('empQid').value.trim() : '29852401928';
-        const empDept = document.getElementById('empDept') ? document.getElementById('empDept').value.trim() : 'CIVIL DIVISION';
-        const empBlood = document.getElementById('empBlood') ? document.getElementById('empBlood').value.trim() : 'O+ POSITIVE';
-        const empEmergency = document.getElementById('empEmergency') ? document.getElementById('empEmergency').value.trim() : '+974 5592 1820';
+        const empQid = document.getElementById('empQid') ? document.getElementById('empQid').value.trim() : '';
+        const empDept = document.getElementById('empDept') ? document.getElementById('empDept').value.trim() : '';
+        const empBlood = document.getElementById('empBlood') ? document.getElementById('empBlood').value.trim() : '';
+        const empEmergency = document.getElementById('empEmergency') ? document.getElementById('empEmergency').value.trim() : '';
+
+        const termDurationEn = (document.getElementById('termDurationEn') && document.getElementById('termDurationEn').value.trim())
+            ? document.getElementById('termDurationEn').value.trim()
+            : '2 Years Renewable upon mutual agreement of both parties.';
+        const termDurationAr = (document.getElementById('termDurationAr') && document.getElementById('termDurationAr').value.trim())
+            ? document.getElementById('termDurationAr').value.trim()
+            : 'سنتان (2) قابلة للتجديد بموافقة الطرفين.';
+
+        const termProbationEn = (document.getElementById('termProbationEn') && document.getElementById('termProbationEn').value.trim())
+            ? document.getElementById('termProbationEn').value.trim()
+            : 'Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.';
+        const termProbationAr = (document.getElementById('termProbationAr') && document.getElementById('termProbationAr').value.trim())
+            ? document.getElementById('termProbationAr').value.trim()
+            : '6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.';
+
+        const termHoursEn = (document.getElementById('termHoursEn') && document.getElementById('termHoursEn').value.trim())
+            ? document.getElementById('termHoursEn').value.trim()
+            : '8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.';
+        const termHoursAr = (document.getElementById('termHoursAr') && document.getElementById('termHoursAr').value.trim())
+            ? document.getElementById('termHoursAr').value.trim()
+            : '8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).';
 
         const record = {
             refNo: refNo,
@@ -200,6 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
             empDept: empDept,
             empBlood: empBlood,
             empEmergency: empEmergency,
+            termDurationEn: termDurationEn,
+            termDurationAr: termDurationAr,
+            termProbationEn: termProbationEn,
+            termProbationAr: termProbationAr,
+            termHoursEn: termHoursEn,
+            termHoursAr: termHoursAr,
             salaryString: salaryString,
             docDate: formattedDocDate,
             empDoj: formattedDoj,
@@ -479,11 +512,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset Form to New Document Mode
     function resetForm() {
-        if (document.getElementById('empName')) document.getElementById('empName').value = 'AASHIK RAUT';
-        if (document.getElementById('empIdNo')) document.getElementById('empIdNo').value = 'PA5231328';
-        if (document.getElementById('empTitle')) document.getElementById('empTitle').value = 'CIVIL FOREMAN';
-        if (document.getElementById('empNat')) document.getElementById('empNat').value = 'NEPAL';
-        if (document.getElementById('salaryString')) document.getElementById('salaryString').value = '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION';
+        if (document.getElementById('empName')) document.getElementById('empName').value = '';
+        if (document.getElementById('empIdNo')) document.getElementById('empIdNo').value = '';
+        if (document.getElementById('empTitle')) document.getElementById('empTitle').value = '';
+        if (document.getElementById('empNat')) document.getElementById('empNat').value = '';
+        if (document.getElementById('salaryString')) document.getElementById('salaryString').value = '';
+        if (document.getElementById('empQid')) document.getElementById('empQid').value = '';
+        if (document.getElementById('empDept')) document.getElementById('empDept').value = '';
+        if (document.getElementById('empBlood')) document.getElementById('empBlood').value = '';
+        if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = '';
+
+        // Pre-filled standard legal contract terms defaults
+        if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = '2 Years Renewable upon mutual agreement of both parties.';
+        if (document.getElementById('termDurationAr')) document.getElementById('termDurationAr').value = 'سنتان (2) قابلة للتجديد بموافقة الطرفين.';
+        if (document.getElementById('termProbationEn')) document.getElementById('termProbationEn').value = 'Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.';
+        if (document.getElementById('termProbationAr')) document.getElementById('termProbationAr').value = '6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.';
+        if (document.getElementById('termHoursEn')) document.getElementById('termHoursEn').value = '8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.';
+        if (document.getElementById('termHoursAr')) document.getElementById('termHoursAr').value = '8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).';
+
         if (docDateInput) docDateInput.value = todayISO;
         if (empDojInput) empDojInput.value = todayISO;
         if (outPhoto) outPhoto.src = defaultAvatarSvg;
@@ -493,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modeText = document.getElementById('modeStatusText');
         if (modeText) modeText.textContent = 'Creating New Document';
 
-        showToast('Form reset to new document mode.');
+        showToast('Form cleared for new document creation.');
         updateAllFields();
     }
 
@@ -513,6 +559,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empDept')) document.getElementById('empDept').value = record.empDept || '';
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = record.empBlood || '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = record.empEmergency || '';
+
+        // Load contract terms into form
+        if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = record.termDurationEn || '2 Years Renewable upon mutual agreement of both parties.';
+        if (document.getElementById('termDurationAr')) document.getElementById('termDurationAr').value = record.termDurationAr || 'سنتان (2) قابلة للتجديد بموافقة الطرفين.';
+        if (document.getElementById('termProbationEn')) document.getElementById('termProbationEn').value = record.termProbationEn || 'Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.';
+        if (document.getElementById('termProbationAr')) document.getElementById('termProbationAr').value = record.termProbationAr || '6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.';
+        if (document.getElementById('termHoursEn')) document.getElementById('termHoursEn').value = record.termHoursEn || '8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.';
+        if (document.getElementById('termHoursAr')) document.getElementById('termHoursAr').value = record.termHoursAr || '8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).';
         
         // Restore dates properly for date input controls
         if (docDateInput && record.docDate) {
@@ -580,7 +634,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Listen to input changes on all form controls
-    const allInputIds = ['empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 'docDate', 'empDoj', 'empQid', 'empDept', 'empBlood', 'empEmergency'];
+    const allInputIds = [
+        'empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 
+        'docDate', 'empDoj', 'empQid', 'empDept', 'empBlood', 'empEmergency',
+        'termDurationEn', 'termDurationAr', 'termProbationEn', 'termProbationAr', 'termHoursEn', 'termHoursAr'
+    ];
     allInputIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) {

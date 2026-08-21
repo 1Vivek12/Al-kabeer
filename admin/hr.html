@@ -750,22 +750,22 @@
 
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label>Full Name *</label>
-                                    <input type="text" id="empName" class="form-control" required value="AASHIK RAUT" placeholder="e.g. AASHIK RAUT" style="text-transform: uppercase; font-weight: 700;">
+                                    <input type="text" id="empName" class="form-control" required value="" placeholder="e.g. AASHIK RAUT" style="text-transform: uppercase; font-weight: 700;">
                                 </div>
                                 
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label>Passport No. *</label>
-                                    <input type="text" id="empIdNo" class="form-control" required value="PA5231328" placeholder="e.g. PA5231328" style="text-transform: uppercase; font-weight: 700;">
+                                    <input type="text" id="empIdNo" class="form-control" required value="" placeholder="e.g. PA5231328" style="text-transform: uppercase; font-weight: 700;">
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label>Trade / Designation *</label>
-                                    <input type="text" id="empTitle" class="form-control" required value="CIVIL FOREMAN" placeholder="e.g. CIVIL FOREMAN" style="text-transform: uppercase;">
+                                    <input type="text" id="empTitle" class="form-control" required value="" placeholder="e.g. CIVIL FOREMAN" style="text-transform: uppercase;">
                                 </div>
                                 
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label>Nationality *</label>
-                                    <input type="text" id="empNat" class="form-control" required value="NEPAL" placeholder="e.g. NEPAL" style="text-transform: uppercase;">
+                                    <input type="text" id="empNat" class="form-control" required value="" placeholder="e.g. NEPAL" style="text-transform: uppercase;">
                                 </div>
                             </div>
 
@@ -777,11 +777,39 @@
 
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label>Salary String (Appears on Letter)</label>
-                                    <input type="text" id="salaryString" class="form-control" value="[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION" style="font-weight: 600;">
+                                    <input type="text" id="salaryString" class="form-control" value="" placeholder="e.g. [BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION" style="font-weight: 600;">
                                 </div>
                             </div>
 
-                            <!-- 4. Joining & Media -->
+                            <!-- 4. Customizable Contract Terms (Offer Letter) -->
+                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+                                <h4 style="margin: 0 0 12px 0; color: #1e3a8a; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                    <i class="bi bi-sliders"></i> Customizable Contract Terms
+                                </h4>
+
+                                <!-- Term 1: Contract Duration -->
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label>1. Contract Duration (English & Arabic)</label>
+                                    <input type="text" id="termDurationEn" class="form-control" value="2 Years Renewable upon mutual agreement of both parties." placeholder="Contract Duration (EN)" style="margin-bottom: 6px;">
+                                    <input type="text" id="termDurationAr" class="form-control" value="سنتان (2) قابلة للتجديد بموافقة الطرفين." placeholder="مدة العقد (AR)" style="text-align: right; font-family: 'Cairo', sans-serif;">
+                                </div>
+
+                                <!-- Term 2: Probation Period -->
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label>2. Probation Period (English & Arabic)</label>
+                                    <input type="text" id="termProbationEn" class="form-control" value="Maximum 6 Months from joining date as per Qatar Labor Law Art. 39." placeholder="Probation Period (EN)" style="margin-bottom: 6px;">
+                                    <input type="text" id="termProbationAr" class="form-control" value="6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري." placeholder="فترة التجربة (AR)" style="text-align: right; font-family: 'Cairo', sans-serif;">
+                                </div>
+
+                                <!-- Term 3: Working Hours & Rest -->
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label>3. Working Hours & Rest (English & Arabic)</label>
+                                    <input type="text" id="termHoursEn" class="form-control" value="8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73." placeholder="Working Hours (EN)" style="margin-bottom: 6px;">
+                                    <input type="text" id="termHoursAr" class="form-control" value="8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73)." placeholder="ساعات العمل والراحة (AR)" style="text-align: right; font-family: 'Cairo', sans-serif;">
+                                </div>
+                            </div>
+
+                            <!-- 5. Joining & Media -->
                             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
                                 <h4 style="margin: 0 0 12px 0; color: #1e3a8a; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                                     <i class="bi bi-calendar-check-fill"></i> Joining Date & ID Photo
@@ -801,19 +829,19 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom: 10px;">
                                         <label>Qatar ID / QID No.</label>
-                                        <input type="text" id="empQid" class="form-control" value="29852401928" placeholder="e.g. 29852401928" style="font-weight: 700;">
+                                        <input type="text" id="empQid" class="form-control" value="" placeholder="e.g. 29852401928" style="font-weight: 700;">
                                     </div>
                                     <div class="form-group" style="margin-bottom: 10px;">
                                         <label>Department / Operations Division</label>
-                                        <input type="text" id="empDept" class="form-control" value="CIVIL & WATERPROOFING DIV" placeholder="e.g. CIVIL DIVISION">
+                                        <input type="text" id="empDept" class="form-control" value="" placeholder="e.g. CIVIL DIVISION">
                                     </div>
                                     <div class="form-group" style="margin-bottom: 10px;">
                                         <label>Blood Group</label>
-                                        <input type="text" id="empBlood" class="form-control" value="O+ POSITIVE" placeholder="e.g. O+ POSITIVE">
+                                        <input type="text" id="empBlood" class="form-control" value="" placeholder="e.g. O+ POSITIVE">
                                     </div>
                                     <div class="form-group" style="margin-bottom: 0;">
                                         <label>Emergency Contact Phone</label>
-                                        <input type="text" id="empEmergency" class="form-control" value="+974 5592 1820" placeholder="+974 XXXX XXXX">
+                                        <input type="text" id="empEmergency" class="form-control" value="" placeholder="+974 XXXX XXXX">
                                     </div>
                                 </div>
                             </div>
@@ -925,11 +953,11 @@
                                                 <div class="terms-row-en">
                                                     <span class="t-num">1.</span>
                                                     <span class="t-lbl">Contract Duration:</span>
-                                                    <span class="t-val">2 Years Renewable upon mutual agreement of both parties.</span>
+                                                    <span class="t-val outTermDurationEn">2 Years Renewable upon mutual agreement of both parties.</span>
                                                 </div>
                                                 <div class="terms-row-ar">
                                                     <span class="t-lbl-ar">مدة العقد:</span>
-                                                    <span class="t-val-ar">سنتان (2) قابلة للتجديد بموافقة الطرفين.</span>
+                                                    <span class="t-val-ar outTermDurationAr">سنتان (2) قابلة للتجديد بموافقة الطرفين.</span>
                                                 </div>
                                             </div>
 
@@ -937,11 +965,11 @@
                                                 <div class="terms-row-en">
                                                     <span class="t-num">2.</span>
                                                     <span class="t-lbl">Probation Period:</span>
-                                                    <span class="t-val">Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.</span>
+                                                    <span class="t-val outTermProbationEn">Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.</span>
                                                 </div>
                                                 <div class="terms-row-ar">
                                                     <span class="t-lbl-ar">فترة التجربة:</span>
-                                                    <span class="t-val-ar">6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.</span>
+                                                    <span class="t-val-ar outTermProbationAr">6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.</span>
                                                 </div>
                                             </div>
 
@@ -949,11 +977,11 @@
                                                 <div class="terms-row-en">
                                                     <span class="t-num">3.</span>
                                                     <span class="t-lbl">Working Hours & Rest:</span>
-                                                    <span class="t-val">8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.</span>
+                                                    <span class="t-val outTermHoursEn">8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.</span>
                                                 </div>
                                                 <div class="terms-row-ar">
                                                     <span class="t-lbl-ar">ساعات العمل والراحة:</span>
-                                                    <span class="t-val-ar">8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).</span>
+                                                    <span class="t-val-ar outTermHoursAr">8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).</span>
                                                 </div>
                                             </div>
 
