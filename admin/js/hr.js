@@ -97,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'termProbationEn': { selector: '.outTermProbationEn', fallback: 'Maximum 6 Months from joining date as per Qatar Labor Law Art. 39.' },
         'termProbationAr': { selector: '.outTermProbationAr', fallback: '6 أشهر كحد أقصى من تاريخ المباشرة وفقاً للمادة (39) من قانون العمل القطري.' },
         'termHoursEn': { selector: '.outTermHoursEn', fallback: '8 Hours/day, 48 Hours/week (6 days/week) as per Qatar Labor Law Art. 73.' },
-        'termHoursAr': { selector: '.outTermHoursAr', fallback: '8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).' }
+        'termHoursAr': { selector: '.outTermHoursAr', fallback: '8 ساعات يومياً بواقع 48 ساعة أسبوعياً (6 أيام عمل) وفقاً للمادة (73).' },
+        'empPhone': { selector: '.outPhone', fallback: '' }
     };
 
     // Synchronize all form input values to document templates
@@ -121,6 +122,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Conditional Phone Row display in Offer Letter summary table
+        const phoneInput = document.getElementById('empPhone');
+        const phoneVal = (phoneInput && phoneInput.value.trim()) ? phoneInput.value.trim() : '';
+        const rowPhone = document.getElementById('rowEmpPhone');
+        if (rowPhone) {
+            if (phoneVal) {
+                rowPhone.style.display = 'table-row';
+            } else {
+                rowPhone.style.display = 'none';
+            }
+        }
+
         // Update Dynamic Verification QR Codes
         updateQRCodes();
     }
@@ -135,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const targets = [
             'qrOfferP1',
-            'qrOfferP2',
             'qrAppt',
             'qrSalary',
             'qrIdCard'
@@ -195,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const empDept = document.getElementById('empDept') ? document.getElementById('empDept').value.trim() : '';
         const empBlood = document.getElementById('empBlood') ? document.getElementById('empBlood').value.trim() : '';
         const empEmergency = document.getElementById('empEmergency') ? document.getElementById('empEmergency').value.trim() : '';
+        const empPhone = document.getElementById('empPhone') ? document.getElementById('empPhone').value.trim() : '';
 
         const termDurationEn = (document.getElementById('termDurationEn') && document.getElementById('termDurationEn').value.trim())
             ? document.getElementById('termDurationEn').value.trim()
@@ -227,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
             empDept: empDept,
             empBlood: empBlood,
             empEmergency: empEmergency,
+            empPhone: empPhone,
             termDurationEn: termDurationEn,
             termDurationAr: termDurationAr,
             termProbationEn: termProbationEn,
@@ -521,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empDept')) document.getElementById('empDept').value = '';
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = '';
+        if (document.getElementById('empPhone')) document.getElementById('empPhone').value = '';
 
         // Pre-filled standard legal contract terms defaults
         if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = '2 Years Renewable upon mutual agreement of both parties.';
@@ -559,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empDept')) document.getElementById('empDept').value = record.empDept || '';
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = record.empBlood || '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = record.empEmergency || '';
+        if (document.getElementById('empPhone')) document.getElementById('empPhone').value = record.empPhone || '';
 
         // Load contract terms into form
         if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = record.termDurationEn || '2 Years Renewable upon mutual agreement of both parties.';
@@ -636,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen to input changes on all form controls
     const allInputIds = [
         'empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 
-        'docDate', 'empDoj', 'empQid', 'empDept', 'empBlood', 'empEmergency',
+        'docDate', 'empDoj', 'empQid', 'empDept', 'empBlood', 'empEmergency', 'empPhone',
         'termDurationEn', 'termDurationAr', 'termProbationEn', 'termProbationAr', 'termHoursEn', 'termHoursAr'
     ];
     allInputIds.forEach(id => {
