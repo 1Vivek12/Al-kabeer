@@ -3,24 +3,32 @@
     const AUTH_KEY = 'alkabeer_admin_auth';
     const AUTH_USER_KEY = 'alkabeer_admin_user';
 
-    // Public pages that don't require authentication
+    // Public pages that don't require authentication (e.g. login.html or /admin/login)
     const currentPath = window.location.pathname.toLowerCase();
-    const isLoginPage = currentPath.endsWith('login.html');
+    const isLoginPage = currentPath.includes('login');
 
     // Check if user is authenticated
     function isAuthenticated() {
-        return sessionStorage.getItem(AUTH_KEY) === 'true' || localStorage.getItem(AUTH_KEY) === 'true';
+        try {
+            return sessionStorage.getItem(AUTH_KEY) === 'true' || localStorage.getItem(AUTH_KEY) === 'true';
+        } catch (e) {
+            return false;
+        }
     }
 
     // Auth Guard: Redirect to login page if unauthenticated
     if (!isAuthenticated() && !isLoginPage) {
-        window.location.href = '/admin/login.html';
+        if (!window.location.pathname.includes('login')) {
+            window.location.href = 'login.html';
+        }
         return;
     }
 
-    // If authenticated and on login page, redirect to index.html
+    // If authenticated and currently on login page, redirect to index.html
     if (isAuthenticated() && isLoginPage) {
-        window.location.href = '/admin/index.html';
+        if (!window.location.pathname.includes('index') && !window.location.pathname.includes('dashboard')) {
+            window.location.href = 'index.html';
+        }
         return;
     }
 

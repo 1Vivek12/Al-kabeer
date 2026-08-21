@@ -3,14 +3,6 @@
   "rewrites": [
     { "source": "/admin", "destination": "/admin/login.html" },
     { "source": "/admin/", "destination": "/admin/login.html" },
-    { "source": "/admin/login", "destination": "/admin/login.html" },
-    { "source": "/admin/dashboard", "destination": "/admin/index.html" },
-    { "source": "/admin/hr", "destination": "/admin/hr.html" },
-    { "source": "/admin/history", "destination": "/admin/history.html" },
-    { "source": "/admin/enquiries", "destination": "/admin/enquiries.html" },
-    { "source": "/admin/services", "destination": "/admin/services.html" },
-    { "source": "/admin/gallery", "destination": "/admin/gallery.html" },
-    { "source": "/admin/settings", "destination": "/admin/settings.html" },
     { "source": "/verify", "destination": "/verify.html" },
     { "source": "/verify/", "destination": "/verify.html" }
   ]
