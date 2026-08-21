@@ -14,13 +14,13 @@
 
     // Auth Guard: Redirect to login page if unauthenticated
     if (!isAuthenticated() && !isLoginPage) {
-        window.location.href = 'login.html';
+        window.location.href = '/admin/login.html';
         return;
     }
 
     // If authenticated and on login page, redirect to index.html
     if (isAuthenticated() && isLoginPage) {
-        window.location.href = 'index.html';
+        window.location.href = '/admin/index.html';
         return;
     }
 
@@ -50,7 +50,7 @@
             sessionStorage.removeItem(AUTH_USER_KEY);
             localStorage.removeItem(AUTH_KEY);
             localStorage.removeItem(AUTH_USER_KEY);
-            window.location.href = 'login.html';
+            window.location.href = '/admin/login.html';
         },
 
         getUser: function() {
