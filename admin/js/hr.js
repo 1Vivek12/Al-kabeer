@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'empIdNo': { selector: '.outIdNo', fallback: '[PASSPORT NO]' },
         'empNat': { selector: '.outNat', fallback: '[NATIONALITY]' },
         'salaryString': { selector: '.outSalary', fallback: '[SALARY & BENEFITS]' },
-        'refNo': { selector: '.outRefNo', fallback: 'QTR/AK:A01969' },
+        'refNo': { selector: '.outRefNo', fallback: '' },
         'empQid': { selector: '#outQid', fallback: '[QID NO]' },
         'empDept': { selector: '#outDept', fallback: '[DEPARTMENT]' },
         'empBlood': { selector: '#outBlood', fallback: '[BLOOD GROUP]' },
@@ -525,25 +525,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Auto-Generate Next Ref Number
+    // Auto-Generate Next Ref Number with Persistent High-Watermark Counter
     function generateNextRefNo() {
         try {
             let allKeys = [];
 
-            // 1. LocalStorage
+            // 1. LocalStorage saved documents
             try {
                 const docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
                 allKeys.push(...Object.keys(docs));
             } catch (e) {}
 
-            // 2. Cached history records
+            // 2. Cached history records from Supabase
             if (window.cachedHistoryRecords && Array.isArray(window.cachedHistoryRecords)) {
                 window.cachedHistoryRecords.forEach(r => {
                     if (r && r.refNo) allKeys.push(r.refNo);
                 });
             }
 
-            let maxNum = 1969;
+            // 3. Persistent high-watermark sequence counter from localStorage
+            let lastSeq = parseInt(localStorage.getItem('alkabeer_last_ref_seq') || '1969', 10);
+            if (isNaN(lastSeq)) lastSeq = 1969;
+
+            let maxNum = lastSeq;
             allKeys.forEach(k => {
                 const match = k.match(/A0*(\d+)/i);
                 if (match && match[1]) {
@@ -553,6 +557,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const nextNum = maxNum + 1;
+            // Save high-watermark so deleting a record NEVER decreases the ref sequence!
+            localStorage.setItem('alkabeer_last_ref_seq', nextNum.toString());
+
             const nextRef = `QTR/AK:A${String(nextNum).padStart(5, '0')}`;
             if (document.getElementById('refNo')) {
                 document.getElementById('refNo').value = nextRef;
@@ -773,6 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPrint) btnPrint.addEventListener('click', triggerPrint);
     if (btnGenerate) btnGenerate.addEventListener('click', triggerPrint);
 
-    // Initial Sync on load
+    // Initial Sync on load - Auto Generate Next Ref No immediately
+    generateNextRefNo();
     updateAllFields();
 });
