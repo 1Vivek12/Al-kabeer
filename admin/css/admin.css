@@ -705,7 +705,27 @@ body {
     gap: 12px;
 }
 
-/* Mobile Sidebar Drawer Toggle */
+/* Mobile Sidebar Drawer & Backdrop Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-overlay.show-mobile {
+    opacity: 1;
+    visibility: visible;
+}
+
 .mobile-sidebar-toggle {
     display: none;
     background: none;
@@ -713,8 +733,57 @@ body {
     font-size: 24px;
     color: var(--sidebar-bg);
     cursor: pointer;
+    padding: 4px;
 }
 
+/* Horizontal Touch Scrolling for HR Tabs */
+.doc-type-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.doc-type-tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.doc-type-tabs::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.doc-tab {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.doc-tab.active {
+    background: #1e3a8a;
+    color: #ffffff;
+    border-color: #1e3a8a;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
+
+/* Mobile Media Queries */
 @media (max-width: 992px) {
     .mobile-sidebar-toggle {
         display: block;
@@ -724,14 +793,106 @@ body {
         left: -280px;
         top: 0;
         bottom: 0;
+        width: 260px;
         z-index: 999;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+        box-shadow: 4px 0 25px rgba(0,0,0,0.3);
+        transition: left 0.3s ease;
     }
     .sidebar.show-mobile {
         left: 0;
     }
     .hr-layout {
+        grid-template-columns: 1fr !important;
+        gap: 20px;
+    }
+    .hr-form-panel {
+        width: 100%;
+    }
+    .hr-preview-panel {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 15px 10px;
+        background: #cbd5e1;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        height: 60px;
+        padding: 0 15px;
+    }
+    .topbar-title {
+        font-size: 16px;
+    }
+    .content-area {
+        padding: 15px 10px;
+        height: calc(100vh - 60px);
+    }
+    .preview-toolbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .preview-toolbar button {
+        width: 100%;
+        justify-content: center;
+    }
+    .document-paper {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+    .pdf-page {
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 12px 10px !important;
+    }
+    .pdf-header-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+    .pdf-right-col {
+        width: 100% !important;
+        margin-top: 8px;
+    }
+    .pdf-ref-date {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .pdf-signatures-grid {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .stat-card {
+        padding: 16px;
+    }
+    .dashboard-cards {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-area {
+        padding: 10px 6px;
+    }
+    .user-profile span {
+        display: none;
+    }
+    .btn-logout {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+    }
+    .form-group label {
+        font-size: 12px;
+    }
+    .form-control {
+        font-size: 14px;
+        padding: 8px 10px;
     }
 }
 

@@ -91,12 +91,35 @@
             });
         });
 
-        // Mobile Sidebar Toggle Handler
+        // Mobile Sidebar Toggle & Backdrop Overlay Handler
         const mobileToggle = document.getElementById('mobileSidebarToggle');
         const sidebar = document.querySelector('.sidebar');
         if (mobileToggle && sidebar) {
-            mobileToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('show-mobile');
+            let overlay = document.getElementById('sidebarOverlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'sidebarOverlay';
+                overlay.className = 'sidebar-overlay';
+                document.body.appendChild(overlay);
+            }
+
+            function toggleMobileSidebar() {
+                const isOpen = sidebar.classList.toggle('show-mobile');
+                if (isOpen) {
+                    overlay.classList.add('show-mobile');
+                } else {
+                    overlay.classList.remove('show-mobile');
+                }
+            }
+
+            mobileToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleMobileSidebar();
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('show-mobile');
+                overlay.classList.remove('show-mobile');
             });
         }
     });
