@@ -788,10 +788,28 @@
                                     <input type="date" id="empDoj" class="form-control" value="2026-08-15">
                                 </div>
 
-                                <div id="photoSection" style="display: none;">
-                                    <div class="form-group" style="margin-bottom: 0;">
+                                <div id="photoSection" style="display: none; border-top: 1px solid #cbd5e1; margin-top: 12px; padding-top: 12px;">
+                                    <h5 style="margin: 0 0 10px 0; color: #1e3a8a; font-size: 13px; font-weight: 700;">🪪 ID Card Specific Details</h5>
+                                    
+                                    <div class="form-group" style="margin-bottom: 10px;">
                                         <label>Upload Employee Photo (JPG/PNG)</label>
                                         <input type="file" id="empPhoto" class="form-control" accept="image/*">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label>Qatar ID / QID No.</label>
+                                        <input type="text" id="empQid" class="form-control" value="29852401928" placeholder="e.g. 29852401928" style="font-weight: 700;">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label>Department / Operations Division</label>
+                                        <input type="text" id="empDept" class="form-control" value="CIVIL & WATERPROOFING DIV" placeholder="e.g. CIVIL DIVISION">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label>Blood Group</label>
+                                        <input type="text" id="empBlood" class="form-control" value="O+ POSITIVE" placeholder="e.g. O+ POSITIVE">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label>Emergency Contact Phone</label>
+                                        <input type="text" id="empEmergency" class="form-control" value="+974 5592 1820" placeholder="+974 XXXX XXXX">
                                     </div>
                                 </div>
                             </div>
@@ -1356,44 +1374,61 @@
                                 </div>
                             </div>
 
-                            <!-- ID CARD TEMPLATE (Hidden by default) -->
-                            <div id="idCardTemplate" style="display: none; align-items: center; justify-content: center; width: 100%; min-height: 500px; padding: 20px 0;">
-                                <div class="id-card-badge">
-                                    <div class="id-card-header">
-                                        <img src="../static/images/alkabeer_logo.png" alt="Logo" class="id-header-logo">
-                                        <div class="id-company-title">
-                                            <h1>AL KABEER</h1>
-                                            <h2>TRADING & CONTRACTING W.L.L.</h2>
-                                            <p>C.R. 184920 | DOHA - QATAR</p>
+                            <!-- ID CARD TEMPLATE (Official Qatar Corporate Security Badge) -->
+                            <div id="idCardTemplate" style="display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 520px; padding: 25px 0;">
+                                <div class="id-card-badge" style="width: 320px; background: #ffffff; border-radius: 14px; border: 2px solid #0f172a; box-shadow: 0 12px 30px rgba(0,0,0,0.15); overflow: hidden; font-family: 'Inter', sans-serif; position: relative;">
+                                    
+                                    <!-- Top Header Bar -->
+                                    <div style="background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #ffffff; padding: 14px 12px; text-align: center; border-bottom: 3px solid #d97706; position: relative;">
+                                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                            <img src="../static/images/alkabeer_logo.png" alt="Logo" style="height: 38px; background: #ffffff; padding: 2px 6px; border-radius: 4px;">
+                                            <div style="text-align: left;">
+                                                <div style="font-size: 15px; font-weight: 900; letter-spacing: 0.5px; color: #ffffff; line-height: 1.1;">AL KABEER</div>
+                                                <div style="font-size: 8.5px; font-weight: 700; color: #93c5fd; font-family: 'Cairo', sans-serif;">شركة الكبير للتجارة والمقاولات ذ.م.م</div>
+                                                <div style="font-size: 7.5px; color: #cbd5e1; font-weight: 600;">C.R. 184920 | DOHA - STATE OF QATAR</div>
+                                            </div>
                                         </div>
                                     </div>
                                     
-                                    <div class="id-card-body">
-                                        <div class="id-photo-box">
-                                            <img id="outPhoto" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='120' viewBox='0 0 100 120' fill='%23cbd5e1'><rect width='100' height='120' fill='%23f1f5f9'/><circle cx='50' cy='45' r='22' fill='%2394a3b8'/><path d='M15,110 C15,80 35,70 50,70 C65,70 85,80 85,110 Z' fill='%2394a3b8'/></svg>" alt="Employee Photo">
+                                    <!-- Body Content -->
+                                    <div style="padding: 16px; text-align: center; background: #ffffff;">
+                                        <!-- Photo Box with Gold Border & Official Hologram -->
+                                        <div style="position: relative; width: 110px; height: 130px; margin: 0 auto 12px auto; border-radius: 8px; border: 3px solid #d97706; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.12); background: #f8fafc;">
+                                            <img id="outPhoto" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='120' viewBox='0 0 100 120' fill='%23cbd5e1'><rect width='100' height='120' fill='%23f1f5f9'/><circle cx='50' cy='45' r='22' fill='%2394a3b8'/><path d='M15,110 C15,80 35,70 50,70 C65,70 85,80 85,110 Z' fill='%2394a3b8'/></svg>" alt="Employee Photo" style="width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                         
-                                        <div class="id-card-name outName">AASHIK RAUT</div>
-                                        <div class="id-card-title outTitle">CIVIL FOREMAN</div>
+                                        <!-- Name & Designation -->
+                                        <div class="outName" style="font-size: 16px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">AASHIK RAUT</div>
+                                        <div class="outTitle" style="font-size: 12px; font-weight: 800; color: #d97706; text-transform: uppercase; background: #fffbebfb; padding: 3px 10px; border-radius: 12px; display: inline-block; border: 1px solid #fef3c7; margin-bottom: 12px;">CIVIL FOREMAN</div>
                                         
-                                        <div class="id-details-table">
-                                            <div class="id-row"><span class="id-lbl">PASSPORT NO:</span> <span class="id-val outIdNo">PA5231328</span></div>
-                                            <div class="id-row"><span class="id-lbl">NATIONALITY:</span> <span class="id-val outNat">NEPAL</span></div>
-                                            <div class="id-row"><span class="id-lbl">JOINING DATE:</span> <span class="id-val outDoj">15/08/2026</span></div>
-                                            <div class="id-row"><span class="id-lbl">REF NO:</span> <span class="id-val outRefNo">QTR/AK:A01969</span></div>
+                                        <!-- Details Grid -->
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; font-size: 11px; text-align: left; line-height: 1.7; margin-bottom: 12px;">
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">QID / CIVIL NO:</strong> <span id="outQid" style="font-weight: 800; color: #0f172a;">29852401928</span></div>
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">PASSPORT NO:</strong> <span class="outIdNo" style="font-weight: 800; color: #0f172a;">PA5231328</span></div>
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">NATIONALITY:</strong> <span class="outNat" style="font-weight: 800; color: #0f172a;">NEPAL</span></div>
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">DEPARTMENT:</strong> <span id="outDept" style="font-weight: 700; color: #1e3a8a;">CIVIL DIVISION</span></div>
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">BLOOD GROUP:</strong> <span id="outBlood" style="font-weight: 800; color: #dc2626;">O+ POSITIVE</span></div>
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">DATE OF JOINING:</strong> <span class="outDoj" style="font-weight: 700; color: #0f172a;">15/08/2026</span></div>
+                                            <div style="display: flex; justify-content: space-between;"><strong style="color: #475569;">REF NO:</strong> <span class="outRefNo" style="font-weight: 800; color: #1e3a8a;">QTR/AK:A01969</span></div>
                                         </div>
 
-                                        <div class="id-barcode-graphic">
-                                            <svg width="180" height="26" viewBox="0 0 180 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <rect width="180" height="26" fill="white"/>
-                                                <path d="M5 2V24M9 2V24M11 2V24M17 2V24M23 2V24M25 2V24M31 2V24M37 2V24M41 2V24M45 2V24M51 2V24M57 2V24M61 2V24M67 2V24M73 2V24M77 2V24M83 2V24M89 2V24M93 2V24M99 2V24M103 2V24M109 2V24M113 2V24M119 2V24M125 2V24M129 2V24M135 2V24M139 2V24M145 2V24M151 2V24M155 2V24M161 2V24M167 2V24M171 2V24M175 2V24" stroke="#0f172a" stroke-width="2"/>
-                                            </svg>
+                                        <!-- Barcode & QR Code Footer -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 6px; border-radius: 6px; border: 1px dashed #cbd5e1;">
+                                            <div>
+                                                <svg width="140" height="24" viewBox="0 0 180 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="180" height="26" fill="white"/>
+                                                    <path d="M5 2V24M9 2V24M11 2V24M17 2V24M23 2V24M25 2V24M31 2V24M37 2V24M41 2V24M45 2V24M51 2V24M57 2V24M61 2V24M67 2V24M73 2V24M77 2V24M83 2V24M89 2V24M93 2V24M99 2V24M103 2V24M109 2V24M113 2V24M119 2V24M125 2V24M129 2V24M135 2V24M139 2V24M145 2V24M151 2V24M155 2V24M161 2V24M167 2V24M171 2V24M175 2V24" stroke="#0f172a" stroke-width="2"/>
+                                                </svg>
+                                                <div style="font-size: 8px; color: #64748b; font-weight: 700;">OFFICIAL EMPLOYEE ID PASS</div>
+                                            </div>
+                                            <div id="qrIdCard" style="width: 38px; height: 38px;"></div>
                                         </div>
                                     </div>
                                     
-                                    <div class="id-card-footer">
+                                    <!-- Footer Bar -->
+                                    <div style="background: #0f172a; color: #ffffff; padding: 6px; text-align: center; font-size: 9px; font-weight: 600;">
                                         Office 110, D Ring Rd, Doha, Qatar | Tel: +974 4490 2699<br>
-                                        <strong>www.alkabeerqatar.com</strong>
+                                        <strong style="color: #93c5fd;">www.alkabeerqatar.com</strong>
                                     </div>
                                 </div>
                             </div>

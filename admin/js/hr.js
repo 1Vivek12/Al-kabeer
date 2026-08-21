@@ -88,7 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'empIdNo': { selector: '.outIdNo', fallback: 'PA5231328' },
         'empNat': { selector: '.outNat', fallback: 'NEPAL' },
         'salaryString': { selector: '.outSalary', fallback: '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION' },
-        'refNo': { selector: '.outRefNo', fallback: 'QTR/AK:A01969' }
+        'refNo': { selector: '.outRefNo', fallback: 'QTR/AK:A01969' },
+        'empQid': { selector: '#outQid', fallback: '29852401928' },
+        'empDept': { selector: '#outDept', fallback: 'CIVIL DIVISION' },
+        'empBlood': { selector: '#outBlood', fallback: 'O+ POSITIVE' }
     };
 
     // Synchronize all form input values to document templates
@@ -128,7 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'qrOfferP1',
             'qrOfferP2',
             'qrAppt',
-            'qrSalary'
+            'qrSalary',
+            'qrIdCard'
         ];
 
         targets.forEach(id => {
@@ -181,12 +185,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const dojVal = empDojInput ? empDojInput.value : todayISO;
         const formattedDoj = formatDateGB(dojVal) || formattedDocDate;
 
+        const empQid = document.getElementById('empQid') ? document.getElementById('empQid').value.trim() : '29852401928';
+        const empDept = document.getElementById('empDept') ? document.getElementById('empDept').value.trim() : 'CIVIL DIVISION';
+        const empBlood = document.getElementById('empBlood') ? document.getElementById('empBlood').value.trim() : 'O+ POSITIVE';
+        const empEmergency = document.getElementById('empEmergency') ? document.getElementById('empEmergency').value.trim() : '+974 5592 1820';
+
         const record = {
             refNo: refNo,
             empName: empName,
             empIdNo: empIdNo,
             empTitle: empTitle,
             empNat: empNat,
+            empQid: empQid,
+            empDept: empDept,
+            empBlood: empBlood,
+            empEmergency: empEmergency,
             salaryString: salaryString,
             docDate: formattedDocDate,
             empDoj: formattedDoj,
@@ -496,6 +509,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empNat')) document.getElementById('empNat').value = record.empNat || '';
         if (document.getElementById('salaryString')) document.getElementById('salaryString').value = record.salaryString || '';
         if (document.getElementById('refNo')) document.getElementById('refNo').value = record.refNo || '';
+        if (document.getElementById('empQid')) document.getElementById('empQid').value = record.empQid || '';
+        if (document.getElementById('empDept')) document.getElementById('empDept').value = record.empDept || '';
+        if (document.getElementById('empBlood')) document.getElementById('empBlood').value = record.empBlood || '';
+        if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = record.empEmergency || '';
         
         // Restore dates properly for date input controls
         if (docDateInput && record.docDate) {
@@ -533,18 +550,27 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.classList.add('active');
             currentDocType = docType;
 
+            const formPanel = document.querySelector('.hr-form-panel');
+            const hrLayout = document.querySelector('.hr-layout');
             const targetTmpl = templates[docType];
-            if (targetTmpl) {
-                if (docType === 'idcard') {
-                    targetTmpl.style.display = 'flex';
-                    if (photoSection) photoSection.style.display = 'block';
-                } else if (docType === 'history') {
-                    targetTmpl.style.display = 'block';
-                    if (photoSection) photoSection.style.display = 'none';
-                    renderHistoryTable();
-                } else {
-                    targetTmpl.style.display = 'block';
-                    if (photoSection) photoSection.style.display = 'none';
+
+            if (docType === 'history') {
+                if (formPanel) formPanel.style.display = 'none';
+                if (hrLayout) hrLayout.style.gridTemplateColumns = '1fr';
+                if (targetTmpl) targetTmpl.style.display = 'block';
+                if (photoSection) photoSection.style.display = 'none';
+                renderHistoryTable();
+            } else {
+                if (formPanel) formPanel.style.display = 'block';
+                if (hrLayout) hrLayout.style.gridTemplateColumns = '360px 1fr';
+                if (targetTmpl) {
+                    if (docType === 'idcard') {
+                        targetTmpl.style.display = 'flex';
+                        if (photoSection) photoSection.style.display = 'block';
+                    } else {
+                        targetTmpl.style.display = 'block';
+                        if (photoSection) photoSection.style.display = 'none';
+                    }
                 }
             }
 
@@ -554,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Listen to input changes on all form controls
-    const allInputIds = ['empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 'docDate', 'empDoj'];
+    const allInputIds = ['empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 'docDate', 'empDoj', 'empQid', 'empDept', 'empBlood', 'empEmergency'];
     allInputIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
