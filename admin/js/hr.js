@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const refNo = (refEl && refEl.value.trim()) ? refEl.value.trim() : 'QTR/AK:A01969';
         
         // Target verification URL for scanning
-        const verifyUrl = `${window.location.origin}/verify.html?ref=${encodeURIComponent(refNo)}`;
+        const verifyUrl = `https://www.alkabeercontracting.com/verify.html?ref=${encodeURIComponent(refNo)}`;
 
         const targets = [
             'qrOfferP1',
@@ -142,11 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.QRCode) {
                     new QRCode(container, {
                         text: verifyUrl,
-                        width: 44,
-                        height: 44,
-                        colorDark: "#1e3a8a",
+                        width: 150,
+                        height: 150,
+                        colorDark: "#000000",
                         colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.M
+                        correctLevel: QRCode.CorrectLevel.H
                     });
                 }
             }

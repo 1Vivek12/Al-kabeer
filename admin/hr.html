@@ -125,9 +125,12 @@
         }
 
         .qr-code-box img, .qr-code-box canvas {
-            width: 44px !important;
-            height: 44px !important;
+            width: 54px !important;
+            height: 54px !important;
             display: block !important;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
         }
 
         .qr-code-box .qr-label {
