@@ -181,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             empDoj: formattedDoj,
             docType: currentDocType,
             docTypeName: docTypeNames[currentDocType] || 'HR Document',
+            photoUrl: (outPhoto && outPhoto.src && !outPhoto.src.includes('placeholder')) ? outPhoto.src : '',
             status: 'VERIFIED',
             company: 'Al Kabeer Trading & Contracting W.L.L.',
             crNo: '184920',
@@ -304,12 +305,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td style="padding: 12px 14px; color: #475569; font-weight: 600;">${rec.docDate}</td>
                     <td style="padding: 12px 14px;"><span style="background: #f0fdf4; color: #15803d; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 800; border: 1px solid #bbf7d0;">🟢 VERIFIED</span></td>
                     <td style="padding: 12px 14px; text-align: center;">
-                        <div style="display: flex; gap: 6px; justify-content: center;">
-                            <a href="${verifyUrl}" target="_blank" style="background: #1e3a8a; color: #fff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                        <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
+                            <a href="${verifyUrl}" target="_blank" style="background: #1e3a8a; color: #fff; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
                                 <i class="bi bi-shield-check"></i> Verify
                             </a>
-                            <button onclick="window.loadRecordToForm('${rec.refNo}')" style="background: #0175b2; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                            <button onclick="window.copyVerifyLink('${rec.refNo}')" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Copy Verification Link">
+                                <i class="bi bi-link-45deg"></i> Copy Link
+                            </button>
+                            <button onclick="window.loadRecordToForm('${rec.refNo}')" style="background: #0175b2; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
                                 <i class="bi bi-pencil-square"></i> Load & Print
+                            </button>
+                            <button onclick="window.deleteRecord('${rec.refNo}')" style="background: #ef4444; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Delete Record">
+                                <i class="bi bi-trash-fill"></i>
                             </button>
                         </div>
                     </td>
@@ -317,6 +324,78 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
     }
+
+    // Export History Registry to Excel (.csv)
+    const btnExportCsv = document.getElementById('btnExportCsv');
+    if (btnExportCsv) {
+        btnExportCsv.addEventListener('click', () => {
+            const records = window.cachedHistoryRecords || [];
+            if (records.length === 0) {
+                alert("No records found in registry to export.");
+                return;
+            }
+
+            const headers = ["Ref No", "Employee Name", "Passport No", "Designation", "Nationality", "Doc Type", "Doc Date", "Date of Joining", "Salary & Benefits", "Status"];
+            const rows = records.map(r => [
+                `"${r.refNo || ''}"`,
+                `"${r.empName || ''}"`,
+                `"${r.empIdNo || ''}"`,
+                `"${r.empTitle || ''}"`,
+                `"${r.empNat || ''}"`,
+                `"${r.docTypeName || ''}"`,
+                `"${r.docDate || ''}"`,
+                `"${r.empDoj || ''}"`,
+                `"${(r.salaryString || '').replace(/"/g, '""')}"`,
+                `"${r.status || 'VERIFIED'}"`
+            ]);
+
+            const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `alkabeer_hr_registry_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    // Global helper: Copy Verification Link
+    window.copyVerifyLink = function(refNo) {
+        const url = `${window.location.origin}/verify.html?ref=${encodeURIComponent(refNo)}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert(`Verification URL copied to clipboard:\n${url}`);
+        }).catch(err => {
+            prompt("Copy this verification URL:", url);
+        });
+    };
+
+    // Global helper: Delete Record from Registry
+    window.deleteRecord = async function(refNo) {
+        if (!confirm(`Are you sure you want to permanently delete document record [${refNo}] from registry?`)) return;
+
+        // 1. Remove from LocalStorage
+        try {
+            let docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+            delete docs[refNo];
+            localStorage.setItem('alkabeer_hr_documents', JSON.stringify(docs));
+        } catch (e) {
+            console.error("Error deleting from LocalStorage:", e);
+        }
+
+        // 2. Remove from Supabase
+        if (supabaseClient) {
+            try {
+                await supabaseClient.from('hr_documents').delete().eq('refNo', refNo);
+                console.log("Deleted record from Supabase:", refNo);
+            } catch (err) {
+                console.error("Supabase delete error:", err);
+            }
+        }
+
+        // Re-render history table
+        renderHistoryTable();
+    };
 
     // Search filter listener for history table
     const historySearchInput = document.getElementById('historySearchInput');
@@ -350,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empNat')) document.getElementById('empNat').value = record.empNat || '';
         if (document.getElementById('salaryString')) document.getElementById('salaryString').value = record.salaryString || '';
         if (document.getElementById('refNo')) document.getElementById('refNo').value = record.refNo || '';
+        if (record.photoUrl && outPhoto) outPhoto.src = record.photoUrl;
 
         // Switch tab to the document's type
         const targetType = record.docType && record.docType !== 'history' ? record.docType : 'offer';

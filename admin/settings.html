@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings | Al Kabeer Admin</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/auth.js"></script>
+</head>
+<body>
+    <div class="admin-wrapper no-print">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Admin">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li><a href="hr.html"><i class="bi bi-people-fill"></i> HR Management</a></li>
+                <li><a href="enquiries.html"><i class="bi bi-chat-left-text-fill"></i> Enquiries</a></li>
+                <li><a href="services.html"><i class="bi bi-briefcase-fill"></i> Services</a></li>
+                <li><a href="gallery.html"><i class="bi bi-images"></i> Gallery</a></li>
+                <li><a href="settings.html" class="active"><i class="bi bi-gear-fill"></i> Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                &copy; 2026 Al Kabeer Trading & Contracting W.L.L.
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" title="Toggle Sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1 class="topbar-title">System & Profile Settings</h1>
+                </div>
+
+                <div class="user-profile">
+                    <span style="font-weight: 600; font-size: 14px; color: #1e293b;">Admin User</span>
+                    <button class="btn-logout" title="Log Out" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #dc2626; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12.5px;">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    
+                    <!-- Company Profile Box -->
+                    <div style="background: #fff; padding: 28px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 25px;">
+                        <h3 style="font-size: 18px; font-weight: 800; color: #1e3a8a; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-building-gear"></i> Company Commercial Profile & Credentials
+                        </h3>
+
+                        <form id="settingsForm" onsubmit="event.preventDefault(); alert('Company Settings Saved Successfully!');">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div class="form-group">
+                                    <label>Company Legal Name (English)</label>
+                                    <input type="text" class="form-control" value="AL KABEER TRADING & CONTRACTING W.L.L." readonly style="background: #f8fafc; font-weight: 700;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Legal Name (Arabic)</label>
+                                    <input type="text" class="form-control" value="شركة الكبير للتجارة والمقاولات ذ.م.م" readonly style="background: #f8fafc; font-weight: 700; text-align: right; font-family: 'Cairo', sans-serif;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Commercial Registration (C.R. No)</label>
+                                    <input type="text" class="form-control" value="184920" style="font-weight: 700;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Establishment ID</label>
+                                    <input type="text" class="form-control" value="74/92014" style="font-weight: 700;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Official Phone Number</label>
+                                    <input type="text" class="form-control" value="+974 4490 2699">
+                                </div>
+                                <div class="form-group">
+                                    <label>Official Fax Number</label>
+                                    <input type="text" class="form-control" value="+974 4434 1512">
+                                </div>
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label>Official Contact Email</label>
+                                    <input type="email" class="form-control" value="info@alkabeerqatar.com">
+                                </div>
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label>Head Office Address</label>
+                                    <input type="text" class="form-control" value="Office 110, World Wide Commercial Bldg, D Ring Rd, Doha, Qatar">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="margin-top: 10px;">
+                                <i class="bi bi-save-fill me-2"></i> Save Company Profile Settings
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Security & Credentials Box -->
+                    <div style="background: #fff; padding: 28px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                        <h3 style="font-size: 18px; font-weight: 800; color: #dc2626; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-shield-lock-fill"></i> Admin Access & Security Credentials
+                        </h3>
+                        <p style="color: #64748b; font-size: 13.5px; margin-bottom: 20px;">Current Administrator Credentials configuration for login security.</p>
+                        
+                        <div style="background: #f0f9ff; border: 1px solid #bae6fd; padding: 16px; border-radius: 8px; color: #0369a1; font-size: 13.5px; line-height: 1.6;">
+                            <i class="bi bi-key-fill me-2"></i> <strong>Active Admin Account:</strong> <code>admin</code><br>
+                            <i class="bi bi-lock-fill me-2"></i> <strong>Password Expiry:</strong> Active Session Guard Enabled<br>
+                            <i class="bi bi-shield-check me-2"></i> <strong>Auth Status:</strong> SessionStorage & LocalStorage Token Active
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

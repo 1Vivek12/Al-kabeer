@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Enquiries | Al Kabeer Admin</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/auth.js"></script>
+    <script src="js/enquiries.js"></script>
+</head>
+<body>
+    <div class="admin-wrapper no-print">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../static/images/alkabeer_logo.png" alt="Al Kabeer Admin">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li><a href="hr.html"><i class="bi bi-people-fill"></i> HR Management</a></li>
+                <li><a href="enquiries.html" class="active"><i class="bi bi-chat-left-text-fill"></i> Enquiries</a></li>
+                <li><a href="services.html"><i class="bi bi-briefcase-fill"></i> Services</a></li>
+                <li><a href="gallery.html"><i class="bi bi-images"></i> Gallery</a></li>
+                <li><a href="settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                &copy; 2026 Al Kabeer Trading & Contracting W.L.L.
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" title="Toggle Sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1 class="topbar-title">Customer Enquiries & Quote Requests</h1>
+                </div>
+
+                <div class="user-profile">
+                    <span style="font-weight: 600; font-size: 14px; color: #1e293b;">Admin User</span>
+                    <button class="btn-logout" title="Log Out" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #dc2626; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 12.5px;">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Stat Cards -->
+                <div class="dashboard-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-chat-square-text-fill"></i></div>
+                        <div class="stat-details">
+                            <h3 id="statTotalEnq">0</h3>
+                            <p>Total Enquiries</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="bi bi-bell-fill"></i></div>
+                        <div class="stat-details">
+                            <h3 id="statNewEnq">0</h3>
+                            <p>New Requests</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #0175b2, #003f72);"><i class="bi bi-hourglass-split"></i></div>
+                        <div class="stat-details">
+                            <h3 id="statProgressEnq">0</h3>
+                            <p>In Progress</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="stat-details">
+                            <h3 id="statClosedEnq">0</h3>
+                            <p>Closed / Resolved</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Filter & Search Controls -->
+                <div style="background: #fff; padding: 18px 24px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 12px; flex-grow: 1; max-width: 600px;">
+                        <input type="text" id="enquirySearch" class="form-control" placeholder="Search by Client Name, Email, Phone or Service..." style="flex-grow: 1;">
+                        <select id="enquiryStatusFilter" class="form-control" style="width: 160px; font-weight: 600;">
+                            <option value="ALL">All Statuses</option>
+                            <option value="New">New Only</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Enquiries Table Card -->
+                <div style="background: #fff; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02); overflow: hidden;">
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                            <thead>
+                                <tr style="background: #1e3a8a; color: #ffffff; text-align: left;">
+                                    <th style="padding: 14px; font-weight: 700;">ID</th>
+                                    <th style="padding: 14px; font-weight: 700;">Client Name</th>
+                                    <th style="padding: 14px; font-weight: 700;">Contact Info</th>
+                                    <th style="padding: 14px; font-weight: 700;">Service Requested</th>
+                                    <th style="padding: 14px; font-weight: 700;">Date</th>
+                                    <th style="padding: 14px; font-weight: 700;">Status</th>
+                                    <th style="padding: 14px; font-weight: 700; text-align: center;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="enquiriesTableBody">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Enquiry Detail & Status Modal -->
+    <div id="enquiryDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Customer Enquiry Details - <span id="modalEnqId">ENQ</span></h3>
+                <button class="modal-close close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div>
+                        <strong style="color: #64748b; font-size: 12px; display: block;">CLIENT NAME</strong>
+                        <span id="modalEnqName" style="font-weight: 700; font-size: 15px; color: #0f172a;">-</span>
+                    </div>
+                    <div>
+                        <strong style="color: #64748b; font-size: 12px; display: block;">DATE RECEIVED</strong>
+                        <span id="modalEnqDate" style="font-weight: 600; color: #334155;">-</span>
+                    </div>
+                    <div>
+                        <strong style="color: #64748b; font-size: 12px; display: block;">EMAIL ADDRESS</strong>
+                        <span id="modalEnqEmail" style="font-weight: 600; color: #1e3a8a;">-</span>
+                    </div>
+                    <div>
+                        <strong style="color: #64748b; font-size: 12px; display: block;">PHONE NUMBER</strong>
+                        <span id="modalEnqPhone" style="font-weight: 600; color: #0175b2;">-</span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #64748b; font-size: 12px; display: block; margin-bottom: 4px;">SERVICE REQUESTED</strong>
+                    <span id="modalEnqService" style="font-weight: 700; color: #0175b2; font-size: 15px;">-</span>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #64748b; font-size: 12px; display: block; margin-bottom: 6px;">CLIENT MESSAGE & SPECIFICATIONS</strong>
+                    <div id="modalEnqMessage" style="background: #ffffff; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #334155;">-</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700;">Update Enquiry Status</label>
+                    <select id="modalStatusSelect" class="form-control" style="font-weight: 700;">
+                        <option value="New">New Request</option>
+                        <option value="In Progress">In Progress (Under Quote Review)</option>
+                        <option value="Closed">Closed / Resolved</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary close-modal-btn" style="background: #94a3b8;">Close</button>
+                <button id="btnSaveEnquiryStatus" class="btn-primary"><i class="bi bi-check-lg"></i> Save Status Change</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
