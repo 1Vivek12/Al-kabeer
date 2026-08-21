@@ -24,6 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return dateStr;
     }
 
+    // Format date string DD/MM/YYYY -> YYYY-MM-DD for input[type="date"]
+    function formatDateISO(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('/');
+        if (parts.length === 3) {
+            return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+        }
+        if (dateStr.includes('-')) return dateStr;
+        return dateStr;
+    }
+
     // Set default date of issue to today
     const todayObj = new Date();
     const yyyy = todayObj.getFullYear();
@@ -417,7 +428,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Global helper to load a saved history record back into the form fields
+    // Show Toast Alert Notification
+    function showToast(msg) {
+        const toast = document.getElementById('hrToast');
+        const text = document.getElementById('toastText');
+        if (toast && text) {
+            text.textContent = msg;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
+        }
+    }
+
+    // Auto-Generate Next Ref Number
+    function generateNextRefNo() {
+        try {
+            const docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+            const keys = Object.keys(docs);
+            let maxNum = 1969; // default base
+            keys.forEach(k => {
+                const match = k.match(/A0?(\d+)/i);
+                if (match && match[1]) {
+                    const num = parseInt(match[1], 10);
+                    if (num > maxNum) maxNum = num;
+                }
+            });
+            const nextNum = maxNum + 1;
+            const nextRef = `QTR/AK:A${String(nextNum).padStart(5, '0')}`;
+            if (document.getElementById('refNo')) {
+                document.getElementById('refNo').value = nextRef;
+                updateAllFields();
+            }
+            return nextRef;
+        } catch (e) {
+            return 'QTR/AK:A01970';
+        }
+    }
+
+    // Reset Form to New Document Mode
+    function resetForm() {
+        if (document.getElementById('empName')) document.getElementById('empName').value = 'AASHIK RAUT';
+        if (document.getElementById('empIdNo')) document.getElementById('empIdNo').value = 'PA5231328';
+        if (document.getElementById('empTitle')) document.getElementById('empTitle').value = 'CIVIL FOREMAN';
+        if (document.getElementById('empNat')) document.getElementById('empNat').value = 'NEPAL';
+        if (document.getElementById('salaryString')) document.getElementById('salaryString').value = '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION';
+        if (docDateInput) docDateInput.value = todayISO;
+        if (empDojInput) empDojInput.value = todayISO;
+        if (outPhoto) outPhoto.src = defaultAvatarSvg;
+
+        generateNextRefNo();
+
+        const modeText = document.getElementById('modeStatusText');
+        if (modeText) modeText.textContent = 'Creating New Document';
+
+        showToast('Form reset to new document mode.');
+        updateAllFields();
+    }
+
+    // Global helper to load a saved history record back into the form fields for editing
     window.loadRecordToForm = function(refNo) {
         const records = window.cachedHistoryRecords || [];
         const record = records.find(r => r.refNo === refNo);
@@ -429,13 +496,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empNat')) document.getElementById('empNat').value = record.empNat || '';
         if (document.getElementById('salaryString')) document.getElementById('salaryString').value = record.salaryString || '';
         if (document.getElementById('refNo')) document.getElementById('refNo').value = record.refNo || '';
+        
+        // Restore dates properly for date input controls
+        if (docDateInput && record.docDate) {
+            docDateInput.value = formatDateISO(record.docDate);
+        }
+        if (empDojInput && record.empDoj) {
+            empDojInput.value = formatDateISO(record.empDoj);
+        }
+
         if (record.photoUrl && outPhoto) outPhoto.src = record.photoUrl;
+
+        const modeText = document.getElementById('modeStatusText');
+        if (modeText) modeText.textContent = `Editing Record: ${record.refNo}`;
 
         // Switch tab to the document's type
         const targetType = record.docType && record.docType !== 'history' ? record.docType : 'offer';
         const targetTab = document.querySelector(`.doc-tab[data-doc="${targetType}"]`);
         if (targetTab) targetTab.click();
         else updateAllFields();
+
+        showToast(`Loaded record [${record.refNo}] into form for editing.`);
     };
 
     // Tab Switch Listener
@@ -482,6 +563,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Explicit Save Record Button Listener
+    const btnSaveRecord = document.getElementById('btnSaveRecord');
+    if (btnSaveRecord) {
+        btnSaveRecord.addEventListener('click', () => {
+            updateAllFields();
+            const record = saveDocumentRecord();
+            showToast(`🟢 Document Record [${record.refNo}] Saved & Synced Successfully!`);
+        });
+    }
+
+    // Auto Ref Generator Button Listener
+    const btnAutoRef = document.getElementById('btnAutoRef');
+    if (btnAutoRef) {
+        btnAutoRef.addEventListener('click', () => {
+            const newRef = generateNextRefNo();
+            showToast(`Generated Ref No: ${newRef}`);
+        });
+    }
+
+    // Reset / New Form Button Listener
+    const btnResetForm = document.getElementById('btnResetForm');
+    if (btnResetForm) {
+        btnResetForm.addEventListener('click', resetForm);
+    }
+
     // Handle Photo Upload
     const photoInput = document.getElementById('empPhoto');
     if (photoInput && outPhoto) {
@@ -491,6 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     outPhoto.src = e.target.result;
+                    updateAllFields();
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -518,5 +625,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial Sync on load
     updateAllFields();
-    saveDocumentRecord(); // Save initial default record so it can be verified right away!
 });
