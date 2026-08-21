@@ -134,6 +134,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Company Contact Line (Tel & Fax)
+        const telVal = (document.getElementById('companyTel') && document.getElementById('companyTel').value.trim()) ? document.getElementById('companyTel').value.trim() : '';
+        const faxVal = (document.getElementById('companyFax') && document.getElementById('companyFax').value.trim()) ? document.getElementById('companyFax').value.trim() : '';
+        let contactLineText = '';
+        if (telVal && faxVal) {
+            contactLineText = `Tel: ${telVal} | Fax: ${faxVal}`;
+        } else if (telVal) {
+            contactLineText = `Tel: ${telVal}`;
+        } else if (faxVal) {
+            contactLineText = `Fax: ${faxVal}`;
+        }
+
+        document.querySelectorAll('.outCompanyContactLine').forEach(el => {
+            if (contactLineText) {
+                el.textContent = contactLineText;
+                el.style.display = 'block';
+            } else {
+                el.textContent = '';
+                el.style.display = 'none';
+            }
+        });
+
         // Update Dynamic Verification QR Codes
         updateQRCodes();
     }
@@ -208,6 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const empBlood = document.getElementById('empBlood') ? document.getElementById('empBlood').value.trim() : '';
         const empEmergency = document.getElementById('empEmergency') ? document.getElementById('empEmergency').value.trim() : '';
         const empPhone = document.getElementById('empPhone') ? document.getElementById('empPhone').value.trim() : '';
+        const companyTel = document.getElementById('companyTel') ? document.getElementById('companyTel').value.trim() : '+974 4490 2699';
+        const companyFax = document.getElementById('companyFax') ? document.getElementById('companyFax').value.trim() : '+974 4434 1512';
 
         const termDurationEn = (document.getElementById('termDurationEn') && document.getElementById('termDurationEn').value.trim())
             ? document.getElementById('termDurationEn').value.trim()
@@ -241,6 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
             empBlood: empBlood,
             empEmergency: empEmergency,
             empPhone: empPhone,
+            companyTel: companyTel,
+            companyFax: companyFax,
             termDurationEn: termDurationEn,
             termDurationAr: termDurationAr,
             termProbationEn: termProbationEn,
@@ -502,16 +528,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-Generate Next Ref Number
     function generateNextRefNo() {
         try {
-            const docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
-            const keys = Object.keys(docs);
-            let maxNum = 1969; // default base
-            keys.forEach(k => {
-                const match = k.match(/A0?(\d+)/i);
+            let allKeys = [];
+
+            // 1. LocalStorage
+            try {
+                const docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
+                allKeys.push(...Object.keys(docs));
+            } catch (e) {}
+
+            // 2. Cached history records
+            if (window.cachedHistoryRecords && Array.isArray(window.cachedHistoryRecords)) {
+                window.cachedHistoryRecords.forEach(r => {
+                    if (r && r.refNo) allKeys.push(r.refNo);
+                });
+            }
+
+            let maxNum = 1969;
+            allKeys.forEach(k => {
+                const match = k.match(/A0*(\d+)/i);
                 if (match && match[1]) {
                     const num = parseInt(match[1], 10);
                     if (num > maxNum) maxNum = num;
                 }
             });
+
             const nextNum = maxNum + 1;
             const nextRef = `QTR/AK:A${String(nextNum).padStart(5, '0')}`;
             if (document.getElementById('refNo')) {
@@ -520,7 +560,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return nextRef;
         } catch (e) {
-            return 'QTR/AK:A01970';
+            const fallbackRef = `QTR/AK:A${Date.now().toString().slice(-5)}`;
+            if (document.getElementById('refNo')) {
+                document.getElementById('refNo').value = fallbackRef;
+                updateAllFields();
+            }
+            return fallbackRef;
         }
     }
 
@@ -536,6 +581,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = '';
         if (document.getElementById('empPhone')) document.getElementById('empPhone').value = '';
+        if (document.getElementById('companyTel')) document.getElementById('companyTel').value = '+974 4490 2699';
+        if (document.getElementById('companyFax')) document.getElementById('companyFax').value = '+974 4434 1512';
 
         // Pre-filled standard legal contract terms defaults
         if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = '2 Years Renewable upon mutual agreement of both parties.';
@@ -575,6 +622,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = record.empBlood || '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = record.empEmergency || '';
         if (document.getElementById('empPhone')) document.getElementById('empPhone').value = record.empPhone || '';
+        if (document.getElementById('companyTel')) document.getElementById('companyTel').value = record.companyTel || '+974 4490 2699';
+        if (document.getElementById('companyFax')) document.getElementById('companyFax').value = record.companyFax || '+974 4434 1512';
 
         // Load contract terms into form
         if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = record.termDurationEn || '2 Years Renewable upon mutual agreement of both parties.';
@@ -653,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allInputIds = [
         'empName', 'empTitle', 'empIdNo', 'empNat', 'salaryString', 'refNo', 
         'docDate', 'empDoj', 'empQid', 'empDept', 'empBlood', 'empEmergency', 'empPhone',
+        'companyTel', 'companyFax',
         'termDurationEn', 'termDurationAr', 'termProbationEn', 'termProbationAr', 'termHoursEn', 'termHoursAr'
     ];
     allInputIds.forEach(id => {
