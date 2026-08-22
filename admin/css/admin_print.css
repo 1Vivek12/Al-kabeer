@@ -127,6 +127,7 @@
         margin: 0 !important;
         overflow: hidden !important;
         background: #ffffff !important;
+        border: 2.5px solid #1e3a8a !important;
         page-break-after: always !important;
         break-after: page !important;
         page-break-inside: avoid !important;
@@ -178,10 +179,10 @@
     .pdf-header-wrapper {
         display: flex !important;
         justify-content: space-between !important;
-        align-items: flex-start !important;
-        border-bottom: 2px solid #1e3a8a !important;
-        padding-bottom: 8px !important;
-        margin-bottom: 10px !important;
+        align-items: center !important;
+        border-bottom: 2.5px solid #1e3a8a !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 12px !important;
     }
 
     .pdf-logo-col img {
