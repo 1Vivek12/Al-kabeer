@@ -142,14 +142,11 @@
             flex-shrink: 0;
         }
 
-        .qr-code-box canvas {
-            display: none !important;
-        }
-
-        .qr-code-box img {
+        .qr-code-box img, .qr-code-box canvas {
             width: 54px !important;
             height: 54px !important;
-            display: block !important;
+            max-width: 54px !important;
+            max-height: 54px !important;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
             image-rendering: pixelated;

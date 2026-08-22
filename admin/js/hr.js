@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateQRCodes();
     }
 
-    // Render dynamic Verification QR Codes
+    // Render dynamic Verification QR Codes (100% Mobile & Desktop Compatible)
     function updateQRCodes() {
         const refEl = document.getElementById('refNo');
         const refNo = (refEl && refEl.value.trim()) ? refEl.value.trim() : 'QTR/AK:A01969';
@@ -177,9 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         targets.forEach(id => {
             const container = document.getElementById(id);
-            if (container) {
-                container.innerHTML = '';
-                if (window.QRCode) {
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            let generated = false;
+            if (window.QRCode) {
+                try {
                     new QRCode(container, {
                         text: verifyUrl,
                         width: 150,
@@ -188,7 +192,34 @@ document.addEventListener('DOMContentLoaded', () => {
                         colorLight: "#ffffff",
                         correctLevel: QRCode.CorrectLevel.H
                     });
+
+                    // Dynamic Mobile/Desktop Display Guarantee
+                    setTimeout(() => {
+                        const img = container.querySelector('img');
+                        const canvas = container.querySelector('canvas');
+
+                        if (img && img.src && img.src.length > 50 && img.src.startsWith('data:image')) {
+                            img.style.display = 'block';
+                            img.style.width = '54px';
+                            img.style.height = '54px';
+                            if (canvas) canvas.style.display = 'none';
+                        } else if (canvas) {
+                            canvas.style.display = 'block';
+                            canvas.style.width = '54px';
+                            canvas.style.height = '54px';
+                        } else {
+                            container.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(verifyUrl)}" style="width: 54px; height: 54px; display: block;" alt="QR Code">`;
+                        }
+                    }, 50);
+
+                    generated = true;
+                } catch (e) {
+                    console.error("QRCode library error:", e);
                 }
+            }
+
+            if (!generated) {
+                container.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(verifyUrl)}" style="width: 54px; height: 54px; display: block;" alt="QR Code">`;
             }
         });
     }
