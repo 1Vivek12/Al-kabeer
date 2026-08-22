@@ -370,6 +370,14 @@
     .pdf-header-mini {
         display: flex !important;
         justify-content: space-between !important;
+        align-items: center !important;
+        direction: ltr !important;
+    }
+
+    .pdf-header-mini .right {
+        font-family: 'Cairo', 'Tajawal', sans-serif !important;
+        direction: rtl !important;
+        unicode-bidi: isolate !important;
     }
 
     .header-line {

@@ -308,9 +308,17 @@
         .pdf-header-mini {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 9.5px;
             color: #475569;
             font-weight: bold;
+            direction: ltr !important;
+        }
+
+        .pdf-header-mini .right {
+            font-family: 'Cairo', 'Tajawal', sans-serif !important;
+            direction: rtl !important;
+            unicode-bidi: isolate !important;
         }
         
         .header-line {
@@ -1126,9 +1134,9 @@
                                     <img src="../static/images/alkabeer_logo.png" class="watermark" alt="">
                                     <div class="content-over-watermark">
                                         <div class="pdf-header-mini">
-                                            <span class="left" dir="ltr">AL KABEER TRADING & CONTRACTING W.L.L.</span>
-                                            <span class="center" dir="ltr">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
-                                            <span class="right" dir="rtl">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
+                                            <span class="left" dir="ltr" style="font-family: 'Inter', sans-serif;">AL KABEER TRADING & CONTRACTING W.L.L.</span>
+                                            <span class="center" dir="ltr" style="font-family: 'Inter', sans-serif;">Ref: <span class="outRefNo">QTR/AK:A01969</span></span>
+                                            <span class="right" dir="rtl" style="font-family: 'Cairo', 'Tajawal', sans-serif;">شركة الكبير للتجارة والمقاولات ذ.م.م</span>
                                         </div>
                                         <hr class="header-line">
 
