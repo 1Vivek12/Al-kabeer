@@ -180,8 +180,10 @@
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        border-bottom: 2.5px solid #1e3a8a !important;
-        padding-bottom: 10px !important;
+        background: #f8fafc !important;
+        border: 2px solid #1e3a8a !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
         margin-bottom: 12px !important;
     }
 
