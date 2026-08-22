@@ -403,16 +403,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td style="padding: 12px 14px;"><span style="background: #f0fdf4; color: #15803d; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 800; border: 1px solid #bbf7d0;">🟢 VERIFIED</span></td>
                     <td style="padding: 12px 14px; text-align: center;">
                         <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
-                            <a href="${verifyUrl}" target="_blank" style="background: #1e3a8a; color: #fff; padding: 6px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                                <i class="bi bi-shield-check"></i> Verify
+                            <button onclick="window.loadRecordToForm('${rec.refNo}')" style="background: #0284c7; color: #fff; border: none; padding: 6px 11px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);" title="Edit Document Details">
+                                <i class="bi bi-pencil-square"></i> Edit Letter
+                            </button>
+                            <button onclick="window.loadRecordToForm('${rec.refNo}'); setTimeout(triggerPrint, 300);" style="background: #1e3a8a; color: #fff; border: none; padding: 6px 11px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);" title="Print / Save PDF">
+                                <i class="bi bi-printer-fill"></i> Print PDF
+                            </button>
+                            <a href="${verifyUrl}" target="_blank" style="background: #059669; color: #fff; padding: 6px 11px; border-radius: 6px; text-decoration: none; font-size: 11.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                                <i class="bi bi-shield-check"></i> Verify QR
                             </a>
-                            <button onclick="window.copyVerifyLink('${rec.refNo}')" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Copy Verification Link">
-                                <i class="bi bi-link-45deg"></i> Copy Link
+                            <button onclick="window.copyVerifyLink('${rec.refNo}')" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px 11px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" title="Copy Verification Link">
+                                <i class="bi bi-link-45deg"></i> Link
                             </button>
-                            <button onclick="window.loadRecordToForm('${rec.refNo}')" style="background: #0175b2; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                                <i class="bi bi-pencil-square"></i> Load & Print
-                            </button>
-                            <button onclick="window.deleteRecord('${rec.refNo}')" style="background: #ef4444; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Delete Record">
+                            <button onclick="window.deleteRecord('${rec.refNo}')" style="background: #ef4444; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Delete Record">
                                 <i class="bi bi-trash-fill"></i>
                             </button>
                         </div>
@@ -780,7 +783,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPrint) btnPrint.addEventListener('click', triggerPrint);
     if (btnGenerate) btnGenerate.addEventListener('click', triggerPrint);
 
-    // Initial Sync on load - Auto Generate Next Ref No immediately
-    generateNextRefNo();
+    // Initial Sync on load - Check for URL Edit Ref or Auto Generate Next Ref No
+    const urlParams = new URLSearchParams(window.location.search);
+    const editRef = urlParams.get('ref') || urlParams.get('edit');
+    if (editRef) {
+        setTimeout(() => {
+            window.loadRecordToForm(editRef);
+            showToast(`Document [${editRef}] loaded for editing.`);
+            if (urlParams.get('print') === 'true') {
+                setTimeout(triggerPrint, 400);
+            }
+        }, 300);
+    } else {
+        generateNextRefNo();
+    }
     updateAllFields();
 });

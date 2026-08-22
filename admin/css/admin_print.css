@@ -185,9 +185,21 @@
         margin-bottom: 12px !important;
     }
 
+    .pdf-logo-col {
+        background: #ffffff !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 5px 10px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+    }
+
     .pdf-logo-col img {
-        width: 130px !important;
+        width: 120px !important;
         height: auto !important;
+        display: block !important;
     }
 
     .pdf-center-col {
