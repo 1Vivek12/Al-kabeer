@@ -3,20 +3,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const STORAGE_KEY = 'alkabeer_enquiries';
 
-    // Initial Mock Enquiries if storage is empty
-    const initialEnquiries = [
-        { id: 'ENQ-1001', name: 'Mohammed Al-Thani', email: 'm.thani@qatar.qa', phone: '+974 5512 3456', service: 'HVAC Chiller Maintenance', message: 'Requesting formal quote for annual chiller maintenance of 2 commercial towers in West Bay, Doha.', status: 'New', date: '2026-08-20' },
-        { id: 'ENQ-1002', name: 'Siddharth Mehta', email: 'sid.m@construction.com', phone: '+974 6690 1122', service: 'Concrete Crack Injection', message: 'Underground basement wall leakage injection required urgently at Lusail project site.', status: 'In Progress', date: '2026-08-19' },
-        { id: 'ENQ-1003', name: 'John Peterson', email: 'j.peterson@mep-qatar.com', phone: '+974 3344 5566', service: 'AC Spare Parts', message: 'Urgent requirement for 15 Carrier compressor units and fan motors.', status: 'Closed', date: '2026-08-18' },
-        { id: 'ENQ-1004', name: 'Tariq Mansoor', email: 'tariq@gulfrealestate.qa', phone: '+974 4455 6677', service: 'Roof Waterproofing', message: 'Roof membrane waterproofing needed for 4 residential villas in Al Waab.', status: 'New', date: '2026-08-17' }
-    ];
+    // Configurable Supabase Credentials
+    const SUPABASE_URL = "https://yueuvpvpzdizmrdgfwau.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_yGg4v1Uz35vj2xx5kJn8nw_BcXof5vs";
+
+    let supabaseClient = null;
+    if (window.supabase) {
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {}
+    }
+
+    // One-time automatic purge of old mock test enquiries from LocalStorage
+    if (!localStorage.getItem('alkabeer_enq_v2_purged')) {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.setItem('alkabeer_enq_v2_purged', 'true');
+        } catch (e) {}
+    }
+
+    // Clean Production Default: Starts empty (0 records)
+    const initialEnquiries = [];
 
     function getEnquiries() {
         try {
             const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : initialEnquiries;
+            return data ? JSON.parse(data) : [];
         } catch (e) {
-            return initialEnquiries;
+            return [];
         }
     }
 
@@ -25,6 +39,27 @@ document.addEventListener('DOMContentLoaded', () => {
         renderEnquiriesTable();
         updateStats();
     }
+
+    // Global helper: Clear All Enquiries
+    window.clearAllEnquiries = async function() {
+        if (!confirm("⚠️ Are you sure you want to permanently delete ALL customer enquiries to start 100% fresh?")) {
+            return;
+        }
+
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+        } catch (e) {}
+
+        if (supabaseClient) {
+            try {
+                await supabaseClient.from('contact_enquiries').delete().neq('id', 0);
+            } catch (err) {}
+        }
+
+        renderEnquiriesTable();
+        updateStats();
+        alert("✅ All customer enquiries deleted. Registry is now clean.");
+    };
 
     // Elements
     const enquiriesTableBody = document.getElementById('enquiriesTableBody');
@@ -160,10 +195,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (statusFilter) statusFilter.addEventListener('change', renderEnquiriesTable);
 
     // Initial Load
-    if (!localStorage.getItem(STORAGE_KEY)) {
-        saveEnquiries(initialEnquiries);
-    } else {
-        renderEnquiriesTable();
-        updateStats();
+    renderEnquiriesTable();
+    updateStats();
+
+    // Fetch live enquiries from Supabase Cloud DB if available
+    if (supabaseClient) {
+        supabaseClient.from('contact_enquiries').select('*').order('created_at', { ascending: false }).then(({ data, error }) => {
+            if (!error && data && data.length > 0) {
+                const mapped = data.map(d => ({
+                    id: `ENQ-${d.id}`,
+                    name: d.name,
+                    email: d.email || 'N/A',
+                    phone: d.phone || 'N/A',
+                    service: d.service || 'General Enquiry',
+                    message: d.message || '',
+                    status: d.status || 'New',
+                    date: d.created_at ? d.created_at.slice(0, 10) : new Date().toISOString().slice(0, 10)
+                }));
+                saveEnquiries(mapped);
+            }
+        });
     }
 });

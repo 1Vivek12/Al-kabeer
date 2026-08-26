@@ -89,14 +89,19 @@
 
                 <!-- Table Filter & Search Controls -->
                 <div style="background: #fff; padding: 18px 24px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <div style="display: flex; gap: 12px; flex-grow: 1; max-width: 600px;">
-                        <input type="text" id="enquirySearch" class="form-control" placeholder="Search by Client Name, Email, Phone or Service..." style="flex-grow: 1;">
-                        <select id="enquiryStatusFilter" class="form-control" style="width: 160px; font-weight: 600;">
-                            <option value="ALL">All Statuses</option>
-                            <option value="New">New Only</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Closed">Closed</option>
-                        </select>
+                    <div style="display: flex; gap: 12px; flex-grow: 1; max-width: 750px; align-items: center; justify-content: space-between; width: 100%;">
+                        <div style="display: flex; gap: 12px; flex-grow: 1;">
+                            <input type="text" id="enquirySearch" class="form-control" placeholder="Search by Client Name, Email, Phone or Service..." style="flex-grow: 1;">
+                            <select id="enquiryStatusFilter" class="form-control" style="width: 160px; font-weight: 600;">
+                                <option value="ALL">All Statuses</option>
+                                <option value="New">New Only</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <button onclick="window.clearAllEnquiries()" style="background: #ef4444; color: #ffffff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(239,68,68,0.25); flex-shrink: 0;" title="Permanently clear all customer enquiries">
+                            <i class="bi bi-trash-fill"></i> Clear All Enquiries
+                        </button>
                     </div>
                 </div>
 

@@ -41,16 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 2. Customer Enquiries
-        let enquiriesList = getLocalItem('alkabeer_enquiries', [
-            { id: 1, name: 'Mohammed Al-Thani', email: 'm.thani@qatar.qa', phone: '+974 5512 3456', service: 'HVAC Chiller Maintenance', message: 'Requesting quote for annual chiller maintenance of commercial tower in West Bay.', status: 'New', date: '2026-08-20' },
-            { id: 2, name: 'Siddharth Mehta', email: 'sid.m@construction.com', phone: '+974 6690 1122', service: 'Concrete Crack Injection', message: 'Underground basement leakage injection required in Lusail site.', status: 'In Progress', date: '2026-08-19' },
-            { id: 3, name: 'John Peterson', email: 'j.peterson@mep-qatar.com', phone: '+974 3344 5566', service: 'AC Spare Parts', message: 'Urgent requirement for 15 Carrier compressor units.', status: 'Closed', date: '2026-08-18' }
-        ]);
-
-        // Save default initial enquiries if none exist
-        if (!localStorage.getItem('alkabeer_enquiries')) {
-            localStorage.setItem('alkabeer_enquiries', JSON.stringify(enquiriesList));
+        // 2. Customer Enquiries (Starts Clean Empty 0)
+        let enquiriesList = getLocalItem('alkabeer_enquiries', []);
+        if (supabaseClient) {
+            try {
+                const { data } = await supabaseClient.from('contact_enquiries').select('*');
+                if (data && data.length > 0) {
+                    enquiriesList = data;
+                }
+            } catch (err) {}
         }
 
         // Calculate Stat Numbers
