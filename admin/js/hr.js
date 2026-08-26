@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // One-time automatic purge of old test demo records from browser LocalStorage
+    if (!localStorage.getItem('alkabeer_v5_purged_clean')) {
+        try {
+            localStorage.removeItem('alkabeer_hr_documents');
+            localStorage.setItem('alkabeer_v5_purged_clean', 'true');
+            console.log("🟢 Old test demo records automatically purged from LocalStorage.");
+        } catch (e) {}
+    }
+
     // Format date string YYYY-MM-DD -> DD/MM/YYYY without UTC timezone shift
     function formatDateGB(dateStr) {
         if (!dateStr) return '';
@@ -409,36 +418,6 @@ document.addEventListener('DOMContentLoaded', () => {
             localList.forEach(item => map.set(item.refNo, item));
             recordsList.forEach(item => map.set(item.refNo, item));
             recordsList = Array.from(map.values());
-
-            // Auto-sync local records to Supabase Cloud DB
-            if (supabaseClient && localList.length > 0) {
-                const cleanList = localList.map(r => ({
-                    refNo: r.refNo,
-                    empName: r.empName || '',
-                    empIdNo: r.empIdNo || '',
-                    empTitle: r.empTitle || '',
-                    empNat: r.empNat || '',
-                    empQid: r.empQid || '',
-                    empDept: r.empDept || '',
-                    empBlood: r.empBlood || '',
-                    empEmergency: r.empEmergency || '',
-                    salaryString: r.salaryString || '',
-                    docDate: r.docDate || '',
-                    empDoj: r.empDoj || '',
-                    docType: r.docType || 'offer',
-                    docTypeName: r.docTypeName || 'Employment Offer Letter',
-                    photoUrl: r.photoUrl || '',
-                    status: 'VERIFIED',
-                    company: r.company || 'Al Kabeer Trading & Contracting W.L.L.',
-                    crNo: r.crNo || '184920',
-                    establishmentId: r.establishmentId || '74/92014',
-                    generatedAt: r.generatedAt || new Date().toISOString()
-                }));
-
-                supabaseClient.from('hr_documents').upsert(cleanList, { onConflict: 'refNo' }).then(({ error }) => {
-                    if (!error) console.log("🟢 Auto-synced local records to Supabase Cloud DB!");
-                });
-            }
         } catch (e) {
             console.error("LocalStorage read error", e);
         }

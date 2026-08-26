@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // One-time automatic purge of old test demo records from browser LocalStorage
+    if (!localStorage.getItem('alkabeer_v5_purged_clean')) {
+        try {
+            localStorage.removeItem('alkabeer_hr_documents');
+            localStorage.setItem('alkabeer_v5_purged_clean', 'true');
+            console.log("🟢 Old test demo records automatically purged from LocalStorage.");
+        } catch (e) {}
+    }
+
     const historyTableBody = document.getElementById('historyTableBody');
     const historySearchInput = document.getElementById('historySearchInput');
     const btnExportCsv = document.getElementById('btnExportCsv');
