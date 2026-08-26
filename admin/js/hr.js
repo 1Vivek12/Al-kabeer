@@ -584,6 +584,41 @@ document.addEventListener('DOMContentLoaded', () => {
         renderHistoryTable();
     };
 
+    // Global helper: Clear / Purge All Old Records from Registry & Supabase Cloud DB
+    window.clearAllRegistryRecords = async function() {
+        if (!confirm("⚠️ Are you sure you want to permanently delete ALL past document records from both Supabase Cloud Database and Local Storage to start 100% fresh?")) {
+            return;
+        }
+
+        // 1. Clear LocalStorage
+        try {
+            localStorage.removeItem('alkabeer_hr_documents');
+            console.log("Local document registry cleared.");
+        } catch (e) {
+            console.error("Error clearing LocalStorage:", e);
+        }
+
+        // 2. Clear Supabase Cloud DB Table
+        if (supabaseClient) {
+            try {
+                await supabaseClient
+                    .from('hr_documents')
+                    .delete()
+                    .neq('refNo', 'BLANK_REF_NEVER_MATCH');
+                console.log("🟢 All records purged from Supabase Cloud DB!");
+            } catch (err) {
+                console.error("Supabase purge error:", err);
+            }
+        }
+
+        window.cachedHistoryRecords = [];
+
+        if (typeof resetForm === 'function') resetForm();
+        renderHistoryTable();
+
+        alert("✅ All previous document records have been completely deleted! Your registry is now 100% fresh.");
+    };
+
     // Search filter listener for history table
     const historySearchInput = document.getElementById('historySearchInput');
     if (historySearchInput) {
