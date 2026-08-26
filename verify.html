@@ -449,29 +449,35 @@
 
                 let record = null;
 
-                // 1. Try fetching from Supabase Cloud DB
+                // 1. Try fetching from Supabase Cloud DB (Case-Insensitive Match)
                 if (supabaseClient) {
                     try {
                         const { data, error } = await supabaseClient
                             .from('hr_documents')
                             .select('*')
-                            .eq('refNo', searchRef)
+                            .ilike('refNo', searchRef)
                             .maybeSingle();
 
                         if (!error && data) {
                             record = data;
                             console.log("🟢 Record found in Supabase Cloud DB:", record);
+                        } else if (error) {
+                            console.warn("Supabase query notice:", error);
                         }
                     } catch (err) {
-                        console.warn("Supabase fetch exception, using local fallback:", err);
+                        console.warn("Supabase fetch exception:", err);
                     }
                 }
 
-                // 2. Fallback to LocalStorage
+                // 2. Fallback to LocalStorage (Case-Insensitive Match)
                 if (!record) {
                     try {
                         let docs = JSON.parse(localStorage.getItem('alkabeer_hr_documents') || '{}');
-                        record = docs[searchRef];
+                        const keys = Object.keys(docs);
+                        const matchKey = keys.find(k => k.toLowerCase() === searchRef.toLowerCase());
+                        if (matchKey) {
+                            record = docs[matchKey];
+                        }
                     } catch (e) {
                         console.error("Error reading localStorage", e);
                     }

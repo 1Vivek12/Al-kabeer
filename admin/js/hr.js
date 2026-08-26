@@ -327,15 +327,41 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error saving document to localStorage:", err);
         }
 
-        // 2. Supabase Integration Sync
+        // 2. Supabase Integration Sync (Sanitized Payload for DB Schema)
         if (supabaseClient) {
+            const dbRecord = {
+                refNo: record.refNo,
+                empName: record.empName,
+                empIdNo: record.empIdNo,
+                empTitle: record.empTitle,
+                empNat: record.empNat,
+                empQid: record.empQid || '',
+                empDept: record.empDept || '',
+                empBlood: record.empBlood || '',
+                empEmergency: record.empEmergency || '',
+                salaryString: record.salaryString || '',
+                docDate: record.docDate || '',
+                empDoj: record.empDoj || '',
+                docType: record.docType || 'offer',
+                docTypeName: record.docTypeName || 'Employment Offer Letter',
+                photoUrl: record.photoUrl || '',
+                status: 'VERIFIED',
+                company: record.company || 'Al Kabeer Trading & Contracting W.L.L.',
+                crNo: record.crNo || '184920',
+                establishmentId: record.establishmentId || '74/92014',
+                generatedAt: record.generatedAt || new Date().toISOString()
+            };
+
             supabaseClient
                 .from('hr_documents')
-                .upsert([record], { onConflict: 'refNo' })
+                .upsert([dbRecord], { onConflict: 'refNo' })
                 .then(({ data, error }) => {
-                    if (error) console.error("Supabase upsert error:", error);
-                    else console.log("🟢 Supabase synced successfully:", data);
-                }).catch(e => console.error("Supabase sync exception:", e));
+                    if (error) {
+                        console.error("❌ Supabase upsert error:", error);
+                    } else {
+                        console.log("🟢 Supabase Cloud DB synced successfully:", dbRecord.refNo);
+                    }
+                }).catch(e => console.error("❌ Supabase sync exception:", e));
         }
 
         return record;
@@ -383,6 +409,36 @@ document.addEventListener('DOMContentLoaded', () => {
             localList.forEach(item => map.set(item.refNo, item));
             recordsList.forEach(item => map.set(item.refNo, item));
             recordsList = Array.from(map.values());
+
+            // Auto-sync local records to Supabase Cloud DB
+            if (supabaseClient && localList.length > 0) {
+                const cleanList = localList.map(r => ({
+                    refNo: r.refNo,
+                    empName: r.empName || '',
+                    empIdNo: r.empIdNo || '',
+                    empTitle: r.empTitle || '',
+                    empNat: r.empNat || '',
+                    empQid: r.empQid || '',
+                    empDept: r.empDept || '',
+                    empBlood: r.empBlood || '',
+                    empEmergency: r.empEmergency || '',
+                    salaryString: r.salaryString || '',
+                    docDate: r.docDate || '',
+                    empDoj: r.empDoj || '',
+                    docType: r.docType || 'offer',
+                    docTypeName: r.docTypeName || 'Employment Offer Letter',
+                    photoUrl: r.photoUrl || '',
+                    status: 'VERIFIED',
+                    company: r.company || 'Al Kabeer Trading & Contracting W.L.L.',
+                    crNo: r.crNo || '184920',
+                    establishmentId: r.establishmentId || '74/92014',
+                    generatedAt: r.generatedAt || new Date().toISOString()
+                }));
+
+                supabaseClient.from('hr_documents').upsert(cleanList, { onConflict: 'refNo' }).then(({ error }) => {
+                    if (!error) console.log("🟢 Auto-synced local records to Supabase Cloud DB!");
+                });
+            }
         } catch (e) {
             console.error("LocalStorage read error", e);
         }
