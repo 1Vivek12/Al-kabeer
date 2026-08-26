@@ -115,20 +115,6 @@ ON public.contact_enquiries
 FOR DELETE 
 USING (true);
 
--- 6. INSERT INITIAL DEMO/TEST DOCUMENT RECORDFOR IMMEDIATE VERIFICATION TEST
-INSERT INTO public.hr_documents (
-    "refNo", "empName", "empIdNo", "empTitle", "empNat", 
-    "salaryString", "docDate", "empDoj", "docType", "docTypeName", 
-    "photoUrl", "status", "company", "crNo", "establishmentId"
-) VALUES (
-    'QTR/AK:A01969', 'AASHIK RAUT', 'PA5231328', 'CIVIL FOREMAN', 'NEPAL',
-    '[BASIC 3400 + OT / MONTH] QAR + FREE FOOD & ACCOMMODATION', '13/08/2026', '15/08/2026', 'offer', 'Employment Offer Letter',
-    '', 'VERIFIED', 'Al Kabeer Trading & Contracting W.L.L.', '184920', '74/92014'
-) ON CONFLICT ("refNo") DO UPDATE SET
-    "empName" = EXCLUDED."empName",
-    "empIdNo" = EXCLUDED."empIdNo",
-    "status" = 'VERIFIED';
-
 -- ==============================================================================
 -- DONE! YOUR SUPABASE CLOUD DATABASE IS NOW 100% PRODUCTION READY!
 -- ==============================================================================
