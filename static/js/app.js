@@ -96,13 +96,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ============ WHATSAPP ORDER LINKS ============
+    // ============ EMAIL ORDER LINKS ============
   document.querySelectorAll('[data-product]').forEach(function (el) {
     el.addEventListener('click', function (e) {
       e.preventDefault();
       var product = this.getAttribute('data-product');
-      var msg = encodeURIComponent('Hello Al Kabeer, I would like to order: ' + product);
-      window.open('https://api.whatsapp.com/send?phone=+97474467433&text=' + msg, '_blank');
+      window.location.href = 'mailto:info@alkabeercontracting.com?subject=' + encodeURIComponent('Order Inquiry: ' + product);
     });
   });
 

@@ -148,11 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const faxVal = (document.getElementById('companyFax') && document.getElementById('companyFax').value.trim()) ? document.getElementById('companyFax').value.trim() : '';
         let contactLineText = '';
         if (telVal && faxVal) {
-            contactLineText = `Tel: ${telVal} | Fax: ${faxVal}`;
+            contactLineText = "";
         } else if (telVal) {
-            contactLineText = `Tel: ${telVal}`;
+            contactLineText = "";
         } else if (faxVal) {
-            contactLineText = `Fax: ${faxVal}`;
+            contactLineText = "";
         }
 
         document.querySelectorAll('.outCompanyContactLine').forEach(el => {
@@ -270,8 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const empBlood = document.getElementById('empBlood') ? document.getElementById('empBlood').value.trim() : '';
         const empEmergency = document.getElementById('empEmergency') ? document.getElementById('empEmergency').value.trim() : '';
         const empPhone = document.getElementById('empPhone') ? document.getElementById('empPhone').value.trim() : '';
-        const companyTel = document.getElementById('companyTel') ? document.getElementById('companyTel').value.trim() : '+974 4490 2699';
-        const companyFax = document.getElementById('companyFax') ? document.getElementById('companyFax').value.trim() : '+974 4434 1512';
+        const companyTel = document.getElementById('companyTel') ? document.getElementById('companyTel').value.trim() : '';
+        const companyFax = document.getElementById('companyFax') ? document.getElementById('companyFax').value.trim() : '';
 
         const termDurationEn = (document.getElementById('termDurationEn') && document.getElementById('termDurationEn').value.trim())
             ? document.getElementById('termDurationEn').value.trim()
@@ -692,8 +692,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = '';
         if (document.getElementById('empPhone')) document.getElementById('empPhone').value = '';
-        if (document.getElementById('companyTel')) document.getElementById('companyTel').value = '+974 4490 2699';
-        if (document.getElementById('companyFax')) document.getElementById('companyFax').value = '+974 4434 1512';
+        if (document.getElementById('companyTel')) document.getElementById('companyTel').value = '';
+        if (document.getElementById('companyFax')) document.getElementById('companyFax').value = '';
 
         // Pre-filled standard legal contract terms defaults
         if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = '2 Years Renewable upon mutual agreement of both parties.';
@@ -733,8 +733,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('empBlood')) document.getElementById('empBlood').value = record.empBlood || '';
         if (document.getElementById('empEmergency')) document.getElementById('empEmergency').value = record.empEmergency || '';
         if (document.getElementById('empPhone')) document.getElementById('empPhone').value = record.empPhone || '';
-        if (document.getElementById('companyTel')) document.getElementById('companyTel').value = record.companyTel || '+974 4490 2699';
-        if (document.getElementById('companyFax')) document.getElementById('companyFax').value = record.companyFax || '+974 4434 1512';
+        if (document.getElementById('companyTel')) document.getElementById('companyTel').value = record.companyTel || '';
+        if (document.getElementById('companyFax')) document.getElementById('companyFax').value = record.companyFax || '';
 
         // Load contract terms into form
         if (document.getElementById('termDurationEn')) document.getElementById('termDurationEn').value = record.termDurationEn || '2 Years Renewable upon mutual agreement of both parties.';
